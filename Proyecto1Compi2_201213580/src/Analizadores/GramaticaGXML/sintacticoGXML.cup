@@ -1,0 +1,30 @@
+package Analizadores.GramaticaGXML;
+import java_cup.runtime.Symbol;
+import java_cup.runtime.*;
+import java.lang.*;
+import javax.swing.JOptionPane;
+import java.io.*;
+import java.util.LinkedList;
+parser code
+{:
+    public static int index=0;
+    public void syntax_error(Symbol s){
+        System.out.println("Error en la linea "+(s.right+1)+" Columna "+s.left+". Identificador "+s.value+" no reconocido"); 
+    }
+    /**Metodo al que se llama en el momento en que ya no es posible una recuperacion de errores.*/
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{
+        javax.swing.JOptionPane.showMessageDialog(null,"Error Sintactico en la linea "+(s.right+1)+"Columna "+s.left+". Identificador"+s.value+" no reconocido.");
+    }
+:}
+action code
+{:  
+:}
+terminal String id;
+
+non terminal String INICIAL,E;
+
+start with INICIAL;
+
+INICIAL::= E;
+E::= E id
+   | id;

@@ -5,17 +5,22 @@
  */
 package proyecto1compi2_201213580;
 
+import java.io.File;
+
 /**
  *
  * @author anton
  */
 public class Proyecto1Compi2_201213580 {
-
+    public static String ruta_proyecto=new File ("").getAbsolutePath();
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        Principal principal=new Principal();
+        principal.setVisible(true);
+        principal.show();
     }
     
 }
