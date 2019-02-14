@@ -5,6 +5,7 @@ import java.lang.*;
 import javax.swing.JOptionPane;
 import java.io.*;
 import java.util.LinkedList;
+import Auxiliares.NodoGXML;
 parser code
 {:
     public static int index=0;
@@ -19,12 +20,29 @@ parser code
 action code
 {:  
 :}
-terminal String id;
 
-non terminal String INICIAL,E;
+//DEFINICION DE ETIQUETAS DEL LENGUAJE GXML
+terminal String e_importar,e_ventana,e_contenedor,e_texto,e_control,e_defecto;
+terminal Stirng e_listadatos,e_dato,e_multimedia,e_boton,e_enviar; 
 
+//DEFINICION DE ELEMENTOS DE LAS ETIQUETAS GXML
+terminal String id,tipo,color,x,y,alto,ancho,borde,nombre,fuente,tam;
+terminal String negrita,cursiva,maximo,minimo,path,auto_reproduccion;
+
+//DEFINICION DE SIGNOS DEL LENGUAJE GXML
+terminal String mayorq,menorq,div,igual,comilladoble;
+
+//DEFINICION VALORES IMPLICITOS LENGUAJE GXML
+terminal String valor_id,valor_numero_completo,valor_path;
+//comentarios
+terminal String comentario_simple,comentario_multiple;
+
+non terminal NodoGXML INICIAL,DEFINICION;
+non terminal NodoGXML COMENTARIO;
 start with INICIAL;
 
-INICIAL::= E;
-E::= E id
-   | id;
+INICIAL::= DEFINICION;
+
+
+COMENTARIO::= comentario_simple
+            | comentario_multiple;
