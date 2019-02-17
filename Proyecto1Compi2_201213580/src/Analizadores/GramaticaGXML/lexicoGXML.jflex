@@ -13,6 +13,8 @@ import java_cup.runtime.*;
 %apiprivate
 %cup
 %caseless
+%char 
+%ignorecase
 %eofval{
 	return null;
 %eofval}
@@ -20,9 +22,11 @@ NUMERO=[0-9]
 NUMERO_COMPLETO=({NUMERO})({NUMERO})*
 LETRA=[a-zA-Z]
 ID=({LETRA})({LETRA}|{NUMERO})*
-COMENTARIO_SIMPLE =("##".*\r\n)|("//".*\n)|("//".*\r)
+COMENTARIO_SIMPLE =("##".*\r\n)|("##".*\n)|("##".*\r)
 COMENTARIO_MULTIPLE ="#$""/"*([^*/]|[^*]"/"|"*"[^/])*"*"*"$#"
-PATH=["C"][":"]["\\"]({ID}|["\\"])*["."]["g"]["x"]["m"]["l"]
+PATH={LETRA}[":"]["\\"]({ID}|["\\"])*["."]["g"]["x"]["m"]["l"]
+PATH2=["/"]({ID}|["\\"])*["."]["g"]["x"]["m"]["l"]
+HEXA=["#"]({NUMERO}|LETRA)*  
 %%
 //DEFINICION DE ETIQUETAS LENGUAJE GXML
 "importar"
@@ -84,37 +88,86 @@ PATH=["C"][":"]["\\"]({ID}|["\\"])*["."]["g"]["x"]["m"]["l"]
 { return new Symbol(simbolo.path, yyline, yycolumn,yytext());}
 "auto-reproduccion"
 { return new Symbol(simbolo.auto_reproduccion, yyline, yycolumn,yytext());}
+"principal"
+{ return new Symbol(simbolo.principal, yyline, yycolumn,yytext());}
+"secundaria"
+{ return new Symbol(simbolo.secundaria, yyline, yycolumn,yytext());}
+"accion"
+{ return new Symbol(simbolo.accion, yyline, yycolumn,yytext());}
+"accioninicial"
+{ return new Symbol(simbolo.accioninicial, yyline, yycolumn,yytext());}
+"accionfinal"
+{ return new Symbol(simbolo.accionfinal, yyline, yycolumn,yytext());}
 
 //DEFINICION DE SIGNOS DEL LENGUAJE GXML
 "<"
-{ return new Symbol(simbolo.menorq, yyline, yycolumn,yytext());}
+{ return new Symbol(simbolo.abre, yyline, yycolumn,yytext());}
 ">"
-{ return new Symbol(simbolo.mayorq, yyline, yycolumn,yytext());}
+{ return new Symbol(simbolo.cierra, yyline, yycolumn,yytext());}
 "/"
 { return new Symbol(simbolo.div, yyline, yycolumn,yytext());}
 "="
 { return new Symbol(simbolo.igual, yyline, yycolumn,yytext());}
 "\""
 { return new Symbol(simbolo.comilladoble, yyline, yycolumn,yytext());}
-
-
+"{"
+{ return new Symbol(simbolo.llavea, yyline, yycolumn,yytext());}
+"}"
+{ return new Symbol(simbolo.llavec, yyline, yycolumn,yytext());}
+"("
+{ return new Symbol(simbolo.parena, yyline, yycolumn,yytext());}
+")"
+{ return new Symbol(simbolo.parenc, yyline, yycolumn,yytext());}
+","
+{ return new Symbol(simbolo.coma, yyline, yycolumn,yytext());}
+"+"
+{ return new Symbol(simbolo.mas, yyline, yycolumn,yytext());}
+"-"
+{ return new Symbol(simbolo.menos, yyline, yycolumn,yytext());}
+"*"
+{ return new Symbol(simbolo.por, yyline, yycolumn,yytext());}
+"^"
+{ return new Symbol(simbolo.potencia, yyline, yycolumn,yytext());}
+">="
+{ return new Symbol(simbolo.mayorigualq, yyline, yycolumn,yytext());}
+"<="
+{ return new Symbol(simbolo.menorigualq, yyline, yycolumn,yytext());}
+"=="
+{ return new Symbol(simbolo.igualigual, yyline, yycolumn,yytext());}
+"!="
+{ return new Symbol(simbolo.diferente, yyline, yycolumn,yytext());}
+"||"
+{ return new Symbol(simbolo.or, yyline, yycolumn,yytext());}
+"&&"
+{ return new Symbol(simbolo.and, yyline, yycolumn,yytext());}
+"!"
+{ return new Symbol(simbolo.not, yyline, yycolumn,yytext());}
 
 
 
 //DEFINICION VALORES IMPLICITOS
+
+"verdadero"
+{ return new Symbol(simbolo.valor_verdadero, yyline, yycolumn,yytext());}
+"falso"
+{ return new Symbol(simbolo.valor_falso, yyline, yycolumn,yytext());}
 {NUMERO_COMPLETO}
 { return new Symbol(simbolo.valor_numero_completo, yyline, yycolumn,yytext());}
 {ID}
 { return new Symbol(simbolo.valor_id, yyline, yycolumn,yytext());}
 {PATH}
 { return new Symbol(simbolo.valor_path, yyline, yycolumn,yytext());}
+{PATH2}
+{ return new Symbol(simbolo.valor_path2, yyline, yycolumn,yytext());}
+{HEXA}
+{ return new Symbol(simbolo.valor_hexa, yyline, yycolumn,yytext());}
 
 
 //DEFINICION DE COMENTARIOS
-{COMENTARIO_SIMPLE}
-{ return new Symbol(simbolo.comentario_simple, yyline, yycolumn,yytext());}
 {COMENTARIO_MULTIPLE}
-{ return new Symbol(simbolo.comentario_multiple, yyline, yycolumn,yytext());}
+{ }
+{COMENTARIO_SIMPLE}
+{ }
 
 [ \t\r\n\f EOF]
 { /* ignore white space. */ }

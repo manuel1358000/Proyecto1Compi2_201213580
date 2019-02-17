@@ -6,8 +6,10 @@ import javax.swing.JOptionPane;
 import java.io.*;
 import java.util.LinkedList;
 import Auxiliares.NodoGXML;
+import Auxiliares.NodoElemento;
 parser code
 {:
+    public NodoGXML root;
     public static int index=0;
     public void syntax_error(Symbol s){
         System.out.println("Error en la linea "+(s.right+1)+" Columna "+s.left+". Identificador "+s.value+" no reconocido"); 
@@ -23,26 +25,243 @@ action code
 
 //DEFINICION DE ETIQUETAS DEL LENGUAJE GXML
 terminal String e_importar,e_ventana,e_contenedor,e_texto,e_control,e_defecto;
-terminal Stirng e_listadatos,e_dato,e_multimedia,e_boton,e_enviar; 
+terminal String e_listadatos,e_dato,e_multimedia,e_boton,e_enviar; 
 
 //DEFINICION DE ELEMENTOS DE LAS ETIQUETAS GXML
 terminal String id,tipo,color,x,y,alto,ancho,borde,nombre,fuente,tam;
-terminal String negrita,cursiva,maximo,minimo,path,auto_reproduccion;
+terminal String negrita,cursiva,maximo,minimo,path,auto_reproduccion,principal,secundaria,accion,accioninicial,accionfinal;
 
 //DEFINICION DE SIGNOS DEL LENGUAJE GXML
-terminal String mayorq,menorq,div,igual,comilladoble;
+terminal String abre,cierra,div,igual,comilladoble,llavea,llavec,parena,parenc,coma;
+terminal String mas,menos,por,potencia,mayorq,menorq,mayorigualq,menorigualq,igualigual,diferente,or,and,not;
 
 //DEFINICION VALORES IMPLICITOS LENGUAJE GXML
-terminal String valor_id,valor_numero_completo,valor_path;
+terminal String valor_id,valor_numero_completo,valor_path,valor_path2,valor_hexa,valor_verdadero,valor_falso;
 //comentarios
-terminal String comentario_simple,comentario_multiple;
 
-non terminal NodoGXML INICIAL,DEFINICION;
-non terminal NodoGXML COMENTARIO;
+
+non terminal NodoGXML INICIAL,GENERAL,ETIQUETA_IMPORTAR,CONTENIDO_IMPORTAR;
+non terminal NodoGXML ETIQUETA_VENTANA;
+non terminal NodoElemento ELEMENTO_VENTANA;
+non terminal LinkedList<NodoElemento> ELEMENTOS_VENTANAS;
+non terminal LinkedList<NodoGXML> CONTENIDO_VENTANA;
+non terminal NodoGXML ETIQUETA_CONTENEDOR;
+non terminal LinkedList<NodoElemento> ELEMENTOS_CONTENEDORES;
+non terminal NodoElemento ELEMENTO_CONTENEDOR;
+non terminal String TIPO_TIPO;
+non terminal String TIPO_BORDE;
+non terminal String LISTA_PARAMETROS,PARAMETRO;
+non terminal LinkedList<NodoGXML> DEFINICION_IMPORTAR,DEFINICION_GENERAL;
+
+
+precedence left or;
+precedence left and;
+precedence right not;
+precedence left cierra,abre,mayorigualq, menorigualq,igualigual,diferente;
+
+precedence left mas,menos;
+precedence left div, por;
+precedence left potencia;
+precedence left parena, parenc;
+
+
+
 start with INICIAL;
 
-INICIAL::= DEFINICION;
 
+INICIAL::=GENERAL:a{:
+                    this.parser.root=a;
+                 :};
+GENERAL::= DEFINICION_IMPORTAR:a DEFINICION_GENERAL:b{:
+                                                    RESULT=new NodoGXML();
+                                                    RESULT.id="RAIZ";
+                                                    RESULT.nodos=a;
+                                                    RESULT.AgregarNodos(b);
+                                                   :}
+         | DEFINICION_GENERAL:a{:
+                                RESULT=new NodoGXML();
+                                RESULT.nodos=a;
+                               :};
 
-COMENTARIO::= comentario_simple
-            | comentario_multiple;
+DEFINICION_IMPORTAR::= DEFINICION_IMPORTAR:a ETIQUETA_IMPORTAR:b{:
+                                                                RESULT=a;
+                                                                if(b!=null){
+                                                                    RESULT.add(b);
+                                                                }
+                                                                :} 
+                     | ETIQUETA_IMPORTAR:a{:
+                                            
+                                            RESULT=new LinkedList<NodoGXML>();
+                                            if(a!=null){
+                                                RESULT.add(a);
+                                            }
+                                            
+                                          :};
+
+ETIQUETA_IMPORTAR::= abre e_importar:a cierra CONTENIDO_IMPORTAR:b abre div e_importar cierra{:
+                                                                                                RESULT=b;
+                                                                                                RESULT.tipo_etiqueta=a.toString();
+                                                                                                RESULT.id=a.toString();
+                                                                                            :}
+                   | error ;
+CONTENIDO_IMPORTAR::= valor_path:a{:
+                                    RESULT=new NodoGXML();
+                                    RESULT.valor=a.toString();
+                                    RESULT.index=this.parser.index;
+                                    this.parser.index++;
+                                  :}
+                    | valor_path2:a{:
+                                        RESULT=new NodoGXML();
+                                        RESULT.valor=a.toString();
+                                        RESULT.index=this.parser.index;
+                                        this.parser.index++;
+                                   :};
+
+DEFINICION_GENERAL::= DEFINICION_GENERAL:a ETIQUETA_VENTANA:b{:
+                                                                RESULT=a;
+                                                                if(b!=null){
+                                                                    a.add(b);
+                                                                }
+                                                             :}
+                    | ETIQUETA_VENTANA:a{:
+                                        RESULT=new LinkedList<NodoGXML>();
+                                        if(a!=null){
+                                            RESULT.add(a);
+                                        }
+                                        :};
+
+ETIQUETA_VENTANA::= abre e_ventana:a ELEMENTOS_VENTANAS:b cierra CONTENIDO_VENTANA:c abre div e_ventana cierra{:
+                                                                                                                RESULT=new NodoGXML(this.parser.index,a.toString(),a.toString(),b);
+                                                                                                                this.parser.index++;
+                                                                                                                RESULT.nodos=c;
+                                                                                                                //vamos a verificar los elementos de la ventana
+                                                                                                                String respuesta=RESULT.elementosVentana(RESULT.elementos);
+                                                                                                                if(respuesta.equals("")){
+                                                                                                                }else{
+                                                                                                                    RESULT=null;
+                                                                                                                    System.out.println(respuesta);
+                                                                                                                }
+                                                                                                              :};
+ELEMENTOS_VENTANAS::= ELEMENTOS_VENTANAS:a ELEMENTO_VENTANA:b{:
+                                                                RESULT=a;
+                                                                RESULT.add(b);
+                                                             :}
+                    | ELEMENTO_VENTANA:a{:
+                                        RESULT=new LinkedList<NodoElemento>();
+                                        RESULT.add(a);
+                                        :};
+
+ELEMENTO_VENTANA::= id igual comilladoble valor_id:b comilladoble{:
+                                                                        RESULT=new NodoElemento("ELEMENTO",b.toString(),"id");
+                                                                   :}
+                  | tipo igual comilladoble TIPO_TIPO:b comilladoble{:
+                                                                        RESULT=new NodoElemento("ELEMENTO",b.toString(),"tipo");
+                                                                      :}
+                  | color igual comilladoble valor_hexa:b comilladoble{:
+                                                                        RESULT=new NodoElemento("ELEMENTO",b.toString(),"color");
+                                                                        :}
+                  | accioninicial igual llavea valor_id:a parena LISTA_PARAMETROS:b parenc llavec{:
+                                                                                               RESULT=new NodoElemento("ELEMENTO",a.toString()+"("+b.toString()+")","accicioninicial"); 
+                                                                                             :}
+                  | accionfinal igual llavea valor_id:a parena LISTA_PARAMETROS:b parenc{:
+                                                                                            RESULT=new NodoElemento("ELEMENTO",a.toString()+"("+b.toString()+")","accicionfinal"); 
+                                                                                        :};
+LISTA_PARAMETROS::= LISTA_PARAMETROS:a coma:b PARAMETRO:c{:RESULT=a.toString()+b.toString()+c.toString();:}
+                  | PARAMETRO:a{:RESULT=a;:};
+
+PARAMETRO::= {:RESULT="";:}
+           | PARAMETRO:a mas:b PARAMETRO:c{:RESULT=a.toString()+b.toString()+c.toString();:}
+           | PARAMETRO:a menos:b PARAMETRO:c{:RESULT=a.toString()+b.toString()+c.toString();:}
+           | PARAMETRO:a por:b PARAMETRO:c{:RESULT=a.toString()+b.toString()+c.toString();:}
+           | PARAMETRO:a div:b PARAMETRO:c{:RESULT=a.toString()+b.toString()+c.toString();:}
+           | PARAMETRO:a potencia:b PARAMETRO:c{:RESULT=a.toString()+b.toString()+c.toString();:}
+           | PARAMETRO:a abre:b PARAMETRO:c{:RESULT=a.toString()+b.toString()+c.toString();:}
+           | PARAMETRO:a cierra:b PARAMETRO:c{:RESULT=a.toString()+b.toString()+c.toString();:}
+           | PARAMETRO:a mayorigualq:b PARAMETRO:c{:RESULT=a.toString()+b.toString()+c.toString();:}
+           | PARAMETRO:a menorigualq:b PARAMETRO:c{:RESULT=a.toString()+b.toString()+c.toString();:}
+           | PARAMETRO:a igualigual:b PARAMETRO:c{:RESULT=a.toString()+b.toString()+c.toString();:}
+           | PARAMETRO:a diferente:b PARAMETRO:c{:RESULT=a.toString()+b.toString()+c.toString();:}
+           | PARAMETRO:a or:b PARAMETRO:c{:RESULT=a.toString()+b.toString()+c.toString();:}
+           | PARAMETRO:a and:b PARAMETRO:c{:RESULT=a.toString()+b.toString()+c.toString();:}
+           | PARAMETRO:a not:b PARAMETRO:c{:RESULT=a.toString()+b.toString()+c.toString();:}
+           | valor_numero_completo:a{:RESULT=a.toString();:}
+           | comilladoble:a valor_id:b comilladoble:c{:RESULT=a.toString()+b.toString()+c.toString();:}
+           | valor_verdadero:a{:RESULT=a.toString();:}
+           | valor_falso:a{:RESULT=a.toString();:};
+
+TIPO_TIPO::= principal:a{:
+                            RESULT="principal";
+                        :}
+           | secundaria:a{:
+                            RESULT="secundaria";        
+                         :};
+
+CONTENIDO_VENTANA::= CONTENIDO_VENTANA:a ETIQUETA_CONTENEDOR:b{:
+                                                                RESULT=a;
+                                                                if(b!=null){
+                                                                    a.add(b);
+                                                                }
+                                                              :}
+                   | ETIQUETA_CONTENEDOR:a{:
+                                            RESULT=new LinkedList<NodoGXML>();
+                                            if(a!=null){
+                                                RESULT.add(a);
+                                            }
+                                          :};
+
+ETIQUETA_CONTENEDOR::=abre e_contenedor:a ELEMENTOS_CONTENEDORES:b cierra abre div e_contenedor cierra{:
+                                                                                                        RESULT=new NodoGXML(this.parser.index,a.toString(),a.toString(),b);
+                                                                                                        this.parser.index++;
+                                                                                                        //vamos a verificar los elementos del contenedor
+                                                                                                        String respuesta=RESULT.elementosContenedor(RESULT.elementos);
+                                                                                                        if(respuesta.equals("")){ 
+                                                                                                        }else{
+                                                                                                            RESULT=null;
+                                                                                                            System.out.println(respuesta);
+                                                                                                        }
+                                                                                                      :};
+
+ELEMENTOS_CONTENEDORES::= ELEMENTOS_CONTENEDORES:a ELEMENTO_CONTENEDOR:b{:
+                                                                        RESULT=a;
+                                                                        RESULT.add(b);
+                                                                        :}
+                        | ELEMENTO_CONTENEDOR:a{:
+                                                RESULT=new LinkedList<NodoElemento>();
+                                                RESULT.add(a);
+                                               :};
+
+ELEMENTO_CONTENEDOR::= id igual comilladoble valor_id:a comilladoble{:
+                                                                        //tipo,valor/nombre
+                                                                        RESULT=new NodoElemento("ELEMENTO",a.toString(),"id");
+                                                                    :} 
+                     | x igual valor_numero_completo:a{:
+                                                        //tipo,valor/nombre
+                                                        RESULT=new NodoElemento("ELEMENTO",a.toString(),"x");
+                                                      :} 
+                     | y igual valor_numero_completo:a{:
+                                                        //tipo,valor/nombre
+                                                        RESULT=new NodoElemento("ELEMENTO",a.toString(),"y");
+                                                      :}
+                     | alto igual valor_numero_completo:a{:
+                                                            //tipo,valor/nombre
+                                                            RESULT=new NodoElemento("ELEMENTO",a.toString(),"alto");
+                                                         :}
+                     | ancho igual valor_numero_completo:a{:
+                                                            //tipo,valor/nombre
+                                                            RESULT=new NodoElemento("ELEMENTO",a.toString(),"ancho");
+                                                          :}
+                     | color igual comilladoble valor_hexa:a comilladoble{:
+                                                                            //tipo,valor/nombre
+                                                                            RESULT=new NodoElemento("ELEMENTO",a.toString(),"color");
+                                                                         :}
+                     | borde igual TIPO_BORDE:a{:
+                                                //tipo,valor/nombre
+                                                RESULT=new NodoElemento("ELEMENTO",a.toString(),"borde");
+                                               :};
+TIPO_BORDE::= valor_verdadero{:
+                                RESULT="verdadero";
+                             :}
+            | valor_falso{:
+                            RESULT="falso";
+                         :};
+

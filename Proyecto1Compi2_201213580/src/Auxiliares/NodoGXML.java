@@ -12,53 +12,37 @@ import java.util.LinkedList;
  */
 public class NodoGXML {
     public int index;//sirve como identificador del nodo en el arbol
-    public String tipo_etiqueta;//este es el tipo de etiqueta que se tiene
-    public Object valor;//guarda el valor que tiene dentro una etiqueta si fuera necesario
+    public String tipo_etiqueta;//este es el tipo de etiqueta que se tiene, el nombre de la etiqueta ventana importar etc
+    public Object valor;//guarda el valor que tiene dentro una etiqueta si fuera necesario, como en importar
+    public String id;//identificador del nodo o nombre
     //definicion de los elementos de las etiquetas
-    public String id;
-    public String tipo;
-    public String color;
-    public int x;
-    public int y;
-    public int alto;
-    public int ancho;
-    public boolean borde;
-    public String nombre;
-    public String fuente;
-    public int tam;
-    public boolean negrita;
-    public boolean cursiva;
-    public int maximo;
-    public int minimo;
-    public String path;
-    public boolean auto_reproduccion;
+    public LinkedList<NodoElemento>elementos;
     public LinkedList<NodoGXML>nodos;
-
+    
+    
+    
+    
     public NodoGXML() {
         this.index = -2;
         this.tipo_etiqueta ="";
         this.valor = "";
-        this.id = "";
-        this.tipo = "";
-        this.color = "";
-        this.x = -1;
-        this.y = -1;
-        this.alto = -1;
-        this.ancho = -1;
-        this.borde = false;
-        this.nombre = "";
-        this.fuente = "";
-        this.tam = -1;
-        this.negrita = false;
-        this.cursiva = false;
-        this.maximo = -1;
-        this.minimo = -1;
-        this.path = "";
-        this.auto_reproduccion = false;
+        this.id="";
+        this.elementos=new LinkedList<NodoElemento>();
         this.nodos = new LinkedList<NodoGXML>();
     }
 
-
+    public NodoGXML(int index, String tipo_etiqueta, String id, LinkedList<NodoElemento> elementos) {
+        this.index = index;
+        this.tipo_etiqueta = tipo_etiqueta;
+        this.id = id;
+        this.elementos = elementos;
+    }
+    
+    public void AgregarNodos(LinkedList<NodoGXML>entrada){
+        for(int i=0;i<entrada.size();i++){
+            this.nodos.add(entrada.get(i));
+        }
+    }
     public int getIndex() {
         return index;
     }
@@ -83,140 +67,12 @@ public class NodoGXML {
         this.valor = valor;
     }
 
-    public String getId() {
-        return id;
+    public LinkedList<NodoElemento> getElementos() {
+        return elementos;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public int getAlto() {
-        return alto;
-    }
-
-    public void setAlto(int alto) {
-        this.alto = alto;
-    }
-
-    public int getAncho() {
-        return ancho;
-    }
-
-    public void setAncho(int ancho) {
-        this.ancho = ancho;
-    }
-
-    public boolean isBorde() {
-        return borde;
-    }
-
-    public void setBorde(boolean borde) {
-        this.borde = borde;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getFuente() {
-        return fuente;
-    }
-
-    public void setFuente(String fuente) {
-        this.fuente = fuente;
-    }
-
-    public int getTam() {
-        return tam;
-    }
-
-    public void setTam(int tam) {
-        this.tam = tam;
-    }
-
-    public boolean isNegrita() {
-        return negrita;
-    }
-
-    public void setNegrita(boolean negrita) {
-        this.negrita = negrita;
-    }
-
-    public boolean isCursiva() {
-        return cursiva;
-    }
-
-    public void setCursiva(boolean cursiva) {
-        this.cursiva = cursiva;
-    }
-
-    public int getMaximo() {
-        return maximo;
-    }
-
-    public void setMaximo(int maximo) {
-        this.maximo = maximo;
-    }
-
-    public int getMinimo() {
-        return minimo;
-    }
-
-    public void setMinimo(int minimo) {
-        this.minimo = minimo;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
-
-    public boolean isAuto_reproduccion() {
-        return auto_reproduccion;
-    }
-
-    public void setAuto_reproduccion(boolean auto_reproduccion) {
-        this.auto_reproduccion = auto_reproduccion;
+    public void setElementos(LinkedList<NodoElemento> elementos) {
+        this.elementos = elementos;
     }
 
     public LinkedList<NodoGXML> getNodos() {
@@ -226,10 +82,39 @@ public class NodoGXML {
     public void setNodos(LinkedList<NodoGXML> nodos) {
         this.nodos = nodos;
     }
-    
-    
-    
-    
-    
-    
+    public String elementosVentana(LinkedList<NodoElemento>entrada){
+        String respuesta="";
+        int id=0;
+        int tipo=0;
+        for(int i=0;i<entrada.size();i++){
+            if(entrada.get(i).getNombre().equals("id")){
+                id++;
+            }else if(entrada.get(i).getNombre().equals("tipo")){
+                tipo++;
+            }
+        }
+        if(id!=1||tipo!=1){
+            respuesta="Error Sintactico: El numero de elementos obligatorios de la ETIQUETA VENTANA son incorrectos, porfavor verificar si hace falta o sobra alguno";
+        }
+        return respuesta;
+    }
+    public String elementosContenedor(LinkedList<NodoElemento>entrada){
+        String respuesta="";
+        int id=0;
+        int x=0;
+        int y=0;
+        for(int i=0;i<entrada.size();i++){
+            if(entrada.get(i).getNombre().equals("id")){
+                id++;
+            }else if(entrada.get(i).getNombre().equals("x")){
+                x++;
+            }else if(entrada.get(i).getNombre().equals("y")){
+                y++;
+            }
+        }
+        if(id!=1||x!=1|y!=1){
+            respuesta="Error Sintactico: El numero de elementos obligatorios de la ETIQUETA CONTENEDOR son incorrectos, porfavor verificar si hace falta o sobra alguno";
+        }
+        return respuesta;
+    }
 }

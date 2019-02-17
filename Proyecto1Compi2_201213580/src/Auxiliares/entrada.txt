@@ -1,1 +1,18 @@
-C:\hola\nuevo.gxm
+<importar>
+C:\hola\como.gxml
+##nuevo
+</importar>
+<importar>
+C:\hola2\como2.gxml
+##nuevo
+</importar>
+<VENTANA ID="HOLA" TIPO="PRINCIPAL" accioninicial={llamar(15+78+15,78+7,verdadero)}>
+<CONTENEDOR  id="hola" X=10 Y=20></CONTENEDOR>
+##hola
+</ventana>
+<VENTANA ID="HOLA" TIPO="PRINCIPAL">
+<CONTENEDOR id="hola1" X=30 Y=40></CONTENEDOR>
+</ventana>
+<VENTANA ID="HOLA" TIPO="PRINCIPAL">
+<CONTENEDOR id="hola2" X=50 Y=60 ></CONTENEDOR>
+</ventana>
