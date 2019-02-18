@@ -7,6 +7,7 @@ import java.io.*;
 import java.util.LinkedList;
 import Auxiliares.NodoGXML;
 import Auxiliares.NodoElemento;
+import java.awt.Color;
 parser code
 {:
     public NodoGXML root;
@@ -29,14 +30,14 @@ terminal String e_listadatos,e_dato,e_multimedia,e_boton,e_enviar;
 
 //DEFINICION DE ELEMENTOS DE LAS ETIQUETAS GXML
 terminal String id,tipo,color,x,y,alto,ancho,borde,nombre,fuente,tam;
-terminal String negrita,cursiva,maximo,minimo,path,auto_reproduccion,principal,secundaria,accion,accioninicial,accionfinal;
+terminal String negrita,cursiva,maximo,minimo,path,auto_reproduccion,principal,secundaria,accion,accioninicial,accionfinal,referencia;
 
 //DEFINICION DE SIGNOS DEL LENGUAJE GXML
 terminal String abre,cierra,div,igual,comilladoble,llavea,llavec,parena,parenc,coma;
 terminal String mas,menos,por,potencia,mayorq,menorq,mayorigualq,menorigualq,igualigual,diferente,or,and,not;
 
 //DEFINICION VALORES IMPLICITOS LENGUAJE GXML
-terminal String valor_id,valor_numero_completo,valor_path,valor_path2,valor_hexa,valor_verdadero,valor_falso;
+terminal String valor_id,valor_numero_completo,valor_path,valor_path2,valor_cadena,valor_verdadero,valor_falso;
 //comentarios
 
 
@@ -48,11 +49,20 @@ non terminal LinkedList<NodoGXML> CONTENIDO_VENTANA;
 non terminal NodoGXML ETIQUETA_CONTENEDOR;
 non terminal LinkedList<NodoElemento> ELEMENTOS_CONTENEDORES;
 non terminal NodoElemento ELEMENTO_CONTENEDOR;
-non terminal String TIPO_TIPO;
-non terminal String TIPO_BORDE;
+non terminal String TIPO_BOOL;
 non terminal String LISTA_PARAMETROS,PARAMETRO;
+non terminal LinkedList<NodoGXML> CONTENIDO_CONTENEDOR;
+non terminal NodoGXML ETIQUETAS_CONTENEDOR;
+non terminal NodoGXML ETIQUETA_TEXTO,ETIQUETA_CONTROL,ETIQUETA_MULTIMEDIA,ETIQUETA_BOTON,ETIQUETA_ENVIAR;
 non terminal LinkedList<NodoGXML> DEFINICION_IMPORTAR,DEFINICION_GENERAL;
+non terminal LinkedList<NodoElemento> ELEMENTOS_TEXTOS;
+non terminal NodoElemento ELEMENTO_TEXTO;
+non terminal NodoElemento ELEMENTO_CONTROL;
+non terminal LinkedList<NodoElemento> ELEMENTOS_CONTROLES;
 
+
+non terminal LinkedList<NodoElemento> ELEMENTOS_ENVIAR;
+non terminal NodoElemento ELEMENTO_ENVIAR;
 
 precedence left or;
 precedence left and;
@@ -144,27 +154,42 @@ ETIQUETA_VENTANA::= abre e_ventana:a ELEMENTOS_VENTANAS:b cierra CONTENIDO_VENTA
                                                                                                               :};
 ELEMENTOS_VENTANAS::= ELEMENTOS_VENTANAS:a ELEMENTO_VENTANA:b{:
                                                                 RESULT=a;
-                                                                RESULT.add(b);
+                                                                if(b!=null){
+                                                                    RESULT.add(b);
+                                                                }
                                                              :}
                     | ELEMENTO_VENTANA:a{:
                                         RESULT=new LinkedList<NodoElemento>();
-                                        RESULT.add(a);
+                                        if(a!=null){
+                                            RESULT.add(a);
+                                        }
+                                        
                                         :};
 
-ELEMENTO_VENTANA::= id igual comilladoble valor_id:b comilladoble{:
-                                                                        RESULT=new NodoElemento("ELEMENTO",b.toString(),"id");
-                                                                   :}
-                  | tipo igual comilladoble TIPO_TIPO:b comilladoble{:
-                                                                        RESULT=new NodoElemento("ELEMENTO",b.toString(),"tipo");
-                                                                      :}
-                  | color igual comilladoble valor_hexa:b comilladoble{:
-                                                                        RESULT=new NodoElemento("ELEMENTO",b.toString(),"color");
-                                                                        :}
+ELEMENTO_VENTANA::= id igual valor_cadena:b {:
+                                               RESULT=new NodoElemento("ELEMENTO",b.toString().replaceAll("\"",""),"id");
+                                            :}
+                  | tipo igual valor_cadena:b{:
+                                                if(b.toString().replaceAll("\"","").toLowerCase().equals("principal")||b.toString().replaceAll("\"","").toLowerCase().equals("secundario")){
+                                                    RESULT=new NodoElemento("ELEMENTO",b.toString().replaceAll("\"",""),"tipo");
+                                                }else{
+                                                    System.out.println("Error en la asignacion de tipo en la etiqueta ventana Linea:" + bleft + " Columna: " + bright);
+                                                }
+                                             :}
+                  | color igual valor_cadena:b{:
+                                                
+                                                try{
+                                                    Color.decode(b.toString().replaceAll("\"",""));
+                                                    RESULT=new NodoElemento("ELEMENTO",b.toString().replaceAll("\"",""),"color");
+                                                }catch(Exception e){
+                                                    System.out.println(e.toString()+" Error en la asignacion de valor en el elemento color etiqueta ventana Linea: "+bleft + " Columna: " + bright);
+                                                }
+                                              :}
                   | accioninicial igual llavea valor_id:a parena LISTA_PARAMETROS:b parenc llavec{:
-                                                                                               RESULT=new NodoElemento("ELEMENTO",a.toString()+"("+b.toString()+")","accicioninicial"); 
-                                                                                             :}
+                                                                                                   RESULT=new NodoElemento("ELEMENTO",a.toString()+"("+b.toString()+")","accioninicial"); 
+                                                                                                 :}
                   | accionfinal igual llavea valor_id:a parena LISTA_PARAMETROS:b parenc{:
-                                                                                            RESULT=new NodoElemento("ELEMENTO",a.toString()+"("+b.toString()+")","accicionfinal"); 
+                                                                                            RESULT=new NodoElemento("ELEMENTO",a.toString()+"("+b.toString()+")","accionfinal"); 
                                                                                         :};
 LISTA_PARAMETROS::= LISTA_PARAMETROS:a coma:b PARAMETRO:c{:RESULT=a.toString()+b.toString()+c.toString();:}
                   | PARAMETRO:a{:RESULT=a;:};
@@ -185,16 +210,10 @@ PARAMETRO::= {:RESULT="";:}
            | PARAMETRO:a and:b PARAMETRO:c{:RESULT=a.toString()+b.toString()+c.toString();:}
            | PARAMETRO:a not:b PARAMETRO:c{:RESULT=a.toString()+b.toString()+c.toString();:}
            | valor_numero_completo:a{:RESULT=a.toString();:}
-           | comilladoble:a valor_id:b comilladoble:c{:RESULT=a.toString()+b.toString()+c.toString();:}
+           | valor_cadena:a{:RESULT=a.toString().replaceAll("\"","");:}
            | valor_verdadero:a{:RESULT=a.toString();:}
            | valor_falso:a{:RESULT=a.toString();:};
 
-TIPO_TIPO::= principal:a{:
-                            RESULT="principal";
-                        :}
-           | secundaria:a{:
-                            RESULT="secundaria";        
-                         :};
 
 CONTENIDO_VENTANA::= CONTENIDO_VENTANA:a ETIQUETA_CONTENEDOR:b{:
                                                                 RESULT=a;
@@ -209,17 +228,18 @@ CONTENIDO_VENTANA::= CONTENIDO_VENTANA:a ETIQUETA_CONTENEDOR:b{:
                                             }
                                           :};
 
-ETIQUETA_CONTENEDOR::=abre e_contenedor:a ELEMENTOS_CONTENEDORES:b cierra abre div e_contenedor cierra{:
-                                                                                                        RESULT=new NodoGXML(this.parser.index,a.toString(),a.toString(),b);
-                                                                                                        this.parser.index++;
-                                                                                                        //vamos a verificar los elementos del contenedor
-                                                                                                        String respuesta=RESULT.elementosContenedor(RESULT.elementos);
-                                                                                                        if(respuesta.equals("")){ 
-                                                                                                        }else{
-                                                                                                            RESULT=null;
-                                                                                                            System.out.println(respuesta);
-                                                                                                        }
-                                                                                                      :};
+ETIQUETA_CONTENEDOR::=abre e_contenedor:a ELEMENTOS_CONTENEDORES:b cierra CONTENIDO_CONTENEDOR:c abre div e_contenedor cierra{:
+                                                                                                                                RESULT=new NodoGXML(this.parser.index,a.toString(),a.toString(),b);
+                                                                                                                                this.parser.index++;
+                                                                                                                                //vamos a verificar los elementos del contenedor
+                                                                                                                                String respuesta=RESULT.elementosContenedor(RESULT.elementos);
+                                                                                                                                RESULT.nodos=c;
+                                                                                                                                if(respuesta.equals("")){ 
+                                                                                                                                }else{
+                                                                                                                                    RESULT=null;
+                                                                                                                                    System.out.println(respuesta);
+                                                                                                                                }
+                                                                                                                             :};
 
 ELEMENTOS_CONTENEDORES::= ELEMENTOS_CONTENEDORES:a ELEMENTO_CONTENEDOR:b{:
                                                                         RESULT=a;
@@ -230,10 +250,9 @@ ELEMENTOS_CONTENEDORES::= ELEMENTOS_CONTENEDORES:a ELEMENTO_CONTENEDOR:b{:
                                                 RESULT.add(a);
                                                :};
 
-ELEMENTO_CONTENEDOR::= id igual comilladoble valor_id:a comilladoble{:
-                                                                        //tipo,valor/nombre
-                                                                        RESULT=new NodoElemento("ELEMENTO",a.toString(),"id");
-                                                                    :} 
+ELEMENTO_CONTENEDOR::= id igual valor_cadena:a{:
+                                                RESULT=new NodoElemento("ELEMENTO",a.toString().replaceAll("\"",""),"id");
+                                              :} 
                      | x igual valor_numero_completo:a{:
                                                         //tipo,valor/nombre
                                                         RESULT=new NodoElemento("ELEMENTO",a.toString(),"x");
@@ -250,18 +269,244 @@ ELEMENTO_CONTENEDOR::= id igual comilladoble valor_id:a comilladoble{:
                                                             //tipo,valor/nombre
                                                             RESULT=new NodoElemento("ELEMENTO",a.toString(),"ancho");
                                                           :}
-                     | color igual comilladoble valor_hexa:a comilladoble{:
-                                                                            //tipo,valor/nombre
-                                                                            RESULT=new NodoElemento("ELEMENTO",a.toString(),"color");
-                                                                         :}
-                     | borde igual TIPO_BORDE:a{:
+                     | color igual valor_cadena:a{:
+                                                    try{
+                                                        Color.decode(a.toString().replaceAll("\"",""));
+                                                        RESULT=new NodoElemento("ELEMENTO",a.toString().replaceAll("\"",""),"color");
+                                                    }catch(Exception e){
+                                                        System.out.println(e.toString()+" Error en la asignacion de valor en el elemento color etiqueta ventana Linea: "+aleft + " Columna: " + aright);
+                                                    }                        
+                                               :}
+                     | borde igual TIPO_BOOL:a{:
                                                 //tipo,valor/nombre
                                                 RESULT=new NodoElemento("ELEMENTO",a.toString(),"borde");
                                                :};
-TIPO_BORDE::= valor_verdadero{:
+TIPO_BOOL::= valor_verdadero{:
                                 RESULT="verdadero";
                              :}
             | valor_falso{:
                             RESULT="falso";
                          :};
 
+
+
+CONTENIDO_CONTENEDOR::= CONTENIDO_CONTENEDOR:a ETIQUETAS_CONTENEDOR:b{:
+                                                                        RESULT=a;
+                                                                        if(b!=null){
+                                                                            RESULT.add(b);
+                                                                        }
+                                                                     :}
+                      | ETIQUETAS_CONTENEDOR:a{:
+                                                RESULT=new LinkedList<NodoGXML>();
+                                                if(a!=null){
+                                                    RESULT.add(a);
+                                                }
+                                             :};
+
+ETIQUETAS_CONTENEDOR::= ETIQUETA_TEXTO:a{:
+                                            RESULT=a;
+                                        :}
+                      | ETIQUETA_CONTROL:a{:
+                                            RESULT=a;
+                                        :}
+                      | ETIQUETA_MULTIMEDIA:a{:
+                                            RESULT=a;
+                                        :}
+                      | ETIQUETA_BOTON:a{:
+                                            RESULT=a;
+                                        :}
+                      | ETIQUETA_ENVIAR:a{:
+                                            RESULT=a;
+                                        :};
+
+ETIQUETA_TEXTO::= abre e_texto:a ELEMENTOS_TEXTOS:b cierra  abre div e_texto cierra{:
+                                                                                    RESULT=new NodoGXML(this.parser.index,a.toString(),a.toString(),b);
+                                                                                    this.parser.index++;
+                                                                                    //vamos a verificar los elementos de texto
+                                                                                    String respuesta=RESULT.elementosTexto(RESULT.elementos);
+                                                                                    if(respuesta.equals("")){ 
+                                                                                    }else{
+                                                                                        RESULT=null;
+                                                                                        System.out.println(respuesta);
+                                                                                    }
+                                                                               :};
+ELEMENTOS_TEXTOS::= ELEMENTOS_TEXTOS:a ELEMENTO_TEXTO:b{:
+                                                        RESULT=a;
+                                                        if(b!=null){
+                                                            RESULT.add(b);
+                                                        }
+                                                       :}
+                  | ELEMENTO_TEXTO:a{:
+                                    RESULT=new LinkedList<NodoElemento>();
+                                    if(a!=null){
+                                        RESULT.add(a);
+                                    }
+                                   :};
+
+ELEMENTO_TEXTO::= nombre igual valor_cadena:a{:
+                                                RESULT=new NodoElemento("ELEMENTO",a.toString().replaceAll("\"",""),"nombre");
+                                             :}
+                | x igual valor_numero_completo:a{:
+                                                    RESULT=new NodoElemento("ELEMENTO",a.toString(),"x");
+                                                 :}
+                | y igual valor_numero_completo:a{:
+                                                    RESULT=new NodoElemento("ELEMENTO",a.toString(),"y");
+                                                 :}
+                | fuente igual valor_cadena:a{:
+                                                RESULT=new NodoElemento("ELEMENTO",a.toString().replaceAll("\"","").toLowerCase(),"");
+                                             :}
+                | tam igual valor_numero_completo:a{:
+                                                    RESULT=new NodoElemento("ELEMENTO",a.toString(),"tam");
+                                                   :}
+                | color igual valor_cadena:a{:
+                                                try{
+                                                    Color.decode(a.toString().replaceAll("\"",""));
+                                                    RESULT=new NodoElemento("ELEMENTO",a.toString().replaceAll("\"",""),"color");
+                                                }catch(Exception e){
+                                                    System.out.println(e.toString()+" Error en la asignacion de valor en el elemento color etiqueta ventana Linea: "+aleft + " Columna: " + aright);
+                                                }  
+                                            :}
+                | negrita igual TIPO_BOOL:a{:
+                                            RESULT=new NodoElemento("ELEMENTO",a.toString(),"negrita");
+                                           :}
+                | cursiva igual TIPO_BOOL:a{:
+                                            RESULT=new NodoElemento("ELEMENTO",a.toString(),"cursiva");
+                                           :};
+
+//aqui queda pendiente el colocar el contenido que esta dentro del control como es la lista y dato
+ETIQUETA_CONTROL::= abre e_control:a ELEMENTOS_CONTROLES:b cierra abre div e_control cierra{:
+                                                                                            RESULT=new NodoGXML(this.parser.index,a.toString(),a.toString(),b);
+                                                                                            this.parser.index++;
+                                                                                            //vamos a verificar los elementos de texto
+                                                                                            String respuesta=RESULT.elementosControl(RESULT.elementos);
+                                                                                            if(respuesta.equals("")){ 
+                                                                                            }else{
+                                                                                                RESULT=null;
+                                                                                                System.out.println(respuesta);
+                                                                                            }
+                                                                                         :};
+
+ELEMENTOS_CONTROLES::= ELEMENTOS_CONTROLES:a ELEMENTO_CONTROL:b{:
+                                                                RESULT=a;
+                                                                if(b!=null){
+                                                                    RESULT.add(b);
+                                                                }
+                                                               :}
+                       | ELEMENTO_CONTROL:a{:
+                                            RESULT=new LinkedList<NodoElemento>();
+                                            if(a!=null){
+                                                RESULT.add(a);
+                                            }
+                                           :};
+
+ELEMENTO_CONTROL::= tipo igual valor_cadena:a{:
+                                                String valor=a.toString().replaceAll("\"","").toLowerCase();
+                                                if(valor.equals("texto")){
+                                                    RESULT=new NodoElemento("ELEMENTO","texto","tipo");
+                                                }else if(valor.equals("textoarea")){
+                                                    RESULT=new NodoElemento("ELEMENTO","textoarea","tipo");
+                                                }else if(valor.equals("numerico")){
+                                                    RESULT=new NodoElemento("ELEMENTO","numerico","tipo");
+                                                }else if(valor.equals("desplegable")){
+                                                    RESULT=new NodoElemento("ELEMENTO","desplegable","tipo");
+                                                }
+                                             :}
+                  | nombre igual valor_cadena:a{:
+                                                RESULT=new NodoElemento("ELEMENTO",a.toString().replaceAll("\"",""),"nombre");
+                                               :}
+                  | x igual valor_numero_completo:a{:
+                                                    RESULT=new NodoElemento("ELEMENTO",a.toString(),"x");
+                                                   :}
+                  | y igual valor_numero_completo:a{:
+                                                    RESULT=new NodoElemento("ELEMENTO",a.toString(),"y");
+                                                   :}
+                  | alto igual valor_numero_completo:a{:
+                                                        //tipo,valor/nombre
+                                                        RESULT=new NodoElemento("ELEMENTO",a.toString(),"alto");
+                                                      :}
+                  | ancho igual valor_numero_completo:a{:
+                                                        //tipo,valor/nombre
+                                                        RESULT=new NodoElemento("ELEMENTO",a.toString(),"ancho");
+                                                       :}
+                  | fuente igual valor_cadena:a{:
+                                                    RESULT=new NodoElemento("ELEMENTO",a.toString().replaceAll("\"","").toLowerCase(),"");
+                                               :}
+                  | tam igual valor_numero_completo:a{:
+                                                        RESULT=new NodoElemento("ELEMENTO",a.toString(),"tam");
+                                                     :}
+                  | color igual valor_cadena:a{:
+                                                try{
+                                                    Color.decode(a.toString().replaceAll("\"",""));
+                                                    RESULT=new NodoElemento("ELEMENTO",a.toString().replaceAll("\"",""),"color");
+                                                }catch(Exception e){
+                                                    System.out.println(e.toString()+" Error en la asignacion de valor en el elemento color etiqueta ventana Linea: "+aleft + " Columna: " + aright);
+                                                }  
+                                              :}
+                  | negrita igual TIPO_BOOL:a{:
+                                                RESULT=new NodoElemento("ELEMENTO",a.toString(),"negrita");
+                                             :}
+                  | cursiva igual TIPO_BOOL:a{:
+                                                RESULT=new NodoElemento("ELEMENTO",a.toString(),"cursiva");
+                                             :}
+                  | maximo igual valor_numero_completo:a{:
+                                                            //tipo,valor/nombre
+                                                            RESULT=new NodoElemento("ELEMENTO",a.toString(),"maximo");
+                                                        :}
+                  | minimo igual valor_numero_completo:a{:
+                                                            //tipo,valor/nombre
+                                                            RESULT=new NodoElemento("ELEMENTO",a.toString(),"minimo");
+                                                        :}
+                  | accion igual llavea valor_id:a parena LISTA_PARAMETROS:b parenc llavec{:
+                                                                                            RESULT=new NodoElemento("ELEMENTO",a.toString()+"("+b.toString()+")","accion"); 
+                                                                                          :};
+ETIQUETA_MULTIMEDIA::= abre e_multimedia cierra abre div e_multimedia cierra;
+ETIQUETA_BOTON::= abre e_boton cierra abre div e_boton cierra;
+
+//falta agregarle la parte que va dentro de la etiqueta
+ETIQUETA_ENVIAR::= abre e_enviar:a ELEMENTOS_ENVIAR:b cierra abre div e_enviar cierra{:
+                                                                                        RESULT=new NodoGXML(this.parser.index,a.toString(),a.toString(),b);
+                                                                                        this.parser.index++;
+                                                                                        //vamos a verificar los elementos de texto
+                                                                                        String respuesta=RESULT.elementosEnviar(RESULT.elementos);
+                                                                                        if(respuesta.equals("")){ 
+                                                                                        }else{
+                                                                                            RESULT=null;
+                                                                                            System.out.println(respuesta);
+                                                                                        }
+                                                                                     :};
+ELEMENTOS_ENVIAR::= ELEMENTOS_ENVIAR:a ELEMENTO_ENVIAR:b{:
+                                                            RESULT=a;
+                                                            if(b!=null){
+                                                                RESULT.add(b);
+                                                            }
+                                                        :}
+                  | ELEMENTO_ENVIAR:a{:
+                                        RESULT=new LinkedList<NodoElemento>();
+                                        if(a!=null){
+                                            RESULT.add(a);
+                                        }
+                                     :};
+
+ELEMENTO_ENVIAR::= nombre igual valor_cadena:a{:
+                                                RESULT=new NodoElemento("ELEMENTO",a.toString().replaceAll("\"",""),"nombre");
+                                               :}
+                 | x igual valor_numero_completo:a{:
+                                                    RESULT=new NodoElemento("ELEMENTO",a.toString(),"x");
+                                                   :}
+                 | y igual valor_numero_completo:a{:
+                                                    RESULT=new NodoElemento("ELEMENTO",a.toString(),"y");
+                                                   :}
+                 | alto igual valor_numero_completo:a{:
+                                                        //tipo,valor/nombre
+                                                        RESULT=new NodoElemento("ELEMENTO",a.toString(),"alto");
+                                                      :}
+                 | ancho igual valor_numero_completo:a{:
+                                                        //tipo,valor/nombre
+                                                        RESULT=new NodoElemento("ELEMENTO",a.toString(),"ancho");
+                                                       :}
+                 | referencia igual valor_cadena:a{:
+                                                    RESULT=new NodoElemento("ELEMENTO",a.toString().replaceAll("\"",""),"referencia");
+                                                  :}
+                 | accion igual llavea valor_id:a parena LISTA_PARAMETROS:b parenc llavec{:
+                                                                                            RESULT=new NodoElemento("ELEMENTO",a.toString()+"("+b.toString()+")","accion"); 
+                                                                                          :};

@@ -7,12 +7,31 @@ C:\hola2\como2.gxml
 ##nuevo
 </importar>
 <VENTANA ID="HOLA" TIPO="PRINCIPAL" accioninicial={llamar(15+78+15,78+7,verdadero)}>
-<CONTENEDOR  id="hola"></CONTENEDOR>
-##hola
-</ventana>
+	<CONTENEDOR  id="hola" X=10 Y=20>
+		<TEXTO NOMBRE="texto1" x=10 y=20>
+		</TEXTO>
+		<CONTROL tipo="numerico" nombre="manuel" x=10 y=10 alto=10 ancho=10 maximo=100>
+		</CONTROL>
+	</CONTENEDOR>
+	##hola
+</VENTANA>
+<VENTANA ID="HOLA" TIPO="PRINCIPAL" color="000000">
+	<CONTENEDOR id="hola1" X=30 Y=40>
+		<TEXTO NOMBRE="texto1" x=10 y=20>
+		</TEXTO>
+		<CONTROL tipo="texto" nombre="manuel" x=10 y=10>
+		</CONTROL>
+	</CONTENEDOR>
+</VENTANA>
 <VENTANA ID="HOLA" TIPO="PRINCIPAL">
-<CONTENEDOR id="hola" ></CONTENEDOR>
-</ventana>
-<VENTANA ID="HOLA" TIPO="PRINCIPAL">
-<CONTENEDOR id="hola" ></CONTENEDOR>
-</ventana>
+	<CONTENEDOR id="hola2" X=50 Y=60 >
+		<ENVIAR NOMBRE="enviar1" x=10 y=20>
+		</ENVIAR>
+		<texto NOMBRE="texto1" x=10 y=20>
+		</texto>
+		<MULTIMEDIA>
+		</MULTIMEDIA>
+		<enviar NOMBRE="enviar1" x=10 y=20>
+		</enviar>
+	</CONTENEDOR>
+</VENTANA>

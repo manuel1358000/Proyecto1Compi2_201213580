@@ -117,4 +117,108 @@ public class NodoGXML {
         }
         return respuesta;
     }
+    public String elementosTexto(LinkedList<NodoElemento>entrada){
+        String respuesta="";
+        int nombre=0;
+        int x=0;
+        int y=0;
+        for(int i=0;i<entrada.size();i++){
+            if(entrada.get(i).getNombre().equals("nombre")){
+                nombre++;
+            }else if(entrada.get(i).getNombre().equals("x")){
+                x++;
+            }else if(entrada.get(i).getNombre().equals("y")){
+                y++;
+            }
+        }
+        if(nombre!=1||x!=1|y!=1){
+            respuesta="Error Sintactico: El numero de elementos obligatorios de la ETIQUETA TEXTO son incorrectos, porfavor verificar si hace falta o sobra alguno";
+        }
+        return respuesta;
+    }
+    public String elementosControl(LinkedList<NodoElemento>entrada){
+        String respuesta="";
+        int tipo=0;
+        String tipo_="";
+        int nombre=0;
+        int x=0;
+        int y=0;
+        int fuente=0;
+        int tam=0;
+        int color=0;
+        int negrita=0;
+        int cursiva=0;
+        int maximo=0;
+        int minimo=0;
+        int accion=0;
+        for(int i=0;i<entrada.size();i++){
+            if(entrada.get(i).getNombre().equals("tipo")){
+                tipo++;
+                tipo_=entrada.get(i).valor.toString();
+            }else if(entrada.get(i).getNombre().equals("nombre")){
+                nombre++;
+            }else if(entrada.get(i).getNombre().equals("x")){
+                x++;
+            }else if(entrada.get(i).getNombre().equals("y")){
+                y++;
+            }else if(entrada.get(i).getNombre().equals("fuente")){
+                fuente++;
+            }else if(entrada.get(i).getNombre().equals("tam")){
+                tam++;
+            }else if(entrada.get(i).getNombre().equals("color")){
+                color++;
+            }else if(entrada.get(i).getNombre().equals("negrita")){
+                negrita++;
+            }else if(entrada.get(i).getNombre().equals("cursiva")){
+                cursiva++;
+            }else if(entrada.get(i).getNombre().equals("maximo")){
+                maximo++;
+            }else if(entrada.get(i).getNombre().equals("minimo")){
+                minimo++;
+            }else if(entrada.get(i).getNombre().equals("accion")){
+                accion++;
+            }
+        }
+        if(tipo!=1|nombre!=1||x!=1|y!=1){
+            respuesta="Error Sintactico: El numero de elementos obligatorios de la ETIQUETA CONTROL son incorrectos, porfavor verificar si hace falta o sobra alguno";
+        }else{
+            if(fuente==1|tam==1|color==1|negrita==1|cursiva==1){
+                if(tipo_.equals("texto")|tipo_.equals("textoarea")){
+                }else{
+                    respuesta="Error Sintactico: Se agregaron elementos incorrector al tipo " + tipo_ + " Se recomienda eliminar elementos";
+                }
+            }else if(maximo==1|minimo==1){
+                if(tipo_.equals("numerico")){
+                }else{
+                    respuesta="Error Sintactico: Se agregaron elementos incorrector al tipo " + tipo_ + " Se recomienda eliminar elementos";
+                }
+            }else if(accion==1){
+                if(tipo_.equals("texto")){
+                }else{
+                    respuesta="Error Sintactico: Se agregaron elementos incorrector al tipo " + tipo_ + " Se recomienda eliminar elementos";
+                }
+            }
+        }
+        
+        return respuesta;
+    }
+    public String elementosEnviar(LinkedList<NodoElemento>entrada){
+        String respuesta="";
+        int nombre=0;
+        int x=0;
+        int y=0;
+        for(int i=0;i<entrada.size();i++){
+            if(entrada.get(i).getNombre().equals("nombre")){
+                nombre++;
+            }else if(entrada.get(i).getNombre().equals("x")){
+                x++;
+            }else if(entrada.get(i).getNombre().equals("y")){
+                y++;
+            }
+        }
+        if(nombre!=1||x!=1|y!=1){
+            respuesta="Error Sintactico: El numero de elementos obligatorios de la ETIQUETA ENVIAR son incorrectos, porfavor verificar si hace falta o sobra alguno";
+        }
+        return respuesta;
+    }
 }
