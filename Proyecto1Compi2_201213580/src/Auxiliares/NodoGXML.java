@@ -36,6 +36,8 @@ public class NodoGXML {
         this.tipo_etiqueta = tipo_etiqueta;
         this.id = id;
         this.elementos = elementos;
+        this.nodos=new LinkedList<NodoGXML>();
+        this.valor="";
     }
     
     public void AgregarNodos(LinkedList<NodoGXML>entrada){
@@ -218,6 +220,50 @@ public class NodoGXML {
         }
         if(nombre!=1||x!=1|y!=1){
             respuesta="Error Sintactico: El numero de elementos obligatorios de la ETIQUETA ENVIAR son incorrectos, porfavor verificar si hace falta o sobra alguno";
+        }
+        return respuesta;
+    }
+    public String elementosBoton(LinkedList<NodoElemento>entrada){
+        String respuesta="";
+        int nombre=0;
+        int x=0;
+        int y=0;
+        for(int i=0;i<entrada.size();i++){
+            if(entrada.get(i).getNombre().equals("nombre")){
+                nombre++;
+            }else if(entrada.get(i).getNombre().equals("x")){
+                x++;
+            }else if(entrada.get(i).getNombre().equals("y")){
+                y++;
+            }
+        }
+        if(nombre!=1||x!=1|y!=1){
+            respuesta="Error Sintactico: El numero de elementos obligatorios de la ETIQUETA BOTON son incorrectos, porfavor verificar si hace falta o sobra alguno";
+        }
+        return respuesta;
+    }
+    public String elementosMultimedia(LinkedList<NodoElemento>entrada){
+        String respuesta="";
+        int nombre=0;
+        int path=0;
+        int tipo=0;
+        int x=0;
+        int y=0;
+        for(int i=0;i<entrada.size();i++){
+            if(entrada.get(i).getNombre().equals("path")){
+                path++;
+            }else if(entrada.get(i).getNombre().equals("tipo")){
+                tipo++;
+            }else if(entrada.get(i).getNombre().equals("nombre")){
+                nombre++;
+            }else if(entrada.get(i).getNombre().equals("x")){
+                x++;
+            }else if(entrada.get(i).getNombre().equals("y")){
+                y++;
+            }
+        }
+        if(path!=1|tipo!=1|nombre!=1||x!=1|y!=1){
+            respuesta="Error Sintactico: El numero de elementos obligatorios de la ETIQUETA MULTIMEDIA son incorrectos, porfavor verificar si hace falta o sobra alguno";
         }
         return respuesta;
     }

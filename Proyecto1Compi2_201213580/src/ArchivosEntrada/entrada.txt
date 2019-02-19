@@ -6,32 +6,66 @@ C:\hola\como.gxml
 C:\hola2\como2.gxml
 ##nuevo
 </importar>
-<VENTANA ID="HOLA" TIPO="PRINCIPAL" accioninicial={llamar(15+78+15,78+7,verdadero)}>
-	<CONTENEDOR  id="hola" X=10 Y=20>
-		<TEXTO NOMBRE="texto1" x=10 y=20>
+<VENTANA ID="ventana1" TIPO="PRINCIPAL" accioninicial={llamar(15+78+15,78+7,verdadero)}>
+	<CONTENEDOR  id="cont1" X=10 Y=20>
+		<TEXTO NOMBRE="encabezado" x=10 y=20>
+			hola soy un texro cualquierla 123 hola .as.asd 
 		</TEXTO>
-		<CONTROL tipo="numerico" nombre="manuel" x=10 y=10 alto=10 ancho=10 maximo=100>
+		<CONTROL tipo="numerico" nombre="control1" x=10 y=10 alto=10 ancho=10 maximo=100>
+		<listadatos>
+			<DATO>hola</DATO>
+			<DATO>hola</DATO>
+			<DATO>hola</DATO>
+		</listadatos>
+		<defecto>
+			59791821
+		</defecto>
 		</CONTROL>
 	</CONTENEDOR>
 	##hola
 </VENTANA>
-<VENTANA ID="HOLA" TIPO="PRINCIPAL" color="000000">
-	<CONTENEDOR id="hola1" X=30 Y=40>
+<VENTANA ID="ventana2" TIPO="SECUNDARIA" color="000000">
+	<CONTENEDOR id="cont1" X=30 Y=40>
 		<TEXTO NOMBRE="texto1" x=10 y=20>
+			hola soy un texro cualquierla 123 hola .as.asd 
 		</TEXTO>
-		<CONTROL tipo="texto" nombre="manuel" x=10 y=10>
+		<CONTROL tipo="texto" nombre="control1" x=10 y=10>
+		<defecto>
+			HOLA SOY EL CONTENIDO POR DEFECTO DEL LA ETIQUETA TEXTO
+		</defecto>
 		</CONTROL>
 	</CONTENEDOR>
 </VENTANA>
-<VENTANA ID="HOLA" TIPO="PRINCIPAL">
-	<CONTENEDOR id="hola2" X=50 Y=60 >
+<VENTANA ID="ventana3" TIPO="SECUNDARIA">
+	<CONTENEDOR id="cont1" X=50 Y=60 >
 		<ENVIAR NOMBRE="enviar1" x=10 y=20>
+		hola soy un texro cualquierla 123 hola .as.asd
 		</ENVIAR>
 		<texto NOMBRE="texto1" x=10 y=20>
+			hola soy un texro cualquierla 123 hola .as.asd 
 		</texto>
-		<MULTIMEDIA>
-		</MULTIMEDIA>
+		<boton NOMBRE="boton1" x=10 y=20>
+			hola soy un texro cualquierla 123 hola .as.asd 
+		</boton>
+		<boton NOMBRE="boton2" x=10 y=20>
+			 <texto NOMBRE="texto3" x=10 y=20>
+				hola soy un texro cualquierla 123 hola .as.asd 
+			</texto>
+		</boton>
+		<enviar NOMBRE="enviar2" x=10 y=20>
+			 <texto NOMBRE="texto4" x=10 y=20>
+				hola soy un texro cualquierla 123 hola .as.asd 
+			</texto>
+			##comentario
+		</enviar>
 		<enviar NOMBRE="enviar1" x=10 y=20>
+			hola soy un texro cualquierla 123 hola .as.asd 
+		</enviar>
+		##comentario
+		<enviar NOMBRE="enviar5" x=10 y=20>
+			<texto NOMBRE="texto5" x=10 y=20>
+				hola soy un texro cualquierla 123 hola .as.asd 
+			</texto> 
 		</enviar>
 	</CONTENEDOR>
 </VENTANA>

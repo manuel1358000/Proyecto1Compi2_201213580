@@ -18,6 +18,7 @@ import java_cup.runtime.*;
 %eofval{
 	return null;
 %eofval}
+SIMBOLOS=(["."]|["@"]|["#"]|["$"]|["%"])
 NUMERO=[0-9]
 NUMERO_COMPLETO=(["-"])?({NUMERO})({NUMERO})*
 LETRA=[a-zA-Z]
@@ -68,6 +69,9 @@ CADENA="\""~"\""
 <YYINITIAL> "accioninicial" { return new Symbol(simbolo.accioninicial, yyline, yycolumn,yytext());}
 <YYINITIAL> "accionfinal" { return new Symbol(simbolo.accionfinal, yyline, yycolumn,yytext());}
 <YYINITIAL> "referencia" { return new Symbol(simbolo.referencia, yyline, yycolumn,yytext());}
+<YYINITIAL> "musica" { return new Symbol(simbolo.musica, yyline, yycolumn,yytext());}
+<YYINITIAL> "video" { return new Symbol(simbolo.video, yyline, yycolumn,yytext());}
+<YYINITIAL> "imagen" { return new Symbol(simbolo.imagen, yyline, yycolumn,yytext());}
 
 //DEFINICION DE SIGNOS DEL LENGUAJE GXML
 <YYINITIAL> "<" { return new Symbol(simbolo.abre, yyline, yycolumn,yytext());}
@@ -103,8 +107,7 @@ CADENA="\""~"\""
 <YYINITIAL> {PATH} { return new Symbol(simbolo.valor_path, yyline, yycolumn,yytext());}
 <YYINITIAL> {PATH2} { return new Symbol(simbolo.valor_path2, yyline, yycolumn,yytext());}
 <YYINITIAL> {CADENA} { return new Symbol(simbolo.valor_cadena, yyline, yycolumn,yytext());}
-
-
+<YYINITIAL> {SIMBOLOS} { return new Symbol(simbolo.valor_simbolo, yyline, yycolumn,yytext());}
 //DEFINICION DE COMENTARIOS
 {COMENTARIO_MULTIPLE}
 { }
