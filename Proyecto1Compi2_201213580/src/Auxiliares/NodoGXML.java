@@ -152,7 +152,6 @@ public class NodoGXML {
         int cursiva=0;
         int maximo=0;
         int minimo=0;
-        int accion=0;
         for(int i=0;i<entrada.size();i++){
             if(entrada.get(i).getNombre().equals("tipo")){
                 tipo++;
@@ -177,8 +176,6 @@ public class NodoGXML {
                 maximo++;
             }else if(entrada.get(i).getNombre().equals("minimo")){
                 minimo++;
-            }else if(entrada.get(i).getNombre().equals("accion")){
-                accion++;
             }
         }
         if(tipo!=1|nombre!=1||x!=1|y!=1){
@@ -191,11 +188,6 @@ public class NodoGXML {
                 }
             }else if(maximo==1|minimo==1){
                 if(tipo_.equals("numerico")){
-                }else{
-                    respuesta="Error Sintactico: Se agregaron elementos incorrector al tipo " + tipo_ + " Se recomienda eliminar elementos";
-                }
-            }else if(accion==1){
-                if(tipo_.equals("texto")){
                 }else{
                     respuesta="Error Sintactico: Se agregaron elementos incorrector al tipo " + tipo_ + " Se recomienda eliminar elementos";
                 }
@@ -223,7 +215,7 @@ public class NodoGXML {
         }
         return respuesta;
     }
-    public String elementosBoton(LinkedList<NodoElemento>entrada){
+    public String elementosBoton(LinkedList<NodoElemento>entrada,boolean bandera){
         String respuesta="";
         int nombre=0;
         int x=0;
@@ -237,9 +229,16 @@ public class NodoGXML {
                 y++;
             }
         }
-        if(nombre!=1||x!=1|y!=1){
-            respuesta="Error Sintactico: El numero de elementos obligatorios de la ETIQUETA BOTON son incorrectos, porfavor verificar si hace falta o sobra alguno";
+        if(bandera){
+            if(nombre!=1){
+                respuesta="Error Sintactico: El numero de elementos obligatorios de la ETIQUETA BOTON son incorrectos, porfavor verificar si hace falta o sobra alguno";
+            }
+        }else{
+            if(nombre!=1||x!=1|y!=1){
+                respuesta="Error Sintactico: El numero de elementos obligatorios de la ETIQUETA BOTON son incorrectos, porfavor verificar si hace falta o sobra alguno";
+            }
         }
+        
         return respuesta;
     }
     public String elementosMultimedia(LinkedList<NodoElemento>entrada){

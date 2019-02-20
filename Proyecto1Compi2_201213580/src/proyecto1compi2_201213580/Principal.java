@@ -5,6 +5,8 @@
  */
 package proyecto1compi2_201213580;
 
+import Analizadores.GramaticaFS.lexicoFS;
+import Analizadores.GramaticaFS.sintacticoFS;
 import Analizadores.GramaticaGXML.lexicoGXML;
 import Analizadores.GramaticaGXML.sintacticoGXML;
 import java.io.File;
@@ -88,11 +90,16 @@ public class Principal extends javax.swing.JFrame {
         File archivo=new File(ruta);
         if(archivo.exists()){
             try {
+//                InputStreamReader ir = new InputStreamReader(new FileInputStream(archivo));
+//                lexicoGXML analizador_lexico=new lexicoGXML(ir);
+//                sintacticoGXML parser=new sintacticoGXML(analizador_lexico);
+//                parser.parse();
+//                System.out.println("Se finalizo correctamente EL ANALISIS DE GXML");
                 InputStreamReader ir = new InputStreamReader(new FileInputStream(archivo));
-                lexicoGXML analizador_lexico=new lexicoGXML(ir);
-                sintacticoGXML parser=new sintacticoGXML(analizador_lexico);
+                lexicoFS analizador_lexico=new lexicoFS(ir);
+                sintacticoFS parser=new sintacticoFS(analizador_lexico);
                 parser.parse();
-                System.out.println("Se finalizo correctamente");
+                System.out.println("Se finalizo correctamente EL ANALISIS DE FS");
                 
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);

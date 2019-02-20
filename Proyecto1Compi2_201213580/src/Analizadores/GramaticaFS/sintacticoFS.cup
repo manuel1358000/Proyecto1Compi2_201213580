@@ -1,0 +1,60 @@
+package Analizadores.GramaticaFS;
+import java_cup.runtime.Symbol;
+import java_cup.runtime.*;
+import java.lang.*;
+import javax.swing.JOptionPane;
+import java.io.*;
+import java.util.LinkedList;
+import Auxiliares.NodoGXML;
+import Auxiliares.NodoElemento;
+import java.awt.Color;
+parser code
+{:
+    public NodoGXML root;
+    public static int index=0;
+    public void syntax_error(Symbol s){
+        System.out.println("Error en la linea "+(s.right+1)+" Columna "+s.left+". Identificador "+s.value+" no reconocido"); 
+    }
+    /**Metodo al que se llama en el momento en que ya no es posible una recuperacion de errores.*/
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{
+        javax.swing.JOptionPane.showMessageDialog(null,"Error Sintactico en la linea "+(s.right+1)+"Columna "+s.left+". Identificador"+s.value+" no reconocido.");
+    }
+:}
+action code
+{:  
+:}
+
+//DEFINICION DE SIMBOLOS DEL LENGUAJE FS
+terminal String parena,parenc,llavea,llavec,igual,mas,menos,por,div,pot,incremento,decremento,mayorq,menorq,mayorigualq,menorigualq,igualigual,diferente,and,or,not;
+
+//DEFINICION VALORES IMPLICITOS LENGUAJE FS
+terminal String valor_id,valor_numero_completo,valor_path,valor_path2,valor_cadena,valor_verdadero,valor_falso,valor_simbolo;
+terminal String valor_numero_decimal,valor_nulo;
+
+//definicion de no terminales
+non terminal AST INICIAL;
+non terminal LinkedList<AST> SENTENCIAS_GLOBALES;
+non terminal AST SENTENCIA_GLOBAL;
+
+//DEFINICION DE LA PRECEDENCIA DE LOS OPERADORES
+precedence left or;
+precedence left and;
+precedence right not;
+precedence left mayorq,menorq,mayorigualq, menorigualq,igualigual,diferente;
+
+precedence left mas,menos;
+precedence left div, por;
+precedence left pot;
+precedence left parena, parenc;
+
+start with INICIAL;
+INICIAL::=SENTENCIAS_GLOBALES;
+SENTENCIAS_GLOBALES::= SENTENCIAS_GLOBALES SENTENCIA_GLOBAL
+                     | SENTENCIA_GLOBAL;
+
+//DECLARACION DE VARIABLES,FUNCIONES, METODOS,OBJETOS,ARREGLOS
+
+SENTENCIA_GLOBAL::= DECLARACION_VARIABLES
+                  | DECLARACION_FUNCIONES
+                  | DECLARACION_SENTENCIAS;
+

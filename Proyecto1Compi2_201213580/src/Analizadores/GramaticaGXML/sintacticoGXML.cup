@@ -126,8 +126,7 @@ ETIQUETA_IMPORTAR::= abre e_importar:a cierra CONTENIDO_IMPORTAR:b abre div e_im
                                                                                                 RESULT=b;
                                                                                                 RESULT.tipo_etiqueta=a.toString();
                                                                                                 RESULT.id=a.toString();
-                                                                                            :}
-                   | error ;
+                                                                                            :};
 CONTENIDO_IMPORTAR::= valor_path:a{:
                                     RESULT=new NodoGXML();
                                     RESULT.valor=a.toString();
@@ -410,25 +409,18 @@ CONTENIDO_CONTROL::= abre e_defecto:a cierra CONTENIDO_TOTAL:b abre div e_defect
                                                                                             RESULT.add(nodo);
                                                                                             this.parser.index++;
                                                                                         :}
-                   | abre e_listadatos:a ELEMENTOS_LISTASDATOS:e cierra CONTENIDOS_LISTAS:b abre div e_listadatos cierra abre e_defecto:c cierra CONTENIDO_TOTAL:d abre div e_defecto cierra{:
+                   | abre e_listadatos:a cierra CONTENIDOS_LISTAS:b abre div e_listadatos cierra abre e_defecto:c cierra CONTENIDO_TOTAL:d abre div e_defecto cierra{:
                                                                                             RESULT=new LinkedList<NodoGXML>();
-                                                                                            NodoGXML nodo_listado=new NodoGXML(this.parser.index,a.toString(),a.toString(),e);
+                                                                                            NodoGXML nodo_listado=new NodoGXML(this.parser.index,a.toString(),a.toString(),new LinkedList<NodoElemento>());
                                                                                             nodo_listado.nodos=b;
                                                                                             NodoGXML nodo_defecto=new NodoGXML(this.parser.index,c.toString(),c.toString(),new LinkedList<NodoElemento>());
                                                                                             if(d!=null){
                                                                                                 nodo_defecto.valor=d.toString();
                                                                                             }
+                                                                                            RESULT.add(nodo_listado);
                                                                                             RESULT.add(nodo_defecto);
                                                                                             this.parser.index++;
                                                                                            :};
-
-ELEMENTOS_LISTASDATOS::= {:RESULT=new LinkedList<NodoElemento>();:}
-                        | accion igual llavea valor_id:a parena LISTA_PARAMETROS:b parenc llavec{:
-                                                                                                RESULT=new LinkedList<NodoElemento>();
-                                                                                                NodoElemento elemento=new NodoElemento("ELEMENTO",a.toString()+"("+b.toString()+")","accion"); 
-                                                                                                RESULT.add(elemento);
-                                                                                              :};
-
 CONTENIDOS_LISTAS::= CONTENIDOS_LISTAS:a CONTENIDO_LISTA:b{:
                                                             RESULT=a;
                                                             if(b!=null){
@@ -519,10 +511,7 @@ ELEMENTO_CONTROL::= tipo igual valor_cadena:a{:
                   | minimo igual valor_numero_completo:a{:
                                                             //tipo,valor/nombre
                                                             RESULT=new NodoElemento("ELEMENTO",a.toString(),"minimo");
-                                                        :}
-                  | accion igual llavea valor_id:a parena LISTA_PARAMETROS:b parenc llavec{:
-                                                                                            RESULT=new NodoElemento("ELEMENTO",a.toString()+"("+b.toString()+")","accion"); 
-                                                                                          :};
+                                                        :};
 ETIQUETA_MULTIMEDIA::= abre e_multimedia:a ELEMENTOS_MULTIMEDIAS:b cierra abre div e_multimedia cierra{:
                                                                                                         RESULT=new NodoGXML(this.parser.index,a.toString(),a.toString(),b);
                                                                                                         this.parser.index++;
@@ -580,13 +569,15 @@ TIPO_MULTIMEDIA::= video:a{:RESULT=a.toString();:}
 ETIQUETA_BOTON::= abre e_boton:a ELEMENTOS_BOTONES:b cierra CONTENIDO_BOTON:c abre div e_boton cierra{:
                                                                                                         RESULT=new NodoGXML(this.parser.index,a.toString(),a.toString(),b);
                                                                                                         this.parser.index++;
+                                                                                                        boolean bandera=false;
                                                                                                         if(c.nombre.equals("ETIQUETA")){
+                                                                                                            bandera=true;
                                                                                                             RESULT.nodos.add((NodoGXML)c.valor);
                                                                                                         }else if(c.nombre.equals("TEXTO")){
                                                                                                             RESULT.valor=c.valor.toString();
                                                                                                         }
                                                                                                         //vamos a verificar los elementos de texto
-                                                                                                        String respuesta=RESULT.elementosBoton(RESULT.elementos);
+                                                                                                        String respuesta=RESULT.elementosBoton(RESULT.elementos,bandera);
                                                                                                         RESULT.valor=c;
                                                                                                         if(respuesta.equals("")){ 
                                                                                                         }else{
@@ -765,4 +756,5 @@ CONTENIDO::= valor_cadena:a{:RESULT=a.toString();:}
            | e_dato:a{:RESULT=a.toString();:}
            | e_multimedia:a{:RESULT=a.toString();:}
            | e_boton:a{:RESULT=a.toString();:}
-           | e_enviar:a{:RESULT=a.toString();:};
+           | e_enviar:a{:RESULT=a.toString();:}
+           | cierra:a{:RESULT=a.toString();:};

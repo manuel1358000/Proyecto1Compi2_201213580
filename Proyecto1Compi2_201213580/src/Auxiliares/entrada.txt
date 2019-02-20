@@ -47,7 +47,7 @@ C:\hola2\como2.gxml
 		<boton NOMBRE="boton1" x=10 y=20>
 			hola soy un texro cualquierla 123 hola .as.asd 
 		</boton>
-		<boton NOMBRE="boton2" x=10 y=20>
+		<boton NOMBRE="boton2">
 			 <texto NOMBRE="texto3" x=10 y=20>
 				hola soy un texro cualquierla 123 hola .as.asd 
 			</texto>
