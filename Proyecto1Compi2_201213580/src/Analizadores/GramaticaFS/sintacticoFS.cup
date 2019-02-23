@@ -5,15 +5,22 @@ import java.lang.*;
 import javax.swing.JOptionPane;
 import java.io.*;
 import java.util.LinkedList;
-import Auxiliares.NodoGXML;
-import Auxiliares.NodoElemento;
 import java.awt.Color;
+import ArbolAST.AST;
+import ArbolAST.NodoAST;
+import ArbolAST.Entorno.Type;
+import ArbolAST.Instrucciones.Declaracion;
+import ArbolAST.Expresiones.Expresion;
+import ArbolAST.Expresiones.operacion.Logica;
+import ArbolAST.Expresiones.operacion.Aritmetica;
+import ArbolAST.Expresiones.operacion.Relacional;
+import ArbolAST.Expresiones.operacion.Operacion.Operador;
 parser code
 {:
-    public NodoGXML root;
+    public AST root;
     public static int index=0;
     public void syntax_error(Symbol s){
-        System.out.println("Error en la linea "+(s.right+1)+" Columna "+s.left+". Identificador "+s.value+" no reconocido"); 
+        System.out.println("Error sintactico en la linea "+(s.left+1)+" Columna "+s.right+". Identificador "+s.value+" no reconocido"); 
     }
     /**Metodo al que se llama en el momento en que ya no es posible una recuperacion de errores.*/
     public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{
@@ -25,7 +32,12 @@ action code
 :}
 
 //DEFINICION DE SIMBOLOS DEL LENGUAJE FS
-terminal String parena,parenc,llavea,llavec,igual,mas,menos,por,div,pot,incremento,decremento,mayorq,menorq,mayorigualq,menorigualq,igualigual,diferente,and,or,not;
+terminal String parena,parenc,llavea,llavec,igual,mas,menos,por,div,pot,mayorq,menorq,mayorigualq,menorigualq,igualigual,diferente,and,or,not;
+terminal String coma,pyc,corchea,corchec,punto,dospuntos,signoi;
+//DEFINICION DE PALABRAS RESERVADAS
+terminal String var,descendente,ascendente,invertir,maximo,minimo,filtrar;
+terminal String buscar,map,reduce,todos,alguno,imprimir,importar,si,sino,caso,detener,retornar,selecciona;
+terminal String defecto;
 
 //DEFINICION VALORES IMPLICITOS LENGUAJE FS
 terminal String valor_id,valor_numero_completo,valor_path,valor_path2,valor_cadena,valor_verdadero,valor_falso,valor_simbolo;
@@ -33,8 +45,18 @@ terminal String valor_numero_decimal,valor_nulo;
 
 //definicion de no terminales
 non terminal AST INICIAL;
-non terminal LinkedList<AST> SENTENCIAS_GLOBALES;
-non terminal AST SENTENCIA_GLOBAL;
+non terminal LinkedList<NodoAST> SENTENCIAS_GLOBALES;
+non terminal LinkedList<NodoAST> SENTENCIA_GLOBAL;
+non terminal LinkedList<NodoAST> DECLARACION_VARIABLES_GLOBALES;
+non terminal LinkedList<NodoAST> LISTA_ID;
+non terminal Expresion EXPRESION;
+non terminal LinkedList<NodoAST> LISTA_PARAMETROS;
+non terminal NodoAST LLAMADA_FUNCION;
+
+non terminal String ELEMENTOS_ARRAY,LISTA_ARRAY,LISTA_PARAMETRO,FUNCIONES_LENGUAJE;
+non terminal String ELEMENTOS_OBJETO,ELEMENTO_PATH;
+non terminal String SENTENCIAS_SELECCION,SENTENCIA_SI,SENTENCIA_SELECCIONA;
+non terminal String TERNARIO,SENTENCIA_SINOSI,SENTENCIA_SINO;
 
 //DEFINICION DE LA PRECEDENCIA DE LOS OPERADORES
 precedence left or;
@@ -46,15 +68,175 @@ precedence left mas,menos;
 precedence left div, por;
 precedence left pot;
 precedence left parena, parenc;
+precedence left signoi;
 
 start with INICIAL;
-INICIAL::=SENTENCIAS_GLOBALES;
-SENTENCIAS_GLOBALES::= SENTENCIAS_GLOBALES SENTENCIA_GLOBAL
-                     | SENTENCIA_GLOBAL;
+INICIAL::= SENTENCIAS_GLOBALES:a{:
+                                this.parser.root=new AST(a);
+                               :};
+SENTENCIAS_GLOBALES::= SENTENCIAS_GLOBALES:a SENTENCIA_GLOBAL:b{:
+                                                                RESULT=a;
+                                                                //RESULT.addAll(b);
+                                                               :}
+                     | SENTENCIA_GLOBAL:a{:
+                                            RESULT=new LinkedList<NodoAST>();
+                                            RESULT=a;
+                                         :};
 
 //DECLARACION DE VARIABLES,FUNCIONES, METODOS,OBJETOS,ARREGLOS
 
-SENTENCIA_GLOBAL::= DECLARACION_VARIABLES
-                  | DECLARACION_FUNCIONES
-                  | DECLARACION_SENTENCIAS;
+SENTENCIA_GLOBAL::= DECLARACION_VARIABLES_GLOBALES:a{:
+                                            RESULT=a;
+                                           :}
+                  | SENTENCIAS_SELECCION;
 
+
+SENTENCIAS_SELECCION::= SENTENCIA_SI;
+
+SENTENCIA_SI::= si parena EXPRESION parenc llavea SENTENCIAS_GLOBALES llavec SENTENCIA_SINOSI SENTENCIA_SINO
+              | si parena EXPRESION parenc llavea SENTENCIAS_GLOBALES llavec SENTENCIA_SINOSI
+              | si parena EXPRESION parenc llavea SENTENCIAS_GLOBALES llavec SENTENCIA_SINO
+              | si parena EXPRESION parenc llavea SENTENCIAS_GLOBALES llavec;
+
+SENTENCIA_SINO::= sino llavea SENTENCIAS_GLOBALES llavec;
+
+SENTENCIA_SINOSI::= SENTENCIA_SINOSI sino si parena EXPRESION parenc llavea SENTENCIAS_GLOBALES llavec
+                  | sino si parena EXPRESION parenc llavea SENTENCIAS_GLOBALES llavec;
+
+
+ DECLARACION_VARIABLES_GLOBALES::= var LISTA_ID:a pyc{:
+                                                        RESULT=a;
+                                                     :}
+                        | var LISTA_ID:a igual EXPRESION:b pyc{:
+                                                               int indice=a.size()-1;
+                                                               Declaracion ultima=(Declaracion)a.get(indice);
+                                                               a.remove(indice);
+                                                               ultima.setIntValue(b);
+                                                               a.add(ultima);
+                                                               RESULT=a;
+                                                              :}
+                        | var LISTA_ID igual corchea ELEMENTOS_ARRAY corchec pyc
+                        | var LISTA_ID igual llavea ELEMENTOS_OBJETO llavec pyc
+                        | importar parena ELEMENTO_PATH parenc pyc
+                        | imprimir parena EXPRESION parenc pyc;
+
+
+
+ELEMENTO_PATH::= valor_path
+                | valor_path2;
+
+ELEMENTOS_OBJETO::= ELEMENTOS_OBJETO coma valor_id dospuntos EXPRESION
+                  | valor_id dospuntos EXPRESION;
+
+
+
+ELEMENTOS_ARRAY::=  
+                 | LISTA_ARRAY;
+LISTA_ARRAY::= LISTA_ARRAY coma EXPRESION
+             | EXPRESION;
+LISTA_ID::= LISTA_ID:a coma valor_id:b{:
+                                       RESULT=a;
+                                       Declaracion declaracion=new Declaracion(Type.PrimitiveType.NULL,b.toString(),null,bleft);
+                                       RESULT.add(declaracion);
+                                      :}
+          | valor_id:a{:
+                        RESULT=new LinkedList<NodoAST>();
+                        Declaracion declaracion=new Declaracion(Type.PrimitiveType.NULL,a.toString(),null,aleft);
+                        RESULT.add(declaracion);
+                      :};
+
+
+EXPRESION::= menos EXPRESION:a{:
+                                            RESULT=new Aritmetica(a,true,Operador.UNARIO);
+                                       :}
+           | EXPRESION:a mas EXPRESION:b{:
+                                            RESULT=new Aritmetica(a,b,Operador.SUMA);
+                                       :}
+           | EXPRESION:a menos EXPRESION:b{:
+                                            RESULT=new Aritmetica(a,b,Operador.RESTA);
+                                       :}
+           | EXPRESION:a por EXPRESION:b{:
+                                            RESULT=new Aritmetica(a,b,Operador.MULTIPLICACION);
+                                       :}
+           | EXPRESION:a div EXPRESION:b{:
+                                            RESULT=new Aritmetica(a,b,Operador.DIVISION);
+                                       :}
+           | EXPRESION:a pot EXPRESION:b{:
+                                            RESULT=new Aritmetica(a,b,Operador.POTENCIA);
+                                       :}
+           | EXPRESION:a mayorq EXPRESION:b{:
+                                            RESULT=new Relacional(a,b,Operador.MAYORQ);
+                                       :}
+           | EXPRESION:a menorq EXPRESION:b{:
+                                            RESULT=new Relacional(a,b,Operador.MENORQ);
+                                       :}
+           | EXPRESION:a mayorigualq EXPRESION:b{:
+                                            RESULT=new Relacional(a,b,Operador.MAYORIGUALQ);
+                                       :}
+           | EXPRESION:a menorigualq EXPRESION:b{:
+                                            RESULT=new Relacional(a,b,Operador.MENORIGUALQ);
+                                       :}
+           | EXPRESION:a igualigual EXPRESION:b{:
+                                            RESULT=new Relacional(a,b,Operador.IGUALIGUAL);
+                                       :}
+           | EXPRESION:a diferente EXPRESION:b{:
+                                            RESULT=new Relacional(a,b,Operador.DIFERENTE);
+                                       :}
+           | EXPRESION:a and EXPRESION:b{:
+                                            RESULT=new Logica(a,b,Operador.AND);
+                                       :}
+           | EXPRESION:a or EXPRESION:b{:
+                                            RESULT=new Logica(a,b,Operador.OR);
+                                       :}
+           | not EXPRESION:a{:
+                                RESULT=new Logica(a,null,Operador.NOT);
+                            :}
+           | parena EXPRESION:a parenc{:
+                                        RESULT=new Aritmetica(a.toString(),Type.PrimitiveType.BOOLEAN);
+                                      :}
+           | valor_id:a{:
+                        RESULT=new Aritmetica(a.toString(),Type.PrimitiveType.ID);
+                       :}
+           | valor_numero_completo:a{:
+                                        RESULT=new Aritmetica(a.toString(),Type.PrimitiveType.INTEGER);
+                                    :}
+           | valor_numero_decimal:a{:
+                                    RESULT=new Aritmetica(a.toString(),Type.PrimitiveType.DOUBLE);
+                                   :}
+           | valor_cadena:a{:
+                            RESULT=new Aritmetica(a.toString(),Type.PrimitiveType.STRING);
+                           :}
+           | valor_verdadero:a{:
+                                RESULT=new Aritmetica(a.toString(),Type.PrimitiveType.BOOLEAN);
+                              :}
+           | valor_falso:a{:
+                            RESULT=new Aritmetica(a.toString(),Type.PrimitiveType.BOOLEAN);
+                          :}
+           | valor_id punto FUNCIONES_LENGUAJE
+           | valor_id corchea EXPRESION corchec
+           | LLAMADA_FUNCION
+           | imprimir parena EXPRESION parenc
+           | EXPRESION signoi EXPRESION dospuntos EXPRESION;
+
+
+
+TERNARIO::=EXPRESION signoi EXPRESION dospuntos EXPRESION;
+FUNCIONES_LENGUAJE::= descendente parena parenc
+                    | ascendente parena parenc
+                    | invertir parena parenc
+                    | maximo parena parenc
+                    | minimo parena parenc
+                    | filtrar parena LISTA_PARAMETROS parenc
+                    | buscar parena LISTA_PARAMETRO parenc
+                    | map parena LISTA_PARAMETRO parenc
+                    | reduce parena LISTA_PARAMETRO parenc
+                    | todos parena LISTA_PARAMETRO parenc
+                    | alguno parena LISTA_PARAMETRO parenc;
+
+
+LLAMADA_FUNCION::= valor_id parena LISTA_PARAMETROS parenc;
+
+LISTA_PARAMETROS::=
+                  | LISTA_PARAMETRO;
+LISTA_PARAMETRO::= LISTA_PARAMETRO coma EXPRESION
+                  | EXPRESION;

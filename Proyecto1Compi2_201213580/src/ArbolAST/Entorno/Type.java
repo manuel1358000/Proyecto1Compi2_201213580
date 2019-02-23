@@ -12,8 +12,36 @@ public class Type {
     }
     public enum PrimitiveType{
         INTEGER,
-        ID,
         DOUBLE,
+        STRING,
+        BOOLEAN,
+        OBJECT,
+        ID,
+        FUNCION,
         NULL
     }    
+    public boolean esNumero(){
+        return primitive_type==Type.PrimitiveType.INTEGER;
+    }
+    public boolean esDecimal(){
+        return primitive_type==Type.PrimitiveType.DOUBLE;
+    }
+    public boolean esCadena(){
+        return primitive_type==Type.PrimitiveType.STRING;
+    }
+    public boolean esBooleano(){
+        return primitive_type==Type.PrimitiveType.BOOLEAN;
+    }
+    public boolean esNulo(){
+        return primitive_type==Type.PrimitiveType.NULL;
+    }
+    public boolean esObjeto(){
+        return primitive_type==Type.PrimitiveType.OBJECT;
+    }
+    public boolean esId(){
+        return primitive_type==Type.PrimitiveType.ID;
+    }
+    public boolean esFuncion(){
+        return primitive_type==Type.PrimitiveType.FUNCION;
+    }
 }

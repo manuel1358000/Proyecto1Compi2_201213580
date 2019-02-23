@@ -15,10 +15,10 @@ import ArbolAST.Expresiones.Expresion;
  * @author anton
  */
 public class Declaracion implements Instruccion {
-        Type.PrimitiveType tipo;
-        String id;
-        Expresion intValue;
-        int line;
+        public static Type.PrimitiveType tipo;
+        public static String id;
+        public static Expresion intValue;
+        public static int line;
         public Declaracion(Type.PrimitiveType type,String id,Expresion expresion,int linea){
             this.tipo=type;
             this.id=id;
@@ -29,13 +29,14 @@ public class Declaracion implements Instruccion {
     public Object execute(Entorno entorno) {
         //aqui vamos a declarar todas las variables
         Object valor=intValue.getValue(entorno);
+        Object tipo=intValue.getType(entorno);
         if(valor!=null){
-            if(this.tipo==intValue.getType(entorno)){
-                Simbolo simbolo=new Simbolo(false,false,intValue.getType(entorno),id,null,valor,"");
-                entorno.tabla.put(id, simbolo);
-            }else{
-                System.out.println("Error Semantico: Error de tipos");
-            }   
+            Simbolo simbolo=new Simbolo(false,false, (Type.PrimitiveType) tipo,id,null,valor,"");
+            System.out.println("el valor de la operacion es el siguiente " + valor.toString());
+            System.out.println("El tipo de la operacion es " + tipo.toString());
+            entorno.tabla.put(id, simbolo);
+        }else{
+            System.out.println("Error Semantico: Error de tipos");
         }
         return null;
     }
@@ -43,6 +44,31 @@ public class Declaracion implements Instruccion {
     public int getLine() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }   
+
+    public static Type.PrimitiveType getTipo() {
+        return tipo;
+    }
+
+    public static void setTipo(Type.PrimitiveType tipo) {
+        Declaracion.tipo = tipo;
+    }
+
+    public static String getId() {
+        return id;
+    }
+
+    public static void setId(String id) {
+        Declaracion.id = id;
+    }
+
+    public static Expresion getIntValue() {
+        return intValue;
+    }
+
+    public static void setIntValue(Expresion intValue) {
+        Declaracion.intValue = intValue;
+    }
+    
 }
 
 //                en el rrntoeno actual existe el identificador

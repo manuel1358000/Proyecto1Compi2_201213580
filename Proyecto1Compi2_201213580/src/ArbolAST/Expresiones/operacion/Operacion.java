@@ -26,6 +26,11 @@ public class Operacion implements Expresion{
         this.expresion2=expresion2;
         this.operador=operador;
     }
+    public Operacion(Expresion expresion1,boolean valor,Operador operador){
+        this.expresion1=expresion1;
+        this.unario=valor;
+        this.operador=operador;
+    }
     public Operacion(Object valor,Type.PrimitiveType type){
         this.valor=valor;
         this.type=type;
@@ -47,10 +52,27 @@ public class Operacion implements Expresion{
     
     
     public enum Operador{
+        UNARIO,
         SUMA,
         RESTA,
         MULTIPLICACION,
-        DIVISION
+        DIVISION,
+        POTENCIA,
+        AUMENTO,
+        DECREMENTO,
+        IGUALIGUAL,
+        DIFERENTE,
+        MAYORQ,
+        MENORQ,
+        MAYORIGUALQ,
+        MENORIGUALQ,
+        NOT,
+        OR,
+        AND,
+        A_SUMA,
+        A_RESTA,
+        A_MULT,
+        A_DIV
     }  
     
 }

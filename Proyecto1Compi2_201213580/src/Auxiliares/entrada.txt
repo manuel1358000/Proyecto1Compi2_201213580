@@ -1,71 +1,59 @@
-<importar>
-C:\hola\como.gxml
-##nuevo
-</importar>
-<importar>
-C:\hola2\como2.gxml
-##nuevo
-</importar>
-<VENTANA ID="ventana1" TIPO="PRINCIPAL" accioninicial={llamar(15+78+15,78+7,verdadero)}>
-	<CONTENEDOR  id="cont1" X=10 Y=20>
-		<TEXTO NOMBRE="encabezado" x=10 y=20>
-			hola soy un texro cualquierla 123 hola .as.asd 
-		</TEXTO>
-		<CONTROL tipo="numerico" nombre="control1" x=10 y=10 alto=10 ancho=10 maximo=100>
-		<listadatos>
-			<DATO>hola</DATO>
-			<DATO>hola</DATO>
-			<DATO>hola</DATO>
-		</listadatos>
-		<defecto>
-			59791821
-		</defecto>
-		</CONTROL>
-	</CONTENEDOR>
-	##hola
-</VENTANA>
-<VENTANA ID="ventana2" TIPO="SECUNDARIA" color="000000">
-	<CONTENEDOR id="cont1" X=30 Y=40>
-		<TEXTO NOMBRE="texto1" x=10 y=20>
-			hola soy un texro cualquierla 123 hola .as.asd 
-		</TEXTO>
-		<CONTROL tipo="texto" nombre="control1" x=10 y=10>
-		<defecto>
-			HOLA SOY EL CONTENIDO POR DEFECTO DEL LA ETIQUETA TEXTO
-		</defecto>
-		</CONTROL>
-	</CONTENEDOR>
-</VENTANA>
-<VENTANA ID="ventana3" TIPO="SECUNDARIA">
-	<CONTENEDOR id="cont1" X=50 Y=60 >
-		<ENVIAR NOMBRE="enviar1" x=10 y=20>
-		hola soy un texro cualquierla 123 hola .as.asd
-		</ENVIAR>
-		<texto NOMBRE="texto1" x=10 y=20>
-			hola soy un texro cualquierla 123 hola .as.asd 
-		</texto>
-		<boton NOMBRE="boton1" x=10 y=20>
-			hola soy un texro cualquierla 123 hola .as.asd 
-		</boton>
-		<boton NOMBRE="boton2">
-			 <texto NOMBRE="texto3" x=10 y=20>
-				hola soy un texro cualquierla 123 hola .as.asd 
-			</texto>
-		</boton>
-		<enviar NOMBRE="enviar2" x=10 y=20>
-			 <texto NOMBRE="texto4" x=10 y=20>
-				hola soy un texro cualquierla 123 hola .as.asd 
-			</texto>
-			##comentario
-		</enviar>
-		<enviar NOMBRE="enviar1" x=10 y=20>
-			hola soy un texro cualquierla 123 hola .as.asd 
-		</enviar>
-		##comentario
-		<enviar NOMBRE="enviar5" x=10 y=20>
-			<texto NOMBRE="texto5" x=10 y=20>
-				hola soy un texro cualquierla 123 hola .as.asd 
-			</texto> 
-		</enviar>
-	</CONTENEDOR>
-</VENTANA>
+<Importar>
+/Ventanas.gxml
+</Importar>
+<Ventana id = "Inicio" tipo = "principal">
+	<Contenedor id = "Cont1" x = 10 y = 10 Alto = 200 Ancho = 200>
+		<Texto Nombre = "lblNombre" X = 10 Y = 20>
+			Nombre
+		</Texto>
+		<Control tipo = "texto" Nombre = "CTNombre" X = 40 Y = 20 Alto = 10 Ancho = 100>
+			<Defecto>
+				Ingrese aqui su nombre
+			</Defecto>
+		</Control>
+		<Texto Nombre = "lblCorreo" X = 10 Y = 50>
+			Correo
+		</Texto>
+		<Control tipo = "texto" Nombre = "CTCorreo" X = 40 Y = 50 Alto = 10 Ancho = 100>
+			<Defecto>
+				Ingrese aqui su correo
+			</Defecto>
+		</Control>
+	</Contenedor>
+	<Contenedor id = "ContBtn" x = 10 Y = 220 Alto = 100 Ancho = 200>
+		<Enviar Nombre = "btnIngresar" X = 25 Y = 30 Alto = 70 Ancho = 50>
+			Ingresar
+		</Enviar>
+		<Boton Nombre = "btnRegistrar" X = 125 Y = 30 Alto = 70 Ancho = 50 Referencia = "Registrar">
+			Registrar
+		</Boton>
+	</Contenedor>
+</Ventana>
+<Ventana id = "Inicio" tipo = "principal" alto=600>
+	<Contenedor id = "Cont1" x = 10 y = 10 Alto = 200 Ancho = 200>
+		<Texto Nombre = "lblNombre" X = 10 Y = 20>
+			Nombre
+		</Texto>
+		<Control tipo = "texto" Nombre = "CTNombre" X = 40 Y = 20 Alto = 10 Ancho = 100>
+			<Defecto>
+				Ingrese aqui su nombre
+			</Defecto>
+		</Control>
+		<Texto Nombre = "lblCorreo" X = 10 Y = 50>
+			Correo
+		</Texto>
+		<Control tipo = "texto" Nombre = "CTCorreo" X = 40 Y = 50 Alto = 10 Ancho = 100>
+			<Defecto>
+				Ingrese aqui su correo
+			</Defecto>
+		</Control>
+	</Contenedor>
+	<Contenedor id = "ContBtn" x = 10 Y = 220 Alto = 100 Ancho = 200>
+		<Enviar Nombre = "btnIngresar" X = 25 Y = 30 Alto = 70 Ancho = 50>
+			Ingresar
+		</Enviar>
+		<Boton Nombre = "btnRegistrar" X = 125 Y = 30 Alto = 70 Ancho = 50 Referencia = "Registrar">
+			Registrar
+		</Boton>
+	</Contenedor>
+</Ventana>

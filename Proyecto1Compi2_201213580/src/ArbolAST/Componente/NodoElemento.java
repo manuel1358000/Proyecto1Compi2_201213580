@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Auxiliares;
+package ArbolAST.Componente;
 
 /**
  *
  * @author anton
  */
-public class NodoElemento {
+public class NodoElemento{
     public String nombre;
     public String tipo;
     public Object valor;
@@ -48,5 +48,4 @@ public class NodoElemento {
     public void setValor(Object valor) {
         this.valor = valor;
     }
-
 }

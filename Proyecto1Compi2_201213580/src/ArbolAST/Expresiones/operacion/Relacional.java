@@ -3,12 +3,46 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package AST.expresiones.operacion;
+package ArbolAST.Expresiones.operacion;
 
+import ArbolAST.Expresiones.operacion.Operacion.Operador;
+import ArbolAST.Entorno.Entorno;
+import ArbolAST.Entorno.Simbolo;
+import ArbolAST.Entorno.Type;
+import ArbolAST.Expresiones.Expresion;
 /**
  *
  * @author anton
  */
-public class Relacional {
+public class Relacional extends Operacion implements Expresion{
+    public Relacional(Expresion expresion1, Expresion expresion2, Operacion.Operador operador) {
+        super(expresion1, expresion2, operador);
+    }
+    public Relacional(Object valor,Type.PrimitiveType type) {
+        super(valor,type);
+    }
+    @Override
+    public Object getValue(Entorno entorno) {
+        Object respuesta=null;
+        return respuesta;
+    }
+
+    @Override
+    public Type.PrimitiveType getType(Entorno entorno) {        
+        return this.type;
+    }
     
+    public Type.PrimitiveType GenerarTipo(Type.PrimitiveType primero,Type.PrimitiveType segundo){
+        if(primero==Type.PrimitiveType.INTEGER&&segundo==Type.PrimitiveType.INTEGER){
+            return Type.PrimitiveType.BOOLEAN;
+        }else{
+            return Type.PrimitiveType.NULL;
+        }
+    
+    }
+
+    @Override
+    public int getLine() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

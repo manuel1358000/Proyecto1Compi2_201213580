@@ -5,6 +5,7 @@
  */
 package proyecto1compi2_201213580;
 
+import ArbolAST.Entorno.Valor;
 import java.io.File;
 
 /**
@@ -13,6 +14,7 @@ import java.io.File;
  */
 public class Proyecto1Compi2_201213580 {
     public static String ruta_proyecto=new File ("").getAbsolutePath();
+    public static Valor almacen=new Valor();
     /**
      * @param args the command line arguments
      */

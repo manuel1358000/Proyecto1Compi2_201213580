@@ -14,8 +14,13 @@ public class Tipo {
     
     }
     public static enum tipo{
-        NUMERO,
-        DECIMAL,
+        INTEGER,
+        DOUBLE,
+        STRING,
+        BOOLEAN,
+        OBJECT,
+        ID,
+        FUNCION,
         NULL
     }
 }

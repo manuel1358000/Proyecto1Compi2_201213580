@@ -5,8 +5,8 @@ import java.lang.*;
 import javax.swing.JOptionPane;
 import java.io.*;
 import java.util.LinkedList;
-import Auxiliares.NodoGXML;
-import Auxiliares.NodoElemento;
+import ArbolAST.Componente.NodoElemento;
+import ArbolAST.Componente.NodoGXML;
 import java.awt.Color;
 parser code
 {:
@@ -99,6 +99,7 @@ INICIAL::=GENERAL:a{:
 GENERAL::= DEFINICION_IMPORTAR:a DEFINICION_GENERAL:b{:
                                                     RESULT=new NodoGXML();
                                                     RESULT.id="RAIZ";
+                                                    RESULT.tipo_etiqueta="RAIZ";
                                                     RESULT.nodos=a;
                                                     RESULT.AgregarNodos(b);
                                                    :}
@@ -124,7 +125,7 @@ DEFINICION_IMPORTAR::= DEFINICION_IMPORTAR:a ETIQUETA_IMPORTAR:b{:
 
 ETIQUETA_IMPORTAR::= abre e_importar:a cierra CONTENIDO_IMPORTAR:b abre div e_importar cierra{:
                                                                                                 RESULT=b;
-                                                                                                RESULT.tipo_etiqueta=a.toString();
+                                                                                                RESULT.tipo_etiqueta="importar";
                                                                                                 RESULT.id=a.toString();
                                                                                             :};
 CONTENIDO_IMPORTAR::= valor_path:a{:
@@ -154,11 +155,12 @@ DEFINICION_GENERAL::= DEFINICION_GENERAL:a ETIQUETA_VENTANA:b{:
                                         :};
 
 ETIQUETA_VENTANA::= abre e_ventana:a ELEMENTOS_VENTANAS:b cierra CONTENIDO_VENTANA:c abre div e_ventana cierra{:
-                                                                                                                RESULT=new NodoGXML(this.parser.index,a.toString(),a.toString(),b);
+                                                                                                                RESULT=new NodoGXML(this.parser.index,a.toString().toLowerCase(),a.toString().toLowerCase(),b);
                                                                                                                 this.parser.index++;
                                                                                                                 RESULT.nodos=c;
                                                                                                                 //vamos a verificar los elementos de la ventana
                                                                                                                 String respuesta=RESULT.elementosVentana(RESULT.elementos);
+                                                                                                                RESULT.elemento_id=RESULT.obtenerID();
                                                                                                                 if(respuesta.equals("")){
                                                                                                                 }else{
                                                                                                                     RESULT=null;
@@ -198,6 +200,14 @@ ELEMENTO_VENTANA::= id igual valor_cadena:b {:
                                                     System.out.println(e.toString()+" Error en la asignacion de valor en el elemento color etiqueta ventana Linea: "+bleft + " Columna: " + bright);
                                                 }
                                               :}
+                  | alto igual valor_numero_completo:a{:
+                                                            //tipo,valor/nombre
+                                                            RESULT=new NodoElemento("ELEMENTO",a.toString(),"alto");
+                                                         :}
+                  | ancho igual valor_numero_completo:a{:
+                                                            //tipo,valor/nombre
+                                                            RESULT=new NodoElemento("ELEMENTO",a.toString(),"ancho");
+                                                          :}
                   | accioninicial igual llavea valor_id:a parena LISTA_PARAMETROS:b parenc llavec{:
                                                                                                    RESULT=new NodoElemento("ELEMENTO",a.toString()+"("+b.toString()+")","accioninicial"); 
                                                                                                  :}
@@ -242,7 +252,7 @@ CONTENIDO_VENTANA::= CONTENIDO_VENTANA:a ETIQUETA_CONTENEDOR:b{:
                                           :};
 
 ETIQUETA_CONTENEDOR::=abre e_contenedor:a ELEMENTOS_CONTENEDORES:b cierra CONTENIDO_CONTENEDOR:c abre div e_contenedor cierra{:
-                                                                                                                                RESULT=new NodoGXML(this.parser.index,a.toString(),a.toString(),b);
+                                                                                                                                RESULT=new NodoGXML(this.parser.index,a.toString().toLowerCase(),a.toString().toLowerCase(),b);
                                                                                                                                 this.parser.index++;
                                                                                                                                 //vamos a verificar los elementos del contenedor
                                                                                                                                 String respuesta=RESULT.elementosContenedor(RESULT.elementos);
@@ -333,7 +343,7 @@ ETIQUETAS_CONTENEDOR::= ETIQUETA_TEXTO:a{:
                                         :};
 
 ETIQUETA_TEXTO::= abre e_texto:a ELEMENTOS_TEXTOS:b cierra CONTENIDO_ENVIAR:c abre div e_texto cierra{:
-                                                                                                        RESULT=new NodoGXML(this.parser.index,a.toString(),a.toString(),b);
+                                                                                                        RESULT=new NodoGXML(this.parser.index,a.toString().toLowerCase(),a.toString().toLowerCase(),b);
                                                                                                         this.parser.index++;
                                                                                                         //vamos a verificar los elementos de texto
                                                                                                         RESULT.valor=c;
@@ -389,7 +399,7 @@ ELEMENTO_TEXTO::= nombre igual valor_cadena:a{:
 
 //aqui queda pendiente el colocar el contenido que esta dentro del control como es la lista y dato
 ETIQUETA_CONTROL::= abre e_control:a ELEMENTOS_CONTROLES:b cierra CONTENIDO_CONTROL:c abre div e_control cierra{:
-                                                                                                                RESULT=new NodoGXML(this.parser.index,a.toString(),a.toString(),b);
+                                                                                                                RESULT=new NodoGXML(this.parser.index,a.toString().toLowerCase(),a.toString().toLowerCase(),b);
                                                                                                                 this.parser.index++;
                                                                                                                 //vamos a verificar los elementos de texto
                                                                                                                 String respuesta=RESULT.elementosControl(RESULT.elementos);
@@ -402,7 +412,7 @@ ETIQUETA_CONTROL::= abre e_control:a ELEMENTOS_CONTROLES:b cierra CONTENIDO_CONT
 //contenido control es un NodoGXML
 CONTENIDO_CONTROL::= abre e_defecto:a cierra CONTENIDO_TOTAL:b abre div e_defecto cierra{:
                                                                                             RESULT=new LinkedList<NodoGXML>();
-                                                                                            NodoGXML nodo=new NodoGXML(this.parser.index,a.toString(),a.toString(),null);
+                                                                                            NodoGXML nodo=new NodoGXML(this.parser.index,a.toString().toLowerCase(),a.toString().toLowerCase(),null);
                                                                                             if(b!=null){
                                                                                                 nodo.valor=b.toString();
                                                                                             }
@@ -411,7 +421,7 @@ CONTENIDO_CONTROL::= abre e_defecto:a cierra CONTENIDO_TOTAL:b abre div e_defect
                                                                                         :}
                    | abre e_listadatos:a cierra CONTENIDOS_LISTAS:b abre div e_listadatos cierra abre e_defecto:c cierra CONTENIDO_TOTAL:d abre div e_defecto cierra{:
                                                                                             RESULT=new LinkedList<NodoGXML>();
-                                                                                            NodoGXML nodo_listado=new NodoGXML(this.parser.index,a.toString(),a.toString(),new LinkedList<NodoElemento>());
+                                                                                            NodoGXML nodo_listado=new NodoGXML(this.parser.index,a.toString().toLowerCase(),a.toString().toLowerCase(),new LinkedList<NodoElemento>());
                                                                                             nodo_listado.nodos=b;
                                                                                             NodoGXML nodo_defecto=new NodoGXML(this.parser.index,c.toString(),c.toString(),new LinkedList<NodoElemento>());
                                                                                             if(d!=null){
@@ -434,7 +444,7 @@ CONTENIDOS_LISTAS::= CONTENIDOS_LISTAS:a CONTENIDO_LISTA:b{:
                                         }
                                     :};
 CONTENIDO_LISTA::= abre e_dato:a cierra CONTENIDO_TOTAL:b abre div e_dato cierra{:
-                                                                                RESULT=new NodoGXML(this.parser.index,a.toString(),a.toString(),new LinkedList<NodoElemento>());
+                                                                                RESULT=new NodoGXML(this.parser.index,a.toString().toLowerCase(),a.toString().toLowerCase(),new LinkedList<NodoElemento>());
                                                                                 if(b!=null){
                                                                                     RESULT.valor=b.toString();
                                                                                 }else{
@@ -513,7 +523,7 @@ ELEMENTO_CONTROL::= tipo igual valor_cadena:a{:
                                                             RESULT=new NodoElemento("ELEMENTO",a.toString(),"minimo");
                                                         :};
 ETIQUETA_MULTIMEDIA::= abre e_multimedia:a ELEMENTOS_MULTIMEDIAS:b cierra abre div e_multimedia cierra{:
-                                                                                                        RESULT=new NodoGXML(this.parser.index,a.toString(),a.toString(),b);
+                                                                                                        RESULT=new NodoGXML(this.parser.index,a.toString().toLowerCase(),a.toString().toLowerCase(),b);
                                                                                                         this.parser.index++;
                                                                                                         //vamos a verificar los elementos de texto
                                                                                                         String respuesta=RESULT.elementosMultimedia(RESULT.elementos);
@@ -567,7 +577,7 @@ TIPO_MULTIMEDIA::= video:a{:RESULT=a.toString();:}
                  | imagen:a{:RESULT=a.toString();:};
 
 ETIQUETA_BOTON::= abre e_boton:a ELEMENTOS_BOTONES:b cierra CONTENIDO_BOTON:c abre div e_boton cierra{:
-                                                                                                        RESULT=new NodoGXML(this.parser.index,a.toString(),a.toString(),b);
+                                                                                                        RESULT=new NodoGXML(this.parser.index,a.toString().toLowerCase(),a.toString().toLowerCase(),b);
                                                                                                         this.parser.index++;
                                                                                                         boolean bandera=false;
                                                                                                         if(c.nombre.equals("ETIQUETA")){
@@ -632,7 +642,7 @@ ELEMENTOS_BOTONES::= ELEMENTOS_BOTONES:a ELEMENTO_BOTON:b{:
 //ELEMENTOS ENVIAR Y ELEMENTOS BOTON TIENEN LOS MISMOS ELEMENTOS
 
 ETIQUETA_ENVIAR::= abre e_enviar:a ELEMENTOS_ENVIAR:b cierra CONTENIDO_ENVIAR:c abre div e_enviar cierra{:
-                                                                                                        RESULT=new NodoGXML(this.parser.index,a.toString(),a.toString(),b);
+                                                                                                        RESULT=new NodoGXML(this.parser.index,a.toString().toLowerCase(),a.toString().toLowerCase(),b);
                                                                                                         this.parser.index++;
                                                                                                         if(c.nombre.equals("ETIQUETA")){
                                                                                                             RESULT.nodos.add((NodoGXML)c.valor);

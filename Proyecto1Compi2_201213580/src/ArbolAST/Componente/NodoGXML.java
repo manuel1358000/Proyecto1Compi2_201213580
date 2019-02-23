@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Auxiliares;
+package ArbolAST.Componente;
 
+import ArbolAST.Componente.NodoElemento;
 import java.util.LinkedList;
 /**
  *
@@ -15,6 +16,7 @@ public class NodoGXML {
     public String tipo_etiqueta;//este es el tipo de etiqueta que se tiene, el nombre de la etiqueta ventana importar etc
     public Object valor;//guarda el valor que tiene dentro una etiqueta si fuera necesario, como en importar
     public String id;//identificador del nodo o nombre
+    public String elemento_id;
     //definicion de los elementos de las etiquetas
     public LinkedList<NodoElemento>elementos;
     public LinkedList<NodoGXML>nodos;
@@ -27,6 +29,7 @@ public class NodoGXML {
         this.tipo_etiqueta ="";
         this.valor = "";
         this.id="";
+        this.elemento_id="";
         this.elementos=new LinkedList<NodoElemento>();
         this.nodos = new LinkedList<NodoGXML>();
     }
@@ -35,6 +38,7 @@ public class NodoGXML {
         this.index = index;
         this.tipo_etiqueta = tipo_etiqueta;
         this.id = id;
+        this.elemento_id="";
         this.elementos = elementos;
         this.nodos=new LinkedList<NodoGXML>();
         this.valor="";
@@ -97,6 +101,16 @@ public class NodoGXML {
         }
         if(id!=1||tipo!=1){
             respuesta="Error Sintactico: El numero de elementos obligatorios de la ETIQUETA VENTANA son incorrectos, porfavor verificar si hace falta o sobra alguno";
+        }
+        return respuesta;
+    }
+    public String obtenerID(){
+        String respuesta="";
+        for(int i=0;i<this.elementos.size();i++){
+            if(this.elementos.get(i).nombre.equals("id")){
+                respuesta=this.elementos.get(i).valor.toString();
+                break;
+            }
         }
         return respuesta;
     }

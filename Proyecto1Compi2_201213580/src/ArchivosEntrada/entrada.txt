@@ -1,3 +1,101 @@
+Hoy no es un dia cualquiera, Hoy #VAMOSPORLACOPA
+Coban Imperial vs Deportivo San Pedro
+Estadio Verapaz
+19:00 Hrs
+Escucha la transmision en vivo por Futura 92.3 FM y por nuestra pagina web www.futuraradio.com.gt
+
+#VAMOSSANPEDRO #VAMOSGALLOS #FUTURA923
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class container extends Jpanel implements Componente{
+	Metodos abstractos
+	renderizar
+	generar
+
+}
+
+Para las logicas se tiene que validar que sea un booleano
+
+
+Relacional se tiene que validar si es un numero
+if(p1.isnumerico()&&t2 es numerico){
+	return type.boolean	
+}else{
+	return null
+}
+
+
+isnumeric(){
+return true si es integer o double
+return TYpe.PrimitiveTYpe.boolean;
+	
+}
+
+
+
+WHile
+Expresion
+LinledList<ASTNOde>sentencias;
+constructor expresion y sentencias LinkedList<ASTNode>
+
+se crear un entorno local
+for(ASTnode nodo:sentence){	
+	if(nodo instanceof Instruccion){
+		instruccion no retorna nada
+		if(instruccion instanceof break){
+			return null;
+		}
+	}else if(nodo instanceof EXpresion){
+		if(nodo instance of return){
+			ejecuta el retorno
+			retorno getValue de return
+		}else if(nodo instnace of funcioncalls){
+llamada a una funcion es una expresion
+return getvalue de funcioncall
+		}
+	}
+
+
+}
+
+
+se le tiene que agregar una variable que lleve el entorno 
+por ejemplo entra en un ciclo se agrega break++;
+y se valida si es cero;
+nodo break es una instruccion
+break implements instruccion;
+
+public break(int line){
+	line=line;
+}
+ejecutar(entorno enrorno){
+	return null;
+
+}
+
+
+
+
+
+
 <importar>
 C:\hola\como.gxml
 ##nuevo
@@ -47,7 +145,7 @@ C:\hola2\como2.gxml
 		<boton NOMBRE="boton1" x=10 y=20>
 			hola soy un texro cualquierla 123 hola .as.asd 
 		</boton>
-		<boton NOMBRE="boton2" x=10 y=20>
+		<boton NOMBRE="boton2">
 			 <texto NOMBRE="texto3" x=10 y=20>
 				hola soy un texro cualquierla 123 hola .as.asd 
 			</texto>
