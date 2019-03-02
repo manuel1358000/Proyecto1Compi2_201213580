@@ -30,10 +30,10 @@ terminal String e_listadatos,e_dato,e_multimedia,e_boton,e_enviar;
 
 //DEFINICION DE ELEMENTOS DE LAS ETIQUETAS GXML
 terminal String id,tipo,color,x,y,alto,ancho,borde,nombre,fuente,tam,video,musica,imagen;
-terminal String negrita,cursiva,maximo,minimo,path,auto_reproduccion,principal,secundaria,accion,accioninicial,accionfinal,referencia;
+terminal String negrita,cursiva,maximo,minimo,path,auto_reproduccion,principal,secundaria,accioninicial,accionfinal,referencia,accion;
 
 //DEFINICION DE SIGNOS DEL LENGUAJE GXML
-terminal String abre,cierra,div,igual,comilladoble,llavea,llavec,parena,parenc,coma;
+terminal String abre,cierra,div,igual,comilladoble,llavea,llavec,parena,parenc,coma,salto;
 terminal String mas,menos,por,potencia,mayorq,menorq,mayorigualq,menorigualq,igualigual,diferente,or,and,not;
 
 //DEFINICION VALORES IMPLICITOS LENGUAJE GXML
@@ -93,7 +93,7 @@ precedence left parena, parenc;
 start with INICIAL;
 
 
-INICIAL::=GENERAL:a{:
+INICIAL::= GENERAL:a{:
                     this.parser.root=a;
                  :};
 GENERAL::= DEFINICION_IMPORTAR:a DEFINICION_GENERAL:b{:
@@ -192,7 +192,6 @@ ELEMENTO_VENTANA::= id igual valor_cadena:b {:
                                                 }
                                              :}
                   | color igual valor_cadena:b{:
-                                                
                                                 try{
                                                     Color.decode(b.toString().replaceAll("\"",""));
                                                     RESULT=new NodoElemento("ELEMENTO",b.toString().replaceAll("\"",""),"color");
@@ -201,19 +200,24 @@ ELEMENTO_VENTANA::= id igual valor_cadena:b {:
                                                 }
                                               :}
                   | alto igual valor_numero_completo:a{:
-                                                            //tipo,valor/nombre
-                                                            RESULT=new NodoElemento("ELEMENTO",a.toString(),"alto");
-                                                         :}
+                                                        RESULT=new NodoElemento("ELEMENTO",a.toString(),"alto");
+                                                      :}
                   | ancho igual valor_numero_completo:a{:
-                                                            //tipo,valor/nombre
-                                                            RESULT=new NodoElemento("ELEMENTO",a.toString(),"ancho");
-                                                          :}
+                                                        RESULT=new NodoElemento("ELEMENTO",a.toString(),"ancho");
+                                                       :}
                   | accioninicial igual llavea valor_id:a parena LISTA_PARAMETROS:b parenc llavec{:
                                                                                                    RESULT=new NodoElemento("ELEMENTO",a.toString()+"("+b.toString()+")","accioninicial"); 
                                                                                                  :}
-                  | accionfinal igual llavea valor_id:a parena LISTA_PARAMETROS:b parenc{:
-                                                                                            RESULT=new NodoElemento("ELEMENTO",a.toString()+"("+b.toString()+")","accionfinal"); 
-                                                                                        :};
+                  | accionfinal igual llavea valor_id:a parena LISTA_PARAMETROS:b parenc llavec{:
+                                                                                                RESULT=new NodoElemento("ELEMENTO",a.toString()+"("+b.toString()+")","accionfinal"); 
+                                                                                               :}
+                  | accioninicial igual llavea llavec{:
+                                                                                                   RESULT=new NodoElemento("ELEMENTO","vacio","accioninicial"); 
+                                                                                                 :}
+                  | accionfinal igual llavea  llavec{:
+                                                                                                RESULT=new NodoElemento("ELEMENTO","vacio","accionfinal"); 
+                                                                                               :};
+
 LISTA_PARAMETROS::= LISTA_PARAMETROS:a coma:b PARAMETRO:c{:RESULT=a.toString()+b.toString()+c.toString();:}
                   | PARAMETRO:a{:RESULT=a;:};
 
@@ -233,7 +237,7 @@ PARAMETRO::= {:RESULT="";:}
            | PARAMETRO:a and:b PARAMETRO:c{:RESULT=a.toString()+b.toString()+c.toString();:}
            | PARAMETRO:a not:b PARAMETRO:c{:RESULT=a.toString()+b.toString()+c.toString();:}
            | valor_numero_completo:a{:RESULT=a.toString();:}
-           | valor_cadena:a{:RESULT=a.toString().replaceAll("\"","");:}
+           | valor_cadena:a{:RESULT=a.toString();:}
            | valor_verdadero:a{:RESULT=a.toString();:}
            | valor_falso:a{:RESULT=a.toString();:};
 
@@ -257,6 +261,7 @@ ETIQUETA_CONTENEDOR::=abre e_contenedor:a ELEMENTOS_CONTENEDORES:b cierra CONTEN
                                                                                                                                 //vamos a verificar los elementos del contenedor
                                                                                                                                 String respuesta=RESULT.elementosContenedor(RESULT.elementos);
                                                                                                                                 RESULT.nodos=c;
+                                                                                                                                RESULT.elemento_id=RESULT.obtenerID();
                                                                                                                                 if(respuesta.equals("")){ 
                                                                                                                                 }else{
                                                                                                                                     RESULT=null;
@@ -346,7 +351,8 @@ ETIQUETA_TEXTO::= abre e_texto:a ELEMENTOS_TEXTOS:b cierra CONTENIDO_ENVIAR:c ab
                                                                                                         RESULT=new NodoGXML(this.parser.index,a.toString().toLowerCase(),a.toString().toLowerCase(),b);
                                                                                                         this.parser.index++;
                                                                                                         //vamos a verificar los elementos de texto
-                                                                                                        RESULT.valor=c;
+                                                                                                        RESULT.valor=c.valor;
+                                                                                                        RESULT.elemento_id=RESULT.obtenerNombre();
                                                                                                         String respuesta=RESULT.elementosTexto(RESULT.elementos);
                                                                                                         if(respuesta.equals("")){ 
                                                                                                         }else{
@@ -377,7 +383,7 @@ ELEMENTO_TEXTO::= nombre igual valor_cadena:a{:
                                                     RESULT=new NodoElemento("ELEMENTO",a.toString(),"y");
                                                  :}
                 | fuente igual valor_cadena:a{:
-                                                RESULT=new NodoElemento("ELEMENTO",a.toString().replaceAll("\"","").toLowerCase(),"");
+                                                RESULT=new NodoElemento("ELEMENTO",a.toString().replaceAll("\"","").toLowerCase(),"fuente");
                                              :}
                 | tam igual valor_numero_completo:a{:
                                                     RESULT=new NodoElemento("ELEMENTO",a.toString(),"tam");
@@ -402,6 +408,8 @@ ETIQUETA_CONTROL::= abre e_control:a ELEMENTOS_CONTROLES:b cierra CONTENIDO_CONT
                                                                                                                 RESULT=new NodoGXML(this.parser.index,a.toString().toLowerCase(),a.toString().toLowerCase(),b);
                                                                                                                 this.parser.index++;
                                                                                                                 //vamos a verificar los elementos de texto
+                                                                                                                RESULT.nodos=c;
+                                                                                                                RESULT.elemento_id=RESULT.obtenerNombre();
                                                                                                                 String respuesta=RESULT.elementosControl(RESULT.elementos);
                                                                                                                 if(respuesta.equals("")){ 
                                                                                                                 }else{
@@ -525,6 +533,7 @@ ELEMENTO_CONTROL::= tipo igual valor_cadena:a{:
 ETIQUETA_MULTIMEDIA::= abre e_multimedia:a ELEMENTOS_MULTIMEDIAS:b cierra abre div e_multimedia cierra{:
                                                                                                         RESULT=new NodoGXML(this.parser.index,a.toString().toLowerCase(),a.toString().toLowerCase(),b);
                                                                                                         this.parser.index++;
+                                                                                                        RESULT.elemento_id=RESULT.obtenerNombre();
                                                                                                         //vamos a verificar los elementos de texto
                                                                                                         String respuesta=RESULT.elementosMultimedia(RESULT.elementos);
                                                                                                         if(respuesta.equals("")){ 
@@ -550,9 +559,16 @@ ELEMENTOS_MULTIMEDIAS::= ELEMENTOS_MULTIMEDIAS:a ELEMENTO_MULTIMEDIA:b{:
 ELEMENTO_MULTIMEDIA::= path igual valor_cadena:a{:
                                                 RESULT=new NodoElemento("ELEMENTO",a.toString().replaceAll("\"",""),"path");
                                                :}
-                     | tipo igual TIPO_MULTIMEDIA:a{:
-                                                    RESULT=new NodoElemento("ELEMENTO",a.toString(),"tipo");
-                                                   :}
+                     | tipo igual valor_cadena:a {:
+                                                    if(a.toLowerCase().equals("\"musica\"")){
+                                                        RESULT=new NodoElemento("ELEMENTO","musica","tipo");
+                                                    }else if(a.toLowerCase().equals("\"video\"")){
+                                                        RESULT=new NodoElemento("ELEMENTO","video","tipo");
+                                                    }else if(a.toLowerCase().equals("\"imagen\"")){
+                                                        RESULT=new NodoElemento("ELEMENTO","imagen","tipo");
+                                                    }
+                                                    
+                                                 :}
                      | nombre igual valor_cadena:a{:
                                                     RESULT=new NodoElemento("ELEMENTO",a.toString().replaceAll("\"",""),"nombre");
                                                   :}
@@ -572,23 +588,20 @@ ELEMENTO_MULTIMEDIA::= path igual valor_cadena:a{:
                                                             RESULT=new NodoElemento("ELEMENTO",a.toString(),"auto_reproduccion");
                                                           :};
 
-TIPO_MULTIMEDIA::= video:a{:RESULT=a.toString();:}
-                 | musica:a{:RESULT=a.toString();:}
-                 | imagen:a{:RESULT=a.toString();:};
-
 ETIQUETA_BOTON::= abre e_boton:a ELEMENTOS_BOTONES:b cierra CONTENIDO_BOTON:c abre div e_boton cierra{:
                                                                                                         RESULT=new NodoGXML(this.parser.index,a.toString().toLowerCase(),a.toString().toLowerCase(),b);
                                                                                                         this.parser.index++;
                                                                                                         boolean bandera=false;
+                                                                                                        RESULT.elemento_id=RESULT.obtenerNombre();
                                                                                                         if(c.nombre.equals("ETIQUETA")){
                                                                                                             bandera=true;
                                                                                                             RESULT.nodos.add((NodoGXML)c.valor);
+                                                                                                            RESULT.valor="ETIQUETA";
                                                                                                         }else if(c.nombre.equals("TEXTO")){
                                                                                                             RESULT.valor=c.valor.toString();
                                                                                                         }
                                                                                                         //vamos a verificar los elementos de texto
                                                                                                         String respuesta=RESULT.elementosBoton(RESULT.elementos,bandera);
-                                                                                                        RESULT.valor=c;
                                                                                                         if(respuesta.equals("")){ 
                                                                                                         }else{
                                                                                                             RESULT=null;
@@ -644,6 +657,7 @@ ELEMENTOS_BOTONES::= ELEMENTOS_BOTONES:a ELEMENTO_BOTON:b{:
 ETIQUETA_ENVIAR::= abre e_enviar:a ELEMENTOS_ENVIAR:b cierra CONTENIDO_ENVIAR:c abre div e_enviar cierra{:
                                                                                                         RESULT=new NodoGXML(this.parser.index,a.toString().toLowerCase(),a.toString().toLowerCase(),b);
                                                                                                         this.parser.index++;
+                                                                                                        RESULT.elemento_id=RESULT.obtenerNombre();
                                                                                                         if(c.nombre.equals("ETIQUETA")){
                                                                                                             RESULT.nodos.add((NodoGXML)c.valor);
                                                                                                         }else if(c.nombre.equals("TEXTO")){
@@ -710,61 +724,62 @@ CONTENIDO_ENVIAR::= ETIQUETA_TEXTO:a{:
                                         RESULT=new NodoElemento("TEXTO",a,"TEXTO");
                                      :};
 
-CONTENIDO::= valor_cadena:a{:RESULT=a.toString();:}
-           | valor_id:a{:RESULT=a.toString();:}
-           | valor_numero_completo:a{:RESULT=a.toString();:}
-           | valor_simbolo:a{:RESULT=a.toString();:}
-           | id:a{:RESULT=a.toString();:}
-           | tipo:a{:RESULT=a.toString();:}
-           | color:a{:RESULT=a.toString();:}
-           | x:a{:RESULT=a.toString();:}
-           | y:a{:RESULT=a.toString();:}
-           | alto:a{:RESULT=a.toString();:}
-           | ancho:a{:RESULT=a.toString();:}
-           | borde:a{:RESULT=a.toString();:}
-           |  nombre:a{:RESULT=a.toString();:}
-           | fuente:a{:RESULT=a.toString();:}
-           | tam:a{:RESULT=a.toString();:}
-           | negrita:a{:RESULT=a.toString();:}
-           | cursiva:a{:RESULT=a.toString();:}
-           | maximo:a{:RESULT=a.toString();:}
-           | minimo:a{:RESULT=a.toString();:}
-           | path:a{:RESULT=a.toString();:}
-           | auto_reproduccion:a{:RESULT=a.toString();:}
-           | principal:a{:RESULT=a.toString();:}
-           | secundaria:a{:RESULT=a.toString();:}
-           | accion:a{:RESULT=a.toString();:}
-           | accioninicial:a{:RESULT=a.toString();:}
-           | accionfinal:a{:RESULT=a.toString();:}
-           | referencia:a{:RESULT=a.toString();:}
-           | div:a{:RESULT=a.toString();:}
-           | igual:a{:RESULT=a.toString();:}
-           | llavea:a{:RESULT=a.toString();:}
-           | llavec:a{:RESULT=a.toString();:}
-           | parena:a{:RESULT=a.toString();:}
-           | parenc:a{:RESULT=a.toString();:}
-           | coma:a{:RESULT=a.toString();:}
-           | mas:a{:RESULT=a.toString();:}
-           | menos:a{:RESULT=a.toString();:}
-           | por:a{:RESULT=a.toString();:}
-           | potencia:a{:RESULT=a.toString();:}
-           | igualigual:a{:RESULT=a.toString();:}
-           | diferente:a{:RESULT=a.toString();:}
-           | or:a{:RESULT=a.toString();:}
-           | and:a{:RESULT=a.toString();:}
-           | not:a{:RESULT=a.toString();:}
-           | video:a{:RESULT=a.toString();:}
-           | musica:a{:RESULT=a.toString();:}
-           | imagen:a{:RESULT=a.toString();:}
-           | e_defecto:a{:RESULT=a.toString();:}
-           | e_importar:a{:RESULT=a.toString();:}
-           | e_ventana:a{:RESULT=a.toString();:}
-           | e_contenedor:a{:RESULT=a.toString();:}
-           | e_texto:a{:RESULT=a.toString();:}
-           | e_control:a{:RESULT=a.toString();:}
-           | e_listadatos:a{:RESULT=a.toString();:}
-           | e_dato:a{:RESULT=a.toString();:}
-           | e_multimedia:a{:RESULT=a.toString();:}
-           | e_boton:a{:RESULT=a.toString();:}
-           | e_enviar:a{:RESULT=a.toString();:}
-           | cierra:a{:RESULT=a.toString();:};
+CONTENIDO::= valor_cadena:a{:RESULT=a.toString()+" ";:}
+           | valor_id:a{:RESULT=a.toString()+" ";:}
+           | valor_numero_completo:a{:RESULT=a.toString()+" ";:}
+           | valor_simbolo:a{:RESULT=a.toString()+" ";:}
+           | id:a{:RESULT=a.toString()+" ";:}
+           | tipo:a{:RESULT=a.toString()+" ";:}
+           | color:a{:RESULT=a.toString()+" ";:}
+           | x:a{:RESULT=a.toString()+" ";:}
+           | y:a{:RESULT=a.toString()+" ";:}
+           | alto:a{:RESULT=a.toString()+" ";:}
+           | ancho:a{:RESULT=a.toString()+" ";:}
+           | borde:a{:RESULT=a.toString()+" ";:}
+           |  nombre:a{:RESULT=a.toString()+" ";:}
+           | fuente:a{:RESULT=a.toString()+" ";:}
+           | tam:a{:RESULT=a.toString()+" ";:}
+           | negrita:a{:RESULT=a.toString()+" ";:}
+           | cursiva:a{:RESULT=a.toString()+" ";:}
+           | maximo:a{:RESULT=a.toString()+" ";:}
+           | minimo:a{:RESULT=a.toString()+" ";:}
+           | path:a{:RESULT=a.toString()+" ";:}
+           | auto_reproduccion:a{:RESULT=a.toString()+" ";:}
+           | principal:a{:RESULT=a.toString()+" ";:}
+           | secundaria:a{:RESULT=a.toString()+" ";:}
+           | accion:a{:RESULT=a.toString()+" ";:}
+           | accioninicial:a{:RESULT=a.toString()+" ";:}
+           | accionfinal:a{:RESULT=a.toString()+" ";:}
+           | referencia:a{:RESULT=a.toString()+" ";:}
+           | div:a{:RESULT=a.toString()+" ";:}
+           | igual:a{:RESULT=a.toString()+" ";:}
+           | llavea:a{:RESULT=a.toString()+" ";:}
+           | llavec:a{:RESULT=a.toString()+" ";:}
+           | parena:a{:RESULT=a.toString()+" ";:}
+           | parenc:a{:RESULT=a.toString()+" ";:}
+           | coma:a{:RESULT=a.toString()+" ";:}
+           | mas:a{:RESULT=a.toString()+" ";:}
+           | menos:a{:RESULT=a.toString()+" ";:}
+           | por:a{:RESULT=a.toString()+" ";:}
+           | potencia:a{:RESULT=a.toString()+" ";:}
+           | igualigual:a{:RESULT=a.toString()+" ";:}
+           | diferente:a{:RESULT=a.toString()+" ";:}
+           | or:a{:RESULT=a.toString()+" ";:}
+           | and:a{:RESULT=a.toString()+" ";:}
+           | not:a{:RESULT=a.toString()+" ";:}
+           | video:a{:RESULT=a.toString()+" ";:}
+           | musica:a{:RESULT=a.toString()+" ";:}
+           | imagen:a{:RESULT=a.toString()+" ";:}
+           | e_defecto:a{:RESULT=a.toString()+" ";:}
+           | e_importar:a{:RESULT=a.toString()+" ";:}
+           | e_ventana:a{:RESULT=a.toString()+" ";:}
+           | e_contenedor:a{:RESULT=a.toString()+" ";:}
+           | e_texto:a{:RESULT=a.toString()+" ";:}
+           | e_control:a{:RESULT=a.toString()+" ";:}
+           | e_listadatos:a{:RESULT=a.toString()+" ";:}
+           | e_dato:a{:RESULT=a.toString()+" ";:}
+           | e_multimedia:a{:RESULT=a.toString()+" ";:}
+           | e_boton:a{:RESULT=a.toString()+" ";:}
+           | e_enviar:a{:RESULT=a.toString()+" ";:}
+           | cierra:a{:RESULT=a.toString()+" ";:}
+           | salto:a{:RESULT=a.toString();:};

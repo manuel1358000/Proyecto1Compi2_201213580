@@ -25,7 +25,9 @@ public class Imprimir implements Instruccion{
     public Object execute(Entorno entorno) {
         Object nuevo=expresion.getValue(entorno);
         if(nuevo!=null){
-            System.out.println(nuevo.toString());
+            System.out.println("SALIDA CONSOLA>"+nuevo.toString());
+        }else{
+            System.out.println("ERROR SEMANTICO: IMPRIMIR NO ENCONTRO EL VALOR");
         }
         return null;
     }

@@ -104,7 +104,13 @@ public class Simbolo {
         this.visibilidad = visibilidad;
     }
     
-    
+    public enum Rol{
+        FUNCION,
+        ARRAY,
+        CLASE,
+        OBJETO,
+        NULL
+    } 
 
     
     

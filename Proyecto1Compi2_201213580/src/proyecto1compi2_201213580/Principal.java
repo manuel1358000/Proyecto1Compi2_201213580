@@ -71,7 +71,7 @@ public class Principal extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(265, 265, 265)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(300, Short.MAX_VALUE))
+                .addContainerGap(467, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -80,7 +80,7 @@ public class Principal extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(126, Short.MAX_VALUE))
+                .addContainerGap(168, Short.MAX_VALUE))
         );
 
         pack();
@@ -93,23 +93,26 @@ public class Principal extends javax.swing.JFrame {
         File archivo=new File(ruta);
         if(archivo.exists()){
             try {
-                InputStreamReader ir = new InputStreamReader(new FileInputStream(archivo));
-                lexicoGXML analizador_lexico=new lexicoGXML(ir);
-                sintacticoGXML parser=new sintacticoGXML(analizador_lexico);
-                parser.parse();
-                EjecutarGXML nodoEjecutar=new EjecutarGXML(parser.root);
-                String respuesta=nodoEjecutar.Ejecutar(parser.root,"");
-                System.out.println("RESPUESTA \n" + respuesta);
 //                InputStreamReader ir = new InputStreamReader(new FileInputStream(archivo));
-//                lexicoFS analizador_lexico=new lexicoFS(ir);
-//                sintacticoFS parser=new sintacticoFS(analizador_lexico);
+//                lexicoGXML analizador_lexico=new lexicoGXML(ir);
+//                sintacticoGXML parser=new sintacticoGXML(analizador_lexico);
 //                parser.parse();
-//                AST nodoRaiz=parser.root;
-//                nodoRaiz.execute();
-//                System.out.println("Se finalizo correctamente EL ANALISIS DE FS");
+//                EjecutarGXML nodoEjecutar=new EjecutarGXML(parser.root);
+//                String respuesta=nodoEjecutar.Ejecutar(parser.root,"");
+//                System.out.println("RESPUESTA \n" + respuesta);
+                try{
+                    InputStreamReader ir = new InputStreamReader(new FileInputStream(archivo));
+                    lexicoFS analizador_lexico=new lexicoFS(ir);
+                    sintacticoFS parser=new sintacticoFS(analizador_lexico);
+                    parser.parse();
+                    AST nodoRaiz=parser.root;
+                    nodoRaiz.execute();
+                    System.out.println("Se finalizo correctamente EL ANALISIS DE FS");
+                }catch(Exception e){
+                    System.out.println("ERROR EN LA EJECUCION");
+                }
                 
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                
             } catch (Exception ex) {
                 Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
             }

@@ -1,4 +1,7 @@
 package ArbolAST.Entorno;
+
+import ElementosUI.Ventana;
+
 /**
  *
  * @author anton
@@ -18,6 +21,15 @@ public class Type {
         OBJECT,
         ID,
         FUNCION,
+        VENTANA,
+        BOTON,
+        PANEL,
+        TEXTO,
+        CAJATEXTO,
+        AREATEXTO,
+        VIDEO,
+        AUDIO,
+        IMAGEN,
         NULL
     }    
     public boolean esNumero(){

@@ -33,6 +33,9 @@ public class Primitivo implements Expresion {
     public Type.PrimitiveType getType(Entorno entorno) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    public Type.PrimitiveType getPrimitive_type(){
+        return this.primitivo;
+    }
 
     @Override
     public int getLine() {

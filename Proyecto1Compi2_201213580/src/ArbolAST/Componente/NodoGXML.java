@@ -114,6 +114,16 @@ public class NodoGXML {
         }
         return respuesta;
     }
+    public String obtenerNombre(){
+        String respuesta="";
+        for(int i=0;i<this.elementos.size();i++){
+            if(this.elementos.get(i).nombre.equals("nombre")){
+                respuesta=this.elementos.get(i).valor.toString();
+                break;
+            }
+        }
+        return respuesta;
+    }
     public String elementosContenedor(LinkedList<NodoElemento>entrada){
         String respuesta="";
         int id=0;

@@ -20,7 +20,7 @@ public class Operacion implements Expresion{
     boolean unario;
     Type.PrimitiveType type;
     Object valor;
-    
+    boolean negacion;
     public Operacion(Expresion expresion1,Expresion expresion2,Operador operador){
         this.expresion1=expresion1;
         this.expresion2=expresion2;
@@ -29,6 +29,7 @@ public class Operacion implements Expresion{
     public Operacion(Expresion expresion1,boolean valor,Operador operador){
         this.expresion1=expresion1;
         this.unario=valor;
+        this.negacion=valor;
         this.operador=operador;
     }
     public Operacion(Object valor,Type.PrimitiveType type){

@@ -15,10 +15,10 @@ import ArbolAST.Expresiones.Expresion;
  * @author anton
  */
 public class Declaracion implements Instruccion {
-        public static Type.PrimitiveType tipo;
-        public static String id;
-        public static Expresion intValue;
-        public static int line;
+        public Type.PrimitiveType tipo;
+        public String id;
+        public Expresion intValue;
+        public int line;
         public Declaracion(Type.PrimitiveType type,String id,Expresion expresion,int linea){
             this.tipo=type;
             this.id=id;
@@ -28,16 +28,19 @@ public class Declaracion implements Instruccion {
     @Override
     public Object execute(Entorno entorno) {
         //aqui vamos a declarar todas las variables
-        Object valor=intValue.getValue(entorno);
-        Object tipo=intValue.getType(entorno);
-        if(valor!=null){
-            Simbolo simbolo=new Simbolo(false,false, (Type.PrimitiveType) tipo,id,null,valor,"");
-            System.out.println("el valor de la operacion es el siguiente " + valor.toString());
-            System.out.println("El tipo de la operacion es " + tipo.toString());
-            entorno.tabla.put(id, simbolo);
-        }else{
-            System.out.println("Error Semantico: Error de tipos");
+        try{
+            Object valor=intValue.getValue(entorno);
+            Object tipo=intValue.getType(entorno);
+            if(valor!=null){
+                Simbolo simbolo=new Simbolo(false,false, (Type.PrimitiveType) tipo,id,null,valor,"");
+                entorno.Agregar(id, simbolo);
+            }else{
+                System.out.println("Error Semantico: Error de tipos no se puede operar el tipo de la declaracion "+id + " Linea: "+line);
+            }
+        }catch(Exception e){
+            System.out.println("ERROR SEMANTICO: Ocurrio un error en la declaracion");
         }
+        
         return null;
     }
     @Override
@@ -45,28 +48,28 @@ public class Declaracion implements Instruccion {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }   
 
-    public static Type.PrimitiveType getTipo() {
+    public  Type.PrimitiveType getTipo() {
         return tipo;
     }
 
-    public static void setTipo(Type.PrimitiveType tipo) {
-        Declaracion.tipo = tipo;
+    public void setTipo(Type.PrimitiveType tipo) {
+        this.tipo = tipo;
     }
 
-    public static String getId() {
+    public String getId() {
         return id;
     }
 
-    public static void setId(String id) {
-        Declaracion.id = id;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public static Expresion getIntValue() {
+    public Expresion getIntValue() {
         return intValue;
     }
 
-    public static void setIntValue(Expresion intValue) {
-        Declaracion.intValue = intValue;
+    public void setIntValue(Expresion intValue) {
+        this.intValue = intValue;
     }
     
 }

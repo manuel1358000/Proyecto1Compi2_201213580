@@ -65,9 +65,9 @@ CADENA="\""~"\""
 <YYINITIAL> "auto-reproduccion" { return new Symbol(simbolo.auto_reproduccion, yyline, yycolumn,yytext());}
 <YYINITIAL> "principal" { return new Symbol(simbolo.principal, yyline, yycolumn,yytext());}
 <YYINITIAL> "secundaria" { return new Symbol(simbolo.secundaria, yyline, yycolumn,yytext());}
-<YYINITIAL> "accion" { return new Symbol(simbolo.accion, yyline, yycolumn,yytext());}
 <YYINITIAL> "accioninicial" { return new Symbol(simbolo.accioninicial, yyline, yycolumn,yytext());}
 <YYINITIAL> "accionfinal" { return new Symbol(simbolo.accionfinal, yyline, yycolumn,yytext());}
+<YYINITIAL> "accion" { return new Symbol(simbolo.accion, yyline, yycolumn,yytext());}
 <YYINITIAL> "referencia" { return new Symbol(simbolo.referencia, yyline, yycolumn,yytext());}
 <YYINITIAL> "musica" { return new Symbol(simbolo.musica, yyline, yycolumn,yytext());}
 <YYINITIAL> "video" { return new Symbol(simbolo.video, yyline, yycolumn,yytext());}
@@ -95,6 +95,7 @@ CADENA="\""~"\""
 <YYINITIAL> "||" { return new Symbol(simbolo.or, yyline, yycolumn,yytext());}
 <YYINITIAL> "&&" { return new Symbol(simbolo.and, yyline, yycolumn,yytext());}
 <YYINITIAL> "!" { return new Symbol(simbolo.not, yyline, yycolumn,yytext());}
+
 
 
 

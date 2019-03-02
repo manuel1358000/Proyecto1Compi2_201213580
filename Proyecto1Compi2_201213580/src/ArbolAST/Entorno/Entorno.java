@@ -26,7 +26,13 @@ public class Entorno {
     }
 
     public void Agregar(String s,Simbolo sim){
-        tabla.put(s,sim);
+        Simbolo com=(Simbolo)Obtener(s);
+        if(com!=null){
+            System.out.println("ERROR SEMANTICO: Ya existe una variable/funcion con el identificador "+s);
+        }else{
+            tabla.put(s,sim);
+        }
+        
     }
     public void Crear(Entorno padre){
         this.padre=padre;

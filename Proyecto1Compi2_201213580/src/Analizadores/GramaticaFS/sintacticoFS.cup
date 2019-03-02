@@ -15,6 +15,14 @@ import ArbolAST.Expresiones.operacion.Logica;
 import ArbolAST.Expresiones.operacion.Aritmetica;
 import ArbolAST.Expresiones.operacion.Relacional;
 import ArbolAST.Expresiones.operacion.Operacion.Operador;
+import ArbolAST.Expresiones.operacion.Ternario;
+import ArbolAST.Instrucciones.Imprimir;
+import ArbolAST.Instrucciones.Detener;
+import ArbolAST.Instrucciones.Seleccion.If;
+import ArbolAST.Instrucciones.Seleccion.SubIf;
+import ArbolAST.Instrucciones.Seleccion.Caso;
+import ArbolAST.Expresiones.operacion.Retornar;
+import ArbolAST.Instrucciones.Seleccion.Switch;
 parser code
 {:
     public AST root;
@@ -47,18 +55,40 @@ terminal String valor_numero_decimal,valor_nulo;
 non terminal AST INICIAL;
 non terminal LinkedList<NodoAST> SENTENCIAS_GLOBALES;
 non terminal LinkedList<NodoAST> SENTENCIA_GLOBAL;
-non terminal LinkedList<NodoAST> DECLARACION_VARIABLES_GLOBALES;
+non terminal LinkedList<NodoAST> DECLARACION_VARIABLES;
 non terminal LinkedList<NodoAST> LISTA_ID;
 non terminal Expresion EXPRESION;
 non terminal LinkedList<NodoAST> LISTA_PARAMETROS;
 non terminal NodoAST LLAMADA_FUNCION;
+non terminal LinkedList<NodoAST> SENTENCIAS_GENERALES;
+non terminal LinkedList<NodoAST> SENTENCIA_IMPRIMIR;
+non terminal LinkedList<NodoAST> SENTENCIAS_SELECCION;
+non terminal Expresion TERNARIO;
+non terminal NodoAST SENTENCIA_SI;
+non terminal LinkedList<SubIf> SENTENCIA_SINOSI;
+non terminal SubIf SENTENCIA_SINO;
+non terminal NodoAST SENTENCIA_SELECCIONA;
+non terminal LinkedList<Caso> LISTAS_CASOS;
+non terminal Caso LISTA_CASO;
+non terminal Caso CASO_DEFECTO;
+non terminal LinkedList<NodoAST> SENTENCIA_INTERNA;
+
+
+
+
+non terminal LinkedList<NodoAST> SENTENCIA_RETORNAR;
+non terminal LinkedList<NodoAST> SENTENCIA_DETENER;
+
+
 
 non terminal String ELEMENTOS_ARRAY,LISTA_ARRAY,LISTA_PARAMETRO,FUNCIONES_LENGUAJE;
 non terminal String ELEMENTOS_OBJETO,ELEMENTO_PATH;
-non terminal String SENTENCIAS_SELECCION,SENTENCIA_SI,SENTENCIA_SELECCIONA;
-non terminal String TERNARIO,SENTENCIA_SINOSI,SENTENCIA_SINO;
 
+
+
+non terminal LinkedList<NodoAST> SENTENCIAS_INTERNAS;
 //DEFINICION DE LA PRECEDENCIA DE LOS OPERADORES
+precedence left signoi;
 precedence left or;
 precedence left and;
 precedence right not;
@@ -68,7 +98,6 @@ precedence left mas,menos;
 precedence left div, por;
 precedence left pot;
 precedence left parena, parenc;
-precedence left signoi;
 
 start with INICIAL;
 INICIAL::= SENTENCIAS_GLOBALES:a{:
@@ -76,59 +105,132 @@ INICIAL::= SENTENCIAS_GLOBALES:a{:
                                :};
 SENTENCIAS_GLOBALES::= SENTENCIAS_GLOBALES:a SENTENCIA_GLOBAL:b{:
                                                                 RESULT=a;
-                                                                //RESULT.addAll(b);
+                                                                RESULT.addAll(b);
                                                                :}
                      | SENTENCIA_GLOBAL:a{:
-                                            RESULT=new LinkedList<NodoAST>();
                                             RESULT=a;
                                          :};
 
 //DECLARACION DE VARIABLES,FUNCIONES, METODOS,OBJETOS,ARREGLOS
 
-SENTENCIA_GLOBAL::= DECLARACION_VARIABLES_GLOBALES:a{:
+SENTENCIA_GLOBAL::= SENTENCIAS_GENERALES:a{:RESULT=a;:}
+                  | importar parena ELEMENTO_PATH parenc pyc;
+
+SENTENCIAS_INTERNAS::= SENTENCIAS_INTERNAS:a SENTENCIAS_GENERALES:b{:
+                                                                    RESULT=a;
+                                                                    RESULT.addAll(b);
+                                                                   :}
+                     | SENTENCIAS_GENERALES:a{:
+                                           RESULT=a;
+                                          :};
+
+SENTENCIAS_GENERALES::= SENTENCIA_IMPRIMIR:a{:
+                                            RESULT=a;
+                                            :}
+                      | DECLARACION_VARIABLES:a{:
+                                                RESULT=a;
+                                               :} 
+                      | SENTENCIAS_SELECCION:a{:RESULT=a;:}
+                      | SENTENCIA_RETORNAR:a{:RESULT=a;:}
+                      | SENTENCIA_DETENER:a{:RESULT=a;:};
+
+SENTENCIA_RETORNAR::= retornar EXPRESION:a pyc{:
+                                                RESULT=new LinkedList<>();
+                                                RESULT.add(new Retornar(a));
+                                              :};
+SENTENCIA_DETENER::= detener pyc{:
+                                    RESULT=new LinkedList<>();
+                                    RESULT.add(new Detener());
+                                :};
+
+SENTENCIA_IMPRIMIR::=imprimir:a parena EXPRESION:b parenc pyc{:
+                                                                RESULT=new LinkedList<NodoAST>();
+                                                                RESULT.add(new Imprimir(b));
+                                                             :};
+SENTENCIAS_SELECCION::= SENTENCIA_SI:a{:
+                                        RESULT=new LinkedList<NodoAST>();
+                                        RESULT.add(a);
+                                      :}
+                      | SENTENCIA_SELECCIONA:a{:
+                                                RESULT=new LinkedList<NodoAST>();
+                                                RESULT.add(a);
+                                              :};
+
+
+SENTENCIA_SELECCIONA::= selecciona parena EXPRESION:a parenc llavea LISTAS_CASOS:b CASO_DEFECTO:c llavec{:
+                                                                                                        RESULT=new Switch(a,b,c);
+                                                                                                        :}
+                      | selecciona parena EXPRESION:a parenc llavea LISTAS_CASOS:b llavec{:
+                                                                                            RESULT=new Switch(a,b,null);
+                                                                                         :};
+
+LISTAS_CASOS::= LISTAS_CASOS:a LISTA_CASO:b{:
+                                            RESULT=a;
+                                            RESULT.add(b);
+                                           :}
+              | LISTA_CASO:a{:
+                                RESULT=new LinkedList<>();
+                                RESULT.add(a);
+                            :};
+
+LISTA_CASO::= caso EXPRESION:a dospuntos llavea SENTENCIAS_INTERNAS:b llavec{:
+                                                                             RESULT=new Caso(a,b);
+                                                                            :};
+
+CASO_DEFECTO::= defecto dospuntos llavea SENTENCIAS_INTERNAS:a llavec{:
+                                                                    RESULT=new Caso(a);
+                                                                   :};
+
+
+
+SENTENCIA_SI::= si parena EXPRESION:a parenc llavea SENTENCIAS_INTERNAS:b llavec SENTENCIA_SINOSI:c SENTENCIA_SINO:d{:
+                                                                                                                        RESULT=new If(a,b,c,d);
+                                                                                                                    :}
+              | si parena EXPRESION:a parenc llavea SENTENCIAS_INTERNAS:b llavec SENTENCIA_SINOSI:c{:
+                                                                                                    RESULT=new If(a,b,c,new SubIf());
+                                                                                                   :}
+              | si parena EXPRESION:a parenc llavea SENTENCIAS_INTERNAS:b llavec SENTENCIA_SINO:c{:
+                                                                                                    RESULT=new If(a,b,new LinkedList<>(),c);
+                                                                                                 :}
+              | si parena EXPRESION:a parenc llavea SENTENCIAS_INTERNAS:b llavec{:
+                                                                                 RESULT=new If(a,b,new LinkedList<>(),new SubIf());
+                                                                                :};
+
+
+
+SENTENCIA_SINO::= sino llavea SENTENCIAS_INTERNAS:a llavec{:
+                                                            RESULT=new SubIf(null,a,true);
+                                                          :};
+
+SENTENCIA_SINOSI::= SENTENCIA_SINOSI:a sino si parena EXPRESION:b parenc llavea SENTENCIAS_INTERNAS:c llavec{:
+                                                                                                                RESULT=a;
+                                                                                                                RESULT.add(new SubIf(b,c,false));
+                                                                                                            :}
+                  | sino si parena EXPRESION:a parenc llavea SENTENCIAS_INTERNAS:b llavec{:
+                                                                                            RESULT=new LinkedList<SubIf>();
+                                                                                            RESULT.add(new SubIf(a,b,false));
+                                                                                         :};
+
+
+DECLARACION_VARIABLES::= var LISTA_ID:a pyc{:
                                             RESULT=a;
                                            :}
-                  | SENTENCIAS_SELECCION;
-
-
-SENTENCIAS_SELECCION::= SENTENCIA_SI;
-
-SENTENCIA_SI::= si parena EXPRESION parenc llavea SENTENCIAS_GLOBALES llavec SENTENCIA_SINOSI SENTENCIA_SINO
-              | si parena EXPRESION parenc llavea SENTENCIAS_GLOBALES llavec SENTENCIA_SINOSI
-              | si parena EXPRESION parenc llavea SENTENCIAS_GLOBALES llavec SENTENCIA_SINO
-              | si parena EXPRESION parenc llavea SENTENCIAS_GLOBALES llavec;
-
-SENTENCIA_SINO::= sino llavea SENTENCIAS_GLOBALES llavec;
-
-SENTENCIA_SINOSI::= SENTENCIA_SINOSI sino si parena EXPRESION parenc llavea SENTENCIAS_GLOBALES llavec
-                  | sino si parena EXPRESION parenc llavea SENTENCIAS_GLOBALES llavec;
-
-
- DECLARACION_VARIABLES_GLOBALES::= var LISTA_ID:a pyc{:
-                                                        RESULT=a;
-                                                     :}
-                        | var LISTA_ID:a igual EXPRESION:b pyc{:
-                                                               int indice=a.size()-1;
-                                                               Declaracion ultima=(Declaracion)a.get(indice);
-                                                               a.remove(indice);
-                                                               ultima.setIntValue(b);
-                                                               a.add(ultima);
-                                                               RESULT=a;
-                                                              :}
-                        | var LISTA_ID igual corchea ELEMENTOS_ARRAY corchec pyc
-                        | var LISTA_ID igual llavea ELEMENTOS_OBJETO llavec pyc
-                        | importar parena ELEMENTO_PATH parenc pyc
-                        | imprimir parena EXPRESION parenc pyc;
-
-
+                       | var LISTA_ID:a igual EXPRESION:b pyc{:
+                                                                int indice=a.size()-1;
+                                                                Declaracion ultima=(Declaracion)a.get(indice);
+                                                                a.remove(indice);
+                                                                ultima.setIntValue(b);
+                                                                a.add(ultima);
+                                                                RESULT=a;
+                                                             :}
+                       | var LISTA_ID igual corchea ELEMENTOS_ARRAY corchec pyc
+                       | var LISTA_ID igual llavea ELEMENTOS_OBJETO llavec pyc;
 
 ELEMENTO_PATH::= valor_path
                 | valor_path2;
 
 ELEMENTOS_OBJETO::= ELEMENTOS_OBJETO coma valor_id dospuntos EXPRESION
                   | valor_id dospuntos EXPRESION;
-
-
 
 ELEMENTOS_ARRAY::=  
                  | LISTA_ARRAY;
@@ -189,10 +291,10 @@ EXPRESION::= menos EXPRESION:a{:
                                             RESULT=new Logica(a,b,Operador.OR);
                                        :}
            | not EXPRESION:a{:
-                                RESULT=new Logica(a,null,Operador.NOT);
+                                RESULT=new Logica(a,true,Operador.NOT);
                             :}
            | parena EXPRESION:a parenc{:
-                                        RESULT=new Aritmetica(a.toString(),Type.PrimitiveType.BOOLEAN);
+                                        RESULT=a;
                                       :}
            | valor_id:a{:
                         RESULT=new Aritmetica(a.toString(),Type.PrimitiveType.ID);
@@ -215,12 +317,10 @@ EXPRESION::= menos EXPRESION:a{:
            | valor_id punto FUNCIONES_LENGUAJE
            | valor_id corchea EXPRESION corchec
            | LLAMADA_FUNCION
-           | imprimir parena EXPRESION parenc
-           | EXPRESION signoi EXPRESION dospuntos EXPRESION;
+           | TERNARIO:a{:RESULT=a;:};
 
+TERNARIO::=EXPRESION:a signoi EXPRESION:b dospuntos EXPRESION:c{:RESULT=new Ternario(a,b,c);:};
 
-
-TERNARIO::=EXPRESION signoi EXPRESION dospuntos EXPRESION;
 FUNCIONES_LENGUAJE::= descendente parena parenc
                     | ascendente parena parenc
                     | invertir parena parenc
