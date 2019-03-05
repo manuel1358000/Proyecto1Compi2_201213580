@@ -17,7 +17,7 @@ import ArbolAST.NodoAST;
  *
  * @author anton
  */
-public class Funcion extends Simbolo implements Instruccion{
+public class Funcio extends Simbolo implements Instruccion{
     @Override
     public Object execute(Entorno entorno) {
         return null;

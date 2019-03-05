@@ -6,6 +6,7 @@
 package ArbolAST.Instrucciones.Seleccion;
 
 import ArbolAST.Entorno.Entorno;
+import ArbolAST.Entorno.Type;
 import ArbolAST.Expresiones.Expresion;
 import ArbolAST.Instrucciones.Detener;
 import ArbolAST.Expresiones.operacion.Retornar;
@@ -19,6 +20,7 @@ import proyecto1compi2_201213580.Proyecto1Compi2_201213580;
  * @author anton
  */
 public class Switch implements Instruccion{
+    Type.PrimitiveType tipo;
     Expresion condicion;
     LinkedList<Caso> lista_casos;
     boolean flag=false;
@@ -27,6 +29,7 @@ public class Switch implements Instruccion{
         this.condicion=condicion;
         this.lista_casos=lista_casos;
         this.def=def;
+        this.tipo=Type.PrimitiveType.NULL;
     }
     @Override
     public Object execute(Entorno entorno) {
@@ -36,12 +39,12 @@ public class Switch implements Instruccion{
         //recorrido previo para saber si los casos son correctos
         for(Caso c:this.lista_casos){
             //aqui se tiene que comparar los tipos
-            if(condicion.getType(entorno)!=c.condicion.getType(entorno)){
+            if(condicion.getType(local)!=c.condicion.getType(local)){
                 System.out.println("Error semantico no son de tipos iguales");
             }
         }
         for(Caso c:this.lista_casos){   
-            if(c.condicion.getValue(entorno).equals(var_control)||flag){
+            if(c.condicion.getValue(local).equals(var_control)||flag){
                 flag=true;
                 for(NodoAST  node:c.lista_bloques){
                     if(node instanceof Instruccion){
@@ -60,9 +63,11 @@ public class Switch implements Instruccion{
                     }else if(node instanceof Expresion){
                         if(node instanceof Retornar){
                             Retornar retorno=(Retornar)node;
+                            this.tipo=retorno.getType(local);
                             return retorno.getValue(local);
                         }else {
                             Expresion expresion=(Expresion)node;
+                            this.tipo=expresion.getType(local);
                             return expresion.getValue(local);
                         }
                     }else{
@@ -85,14 +90,15 @@ public class Switch implements Instruccion{
                             return null;
                         }
                     }
-                    instruccion.execute(entorno);
+                    instruccion.execute(local);
                 }else if(node instanceof Expresion){
                     if(node instanceof Retornar){
                         Retornar retorno=(Retornar)node;
-                        return retorno.getValue(entorno);
+                        this.tipo=retorno.getType(local);
+                        return retorno.getValue(local);
                     }else {
                         Expresion expresion=(Expresion)node;
-                        return expresion.getValue(entorno);
+                        return expresion.getValue(local);
                     }
                 }else{
                     return null;

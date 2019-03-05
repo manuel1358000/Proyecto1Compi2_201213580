@@ -8,6 +8,7 @@ package ArbolAST.Instrucciones.Seleccion;
 import ArbolAST.Entorno.Entorno;
 import ArbolAST.Entorno.Type;
 import ArbolAST.Expresiones.Expresion;
+import ArbolAST.Expresiones.Llamada_Funcion;
 import ArbolAST.Expresiones.operacion.Retornar;
 import ArbolAST.Instrucciones.Detener;
 import ArbolAST.Instrucciones.Instruccion;
@@ -20,6 +21,7 @@ import proyecto1compi2_201213580.Proyecto1Compi2_201213580;
  * @author anton
  */
 public class If implements Instruccion{
+    Type.PrimitiveType tipo;
     Expresion condicion;
     //lista de ifs
     LinkedList<SubIf> lista_if;
@@ -31,9 +33,11 @@ public class If implements Instruccion{
         this.lista_if=lista_if;
         this.def_else=def_else;
         this.sentencias_if=sentencias_if;
+        this.tipo=Type.PrimitiveType.NULL;
     }
     @Override
     public Object execute(Entorno entorno) {
+        Object respuesta=null;
         Entorno local=new Entorno(entorno);
         Object condi=this.condicion.getValue(local);
         if(this.condicion.getType(local)==Type.PrimitiveType.BOOLEAN){
@@ -42,7 +46,7 @@ public class If implements Instruccion{
                 for(NodoAST node:this.sentencias_if){
                     if(node instanceof Instruccion){
                         if(node instanceof Detener){
-                            return null;
+                            respuesta=null;
                         }else{
                             Instruccion instruccion=(Instruccion)node;
                             instruccion.execute(local);
@@ -50,15 +54,19 @@ public class If implements Instruccion{
                     }else if(node instanceof Expresion){
                         if(node instanceof Retornar){
                             Retornar retorno=(Retornar)node;
-                            return retorno.getValue(local);
+                            this.tipo=retorno.getType(local);
+                            respuesta=retorno.getValue(local);
                         }else{
                             Expresion expresion=(Expresion)node;
-                            return expresion.getValue(entorno);
+                            this.tipo=expresion.getType(local);
+                            respuesta=expresion.getValue(local);
                         }
                     }else{
-                        return null;
+                        respuesta=null;
                     }
                 }
+            }else{
+                flag=false;
             }
         }else{
             flag=false;
@@ -73,7 +81,7 @@ public class If implements Instruccion{
                         for(NodoAST node:subif.lista_bloques){
                             if(node instanceof Instruccion){
                                 if(node instanceof Detener){
-                                    return null;
+                                    respuesta= null;
                                 }else{
                                     Instruccion instruccion=(Instruccion)node;
                                     instruccion.execute(local);
@@ -81,16 +89,20 @@ public class If implements Instruccion{
                             }else if(node instanceof Expresion){
                                 if(node instanceof Retornar){
                                     Retornar retorno=(Retornar)node;
-                                    return retorno.getValue(local);
+                                    this.tipo=retorno.getType(local);
+                                    respuesta=retorno.getValue(local);
                                 }else{
                                     Expresion expresion=(Expresion)node;
-                                    return expresion.getValue(entorno);
+                                    this.tipo=expresion.getType(local);
+                                    respuesta=expresion.getValue(local);
                                 }
                             }else{
-                                return null;
+                                respuesta=null;
                             }
                         }
                         break;
+                    }else{
+                        flag=false;
                     }
                 }
             }
@@ -108,7 +120,7 @@ public class If implements Instruccion{
                             }else{
                                 Proyecto1Compi2_201213580.control_break--;
                             }
-                            return null;
+                            respuesta=null;
                         }else{
                             Instruccion instruccion=(Instruccion)node;
                             instruccion.execute(local);
@@ -116,20 +128,70 @@ public class If implements Instruccion{
                     }else if(node instanceof Expresion){
                         if(node instanceof Retornar){
                             Retornar retorno=(Retornar)node;
-                            return retorno.getValue(local);
+                            this.tipo=retorno.getType(local);
+                            respuesta=retorno.getValue(local);
                         }else{
                             Expresion expresion=(Expresion)node;
-                            return expresion.getValue(entorno);
+                            this.tipo=expresion.getType(local);
+                            respuesta=expresion.getValue(local);
                         }
                     }else{
-                        return null;
+                        respuesta=null;
                     }
                 }
             }else{
-                return null;
+                respuesta=null;
             }
         }
-        return null;
+        return respuesta;
+    }
+
+    public Type.PrimitiveType getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(Type.PrimitiveType tipo) {
+        this.tipo = tipo;
+    }
+
+    public Expresion getCondicion() {
+        return condicion;
+    }
+
+    public void setCondicion(Expresion condicion) {
+        this.condicion = condicion;
+    }
+
+    public LinkedList<SubIf> getLista_if() {
+        return lista_if;
+    }
+
+    public void setLista_if(LinkedList<SubIf> lista_if) {
+        this.lista_if = lista_if;
+    }
+
+    public LinkedList<NodoAST> getSentencias_if() {
+        return sentencias_if;
+    }
+
+    public void setSentencias_if(LinkedList<NodoAST> sentencias_if) {
+        this.sentencias_if = sentencias_if;
+    }
+
+    public boolean isFlag() {
+        return flag;
+    }
+
+    public void setFlag(boolean flag) {
+        this.flag = flag;
+    }
+
+    public SubIf getDef_else() {
+        return def_else;
+    }
+
+    public void setDef_else(SubIf def_else) {
+        this.def_else = def_else;
     }
 
     @Override

@@ -7,6 +7,7 @@ package ArbolAST.Componente;
 
 import ArbolAST.Componente.NodoElemento;
 import java.util.LinkedList;
+import javax.swing.JOptionPane;
 /**
  *
  * @author anton
@@ -20,7 +21,7 @@ public class NodoGXML {
     //definicion de los elementos de las etiquetas
     public LinkedList<NodoElemento>elementos;
     public LinkedList<NodoGXML>nodos;
-    
+    public boolean general;
     
     
     
@@ -32,6 +33,17 @@ public class NodoGXML {
         this.elemento_id="";
         this.elementos=new LinkedList<NodoElemento>();
         this.nodos = new LinkedList<NodoGXML>();
+        this.general=false;
+    }
+    public NodoGXML(boolean general) {
+        this.index = -2;
+        this.tipo_etiqueta ="";
+        this.valor = "";
+        this.id="";
+        this.elemento_id="";
+        this.elementos=new LinkedList<NodoElemento>();
+        this.nodos = new LinkedList<NodoGXML>();
+        this.general=general;
     }
 
     public NodoGXML(int index, String tipo_etiqueta, String id, LinkedList<NodoElemento> elementos) {
@@ -90,6 +102,10 @@ public class NodoGXML {
     }
     public String elementosVentana(LinkedList<NodoElemento>entrada){
         String respuesta="";
+        try{
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null,"ERROR NODOGXML:");
+        }
         int id=0;
         int tipo=0;
         for(int i=0;i<entrada.size();i++){
@@ -106,6 +122,10 @@ public class NodoGXML {
     }
     public String obtenerID(){
         String respuesta="";
+        try{
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null,"ERROR NODOGXML:");
+        }
         for(int i=0;i<this.elementos.size();i++){
             if(this.elementos.get(i).nombre.equals("id")){
                 respuesta=this.elementos.get(i).valor.toString();
@@ -116,6 +136,10 @@ public class NodoGXML {
     }
     public String obtenerNombre(){
         String respuesta="";
+        try{
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null,"ERROR NODOGXML:");
+        }
         for(int i=0;i<this.elementos.size();i++){
             if(this.elementos.get(i).nombre.equals("nombre")){
                 respuesta=this.elementos.get(i).valor.toString();
@@ -126,6 +150,10 @@ public class NodoGXML {
     }
     public String elementosContenedor(LinkedList<NodoElemento>entrada){
         String respuesta="";
+        try{
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null,"ERROR NODOGXML:");
+        }
         int id=0;
         int x=0;
         int y=0;
@@ -145,6 +173,10 @@ public class NodoGXML {
     }
     public String elementosTexto(LinkedList<NodoElemento>entrada){
         String respuesta="";
+        try{
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null,"ERROR NODOGXML:");
+        }
         int nombre=0;
         int x=0;
         int y=0;
@@ -164,6 +196,10 @@ public class NodoGXML {
     }
     public String elementosControl(LinkedList<NodoElemento>entrada){
         String respuesta="";
+        try{
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null,"ERROR NODOGXML:");
+        }
         int tipo=0;
         String tipo_="";
         int nombre=0;
@@ -222,6 +258,10 @@ public class NodoGXML {
     }
     public String elementosEnviar(LinkedList<NodoElemento>entrada){
         String respuesta="";
+        try{
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null,"ERROR NODOGXML:");
+        }
         int nombre=0;
         int x=0;
         int y=0;
@@ -241,6 +281,10 @@ public class NodoGXML {
     }
     public String elementosBoton(LinkedList<NodoElemento>entrada,boolean bandera){
         String respuesta="";
+        try{
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null,"ERROR NODOGXML:");
+        }
         int nombre=0;
         int x=0;
         int y=0;
@@ -267,6 +311,10 @@ public class NodoGXML {
     }
     public String elementosMultimedia(LinkedList<NodoElemento>entrada){
         String respuesta="";
+        try{
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null,"ERROR NODOGXML:");
+        }
         int nombre=0;
         int path=0;
         int tipo=0;

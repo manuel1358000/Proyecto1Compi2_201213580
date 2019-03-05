@@ -14,20 +14,28 @@ import java.util.LinkedList;
 public class Simbolo {
     public boolean parametro;
     public boolean parametroInicializado;
+    public Type.PrimitiveType tipo_implicito;
     public Type.PrimitiveType tipo;
     public String id;
     public LinkedList<Integer>tamaniosDImensiones;
     public Object valor;
-    public String visibilidad;
 
-    public Simbolo(boolean parametro, boolean parametroInicializado, Type.PrimitiveType tipo, String id, LinkedList<Integer> tamaniosDImensiones, Object valor, String visibilidad) {
+    public Simbolo(boolean parametro, boolean parametroInicializado, Type.PrimitiveType tipo, String id, LinkedList<Integer> tamaniosDImensiones, Object valor) {
         this.parametro = parametro;
         this.parametroInicializado = parametroInicializado;
         this.tipo = tipo;
         this.id = id;
         this.tamaniosDImensiones = tamaniosDImensiones;
         this.valor = valor;
-        this.visibilidad = visibilidad;
+        this.tipo_implicito=Type.PrimitiveType.NULL;
+    }
+
+    public Type.PrimitiveType getTipo_implicito() {
+        return tipo_implicito;
+    }
+
+    public void setTipo_implicito(Type.PrimitiveType tipo_implicito) {
+        this.tipo_implicito = tipo_implicito;
     }
     
     public Simbolo() {
@@ -37,7 +45,6 @@ public class Simbolo {
         this.id = "";
         this.tamaniosDImensiones = new LinkedList<Integer>();
         this.valor = "";
-        this.visibilidad = "";
     }
     public Simbolo(String id,Type.PrimitiveType tipo) {
         this.parametro = false;
@@ -46,7 +53,6 @@ public class Simbolo {
         this.id = id;
         this.tamaniosDImensiones = new LinkedList<Integer>();
         this.valor = "";
-        this.visibilidad = "";
     }
     public boolean isParametro() {
         return parametro;
@@ -94,14 +100,6 @@ public class Simbolo {
 
     public void setValor(Object valor) {
         this.valor = valor;
-    }
-
-    public String getVisibilidad() {
-        return visibilidad;
-    }
-
-    public void setVisibilidad(String visibilidad) {
-        this.visibilidad = visibilidad;
     }
     
     public enum Rol{

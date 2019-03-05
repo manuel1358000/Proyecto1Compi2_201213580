@@ -56,8 +56,8 @@ CADENA="\""~"\""
 <YYINITIAL> ";" { return new Symbol(simbolofs.pyc, yyline, yycolumn,yytext());}
 <YYINITIAL> "[" { return new Symbol(simbolofs.corchea, yyline, yycolumn,yytext());}
 <YYINITIAL> "]" { return new Symbol(simbolofs.corchec, yyline, yycolumn,yytext());}
-
-
+<YYINITIAL> "--" { return new Symbol(simbolofs.decremental, yyline, yycolumn,yytext());}
+<YYINITIAL> "++" { return new Symbol(simbolofs.incremental, yyline, yycolumn,yytext());}
 
 //DEFINICION DE PALABRAS RESERVADAS
 <YYINITIAL> "var" { return new Symbol(simbolofs.var, yyline, yycolumn,yytext());}
@@ -82,6 +82,7 @@ CADENA="\""~"\""
 <YYINITIAL> "?" { return new Symbol(simbolofs.signoi, yyline, yycolumn,yytext());}
 <YYINITIAL> "si" { return new Symbol(simbolofs.si, yyline, yycolumn,yytext());}
 <YYINITIAL> "sino" { return new Symbol(simbolofs.sino, yyline, yycolumn,yytext());}
+<YYINITIAL> "funcion" { return new Symbol(simbolofs.funcion, yyline, yycolumn,yytext());}
 
 
 

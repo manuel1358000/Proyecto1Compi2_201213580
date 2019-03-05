@@ -9,20 +9,27 @@ import java.awt.Color;
 import ArbolAST.AST;
 import ArbolAST.NodoAST;
 import ArbolAST.Entorno.Type;
-import ArbolAST.Instrucciones.Declaracion;
+
 import ArbolAST.Expresiones.Expresion;
 import ArbolAST.Expresiones.operacion.Logica;
 import ArbolAST.Expresiones.operacion.Aritmetica;
 import ArbolAST.Expresiones.operacion.Relacional;
 import ArbolAST.Expresiones.operacion.Operacion.Operador;
 import ArbolAST.Expresiones.operacion.Ternario;
+import ArbolAST.Expresiones.operacion.Retornar;
+import ArbolAST.Expresiones.Llamada_Funcion;
 import ArbolAST.Instrucciones.Imprimir;
 import ArbolAST.Instrucciones.Detener;
 import ArbolAST.Instrucciones.Seleccion.If;
 import ArbolAST.Instrucciones.Seleccion.SubIf;
 import ArbolAST.Instrucciones.Seleccion.Caso;
-import ArbolAST.Expresiones.operacion.Retornar;
 import ArbolAST.Instrucciones.Seleccion.Switch;
+import ArbolAST.Instrucciones.Asignacion;
+import ArbolAST.Instrucciones.Funcion;
+import ArbolAST.Instrucciones.Declaracion;
+import ArbolAST.Instrucciones.AsignacionArreglo;
+import ArbolAST.Instrucciones.Declaracion_Arreglo;
+import ArbolAST.Expresiones.AccesoArreglo;
 parser code
 {:
     public AST root;
@@ -41,10 +48,10 @@ action code
 
 //DEFINICION DE SIMBOLOS DEL LENGUAJE FS
 terminal String parena,parenc,llavea,llavec,igual,mas,menos,por,div,pot,mayorq,menorq,mayorigualq,menorigualq,igualigual,diferente,and,or,not;
-terminal String coma,pyc,corchea,corchec,punto,dospuntos,signoi;
+terminal String coma,pyc,corchea,corchec,punto,dospuntos,signoi,incremental,decremental;
 //DEFINICION DE PALABRAS RESERVADAS
 terminal String var,descendente,ascendente,invertir,maximo,minimo,filtrar;
-terminal String buscar,map,reduce,todos,alguno,imprimir,importar,si,sino,caso,detener,retornar,selecciona;
+terminal String buscar,map,reduce,todos,alguno,imprimir,importar,si,sino,caso,detener,retornar,selecciona,funcion;
 terminal String defecto;
 
 //DEFINICION VALORES IMPLICITOS LENGUAJE FS
@@ -59,7 +66,7 @@ non terminal LinkedList<NodoAST> DECLARACION_VARIABLES;
 non terminal LinkedList<NodoAST> LISTA_ID;
 non terminal Expresion EXPRESION;
 non terminal LinkedList<NodoAST> LISTA_PARAMETROS;
-non terminal NodoAST LLAMADA_FUNCION;
+non terminal Expresion LLAMADA_FUNCION;
 non terminal LinkedList<NodoAST> SENTENCIAS_GENERALES;
 non terminal LinkedList<NodoAST> SENTENCIA_IMPRIMIR;
 non terminal LinkedList<NodoAST> SENTENCIAS_SELECCION;
@@ -72,21 +79,20 @@ non terminal LinkedList<Caso> LISTAS_CASOS;
 non terminal Caso LISTA_CASO;
 non terminal Caso CASO_DEFECTO;
 non terminal LinkedList<NodoAST> SENTENCIA_INTERNA;
-
-
-
-
 non terminal LinkedList<NodoAST> SENTENCIA_RETORNAR;
 non terminal LinkedList<NodoAST> SENTENCIA_DETENER;
-
-
-
-non terminal String ELEMENTOS_ARRAY,LISTA_ARRAY,LISTA_PARAMETRO,FUNCIONES_LENGUAJE;
-non terminal String ELEMENTOS_OBJETO,ELEMENTO_PATH;
-
-
-
 non terminal LinkedList<NodoAST> SENTENCIAS_INTERNAS;
+non terminal LinkedList<NodoAST> SENTENCIA_ASIGNACION;
+non terminal LinkedList<NodoAST> DEFINICIONES_PARAMETROS;
+non terminal LinkedList<NodoAST> DECLARAR_FUNCIONES;
+non terminal LinkedList<NodoAST> LISTA_PARAMETRO;
+non terminal LinkedList<Expresion> LISTA_ARRAY;
+non terminal LinkedList<Expresion> ELEMENTOS_ARRAY;
+non terminal String FUNCIONES_LENGUAJE;
+non terminal String ELEMENTOS_OBJETO,ELEMENTO_PATH;
+non terminal Expresion LLAMADA_ARREGLO;
+
+
 //DEFINICION DE LA PRECEDENCIA DE LOS OPERADORES
 precedence left signoi;
 precedence left or;
@@ -98,6 +104,7 @@ precedence left mas,menos;
 precedence left div, por;
 precedence left pot;
 precedence left parena, parenc;
+precedence left decremental,incremental;
 
 start with INICIAL;
 INICIAL::= SENTENCIAS_GLOBALES:a{:
@@ -114,30 +121,108 @@ SENTENCIAS_GLOBALES::= SENTENCIAS_GLOBALES:a SENTENCIA_GLOBAL:b{:
 //DECLARACION DE VARIABLES,FUNCIONES, METODOS,OBJETOS,ARREGLOS
 
 SENTENCIA_GLOBAL::= SENTENCIAS_GENERALES:a{:RESULT=a;:}
-                  | importar parena ELEMENTO_PATH parenc pyc;
+                  | importar parena ELEMENTO_PATH parenc pyc
+                  | DECLARAR_FUNCIONES:a{:RESULT=a;:};
+
+DECLARAR_FUNCIONES::= funcion valor_id:a parena parenc llavea SENTENCIAS_INTERNAS:b llavec{:
+                                                                                            RESULT=new LinkedList<>();
+                                                                                            RESULT.add(new Funcion(a.toString(),b));
+                                                                                          :}
+                    | funcion valor_id:a parena DEFINICIONES_PARAMETROS:b parenc llavea SENTENCIAS_INTERNAS:c llavec{:
+                                                                                                                        RESULT=new LinkedList<>();
+                                                                                                                        RESULT.add(new Funcion(a.toString(),b,c));
+                                                                                                                    :};
+
+DEFINICIONES_PARAMETROS::= DEFINICIONES_PARAMETROS:a coma var valor_id:b{:
+                                                                        RESULT=a;
+                                                                        RESULT.add(new Declaracion(Type.PrimitiveType.ID,b.toString(),null,false,bright));
+                                                                        :}
+                         | var valor_id:a{:
+                                            RESULT=new LinkedList<>();
+                                            RESULT.add(new Declaracion(Type.PrimitiveType.ID,a.toString(),null,false,aright));
+                                         :};
+
 
 SENTENCIAS_INTERNAS::= SENTENCIAS_INTERNAS:a SENTENCIAS_GENERALES:b{:
                                                                     RESULT=a;
                                                                     RESULT.addAll(b);
                                                                    :}
                      | SENTENCIAS_GENERALES:a{:
-                                           RESULT=a;
-                                          :};
+                                                RESULT=a;
+                                             :};
 
 SENTENCIAS_GENERALES::= SENTENCIA_IMPRIMIR:a{:
                                             RESULT=a;
                                             :}
                       | DECLARACION_VARIABLES:a{:
                                                 RESULT=a;
-                                               :} 
+                                               :}
                       | SENTENCIAS_SELECCION:a{:RESULT=a;:}
                       | SENTENCIA_RETORNAR:a{:RESULT=a;:}
-                      | SENTENCIA_DETENER:a{:RESULT=a;:};
+                      | SENTENCIA_DETENER:a{:RESULT=a;:}
+                      | SENTENCIA_ASIGNACION:a{:RESULT=a;:}
+                      | LLAMADA_FUNCION:a pyc{:
+                                                RESULT=new LinkedList<>();
+                                                RESULT.add(a);
+                                             :};
+
+SENTENCIA_ASIGNACION::= valor_id:a igual EXPRESION:b pyc{:
+                                                            RESULT=new LinkedList<>();
+                                                            RESULT.add(new Asignacion(a.toString(),b,Operador.IGUAL,aright,aleft));
+                                                        :}
+                      | valor_id:a mas igual EXPRESION:b pyc{:
+                                                                RESULT=new LinkedList<>();
+                                                                RESULT.add(new Asignacion(a.toString(),b,Operador.A_SUMA,aright,aleft));
+                                                            :}
+                      | valor_id:a menos igual EXPRESION:b pyc{:
+                                                                RESULT=new LinkedList<>();
+                                                                RESULT.add(new Asignacion(a.toString(),b,Operador.A_RESTA,aright,aleft));
+                                                              :}
+                      | valor_id:a por igual EXPRESION:b pyc{:
+                                                                RESULT=new LinkedList<>();
+                                                                RESULT.add(new Asignacion(a.toString(),b,Operador.A_MULT,aright,aleft));
+                                                            :}
+                      | valor_id:a div igual EXPRESION:b pyc{:
+                                                                RESULT=new LinkedList<>();
+                                                                RESULT.add(new Asignacion(a.toString(),b,Operador.A_DIV,aright,aleft));
+                                                            :}
+                      | valor_id:a corchea EXPRESION:b corchec igual EXPRESION:c pyc{:
+                                                                                        RESULT=new LinkedList<>();
+                                                                                        RESULT.add(new AsignacionArreglo(a.toString(),c,b,Operador.IGUAL));
+                                                                                    :}
+                      | valor_id:a corchea EXPRESION:b corchec mas igual EXPRESION:c pyc{:
+                                                                                            RESULT=new LinkedList<>();
+                                                                                            RESULT.add(new AsignacionArreglo(a.toString(),c,b,Operador.A_SUMA));
+                                                                                        :}
+                      | valor_id:a corchea EXPRESION:b corchec menos igual EXPRESION:c pyc{:
+                                                                                            RESULT=new LinkedList<>();
+                                                                                            RESULT.add(new AsignacionArreglo(a.toString(),c,b,Operador.A_RESTA));
+                                                                                          :}
+                      | valor_id:a corchea EXPRESION:b corchec por igual EXPRESION:c pyc{:
+                                                                                            RESULT=new LinkedList<>();
+                                                                                            RESULT.add(new AsignacionArreglo(a.toString(),c,b,Operador.A_MULT));
+                                                                                        :}
+                      | valor_id:a corchea EXPRESION:b corchec div igual EXPRESION:c pyc{:
+                                                                                            RESULT=new LinkedList<>();
+                                                                                            RESULT.add(new AsignacionArreglo(a.toString(),c,b,Operador.A_DIV));
+                                                                                        :}
+                      | EXPRESION:a decremental pyc{:
+                                                        RESULT=new LinkedList<>();
+                                                        RESULT.add(new Aritmetica(a,true,Operador.AUMENTO));
+                                                   :}
+                      | EXPRESION:a incremental pyc{:
+                                                    RESULT=new LinkedList<>();
+                                                    RESULT.add(new Aritmetica(a,true,Operador.DECREMENTO));
+                                                   :};
 
 SENTENCIA_RETORNAR::= retornar EXPRESION:a pyc{:
                                                 RESULT=new LinkedList<>();
                                                 RESULT.add(new Retornar(a));
-                                              :};
+                                              :}
+                    | retornar pyc{:
+                                    RESULT=new LinkedList<>();
+                                    RESULT.add(new Retornar());
+                                   :};
 SENTENCIA_DETENER::= detener pyc{:
                                     RESULT=new LinkedList<>();
                                     RESULT.add(new Detener());
@@ -220,11 +305,20 @@ DECLARACION_VARIABLES::= var LISTA_ID:a pyc{:
                                                                 Declaracion ultima=(Declaracion)a.get(indice);
                                                                 a.remove(indice);
                                                                 ultima.setIntValue(b);
+                                                                ultima.setInicializado(true);
                                                                 a.add(ultima);
                                                                 RESULT=a;
                                                              :}
-                       | var LISTA_ID igual corchea ELEMENTOS_ARRAY corchec pyc
+                       | var LISTA_ID:a igual corchea ELEMENTOS_ARRAY:b corchec pyc{:
+                                                                                int indice=a.size()-1;
+                                                                                Declaracion ultima=(Declaracion)a.get(indice);
+                                                                                a.remove(indice);
+                                                                                Declaracion_Arreglo declaracion_arreglo=new Declaracion_Arreglo(Type.PrimitiveType.NULL,ultima.getId(),null,true,ultima.getLine(),b);
+                                                                                a.add(declaracion_arreglo);
+                                                                                RESULT=a;
+                                                                               :}
                        | var LISTA_ID igual llavea ELEMENTOS_OBJETO llavec pyc;
+
 
 ELEMENTO_PATH::= valor_path
                 | valor_path2;
@@ -232,18 +326,24 @@ ELEMENTO_PATH::= valor_path
 ELEMENTOS_OBJETO::= ELEMENTOS_OBJETO coma valor_id dospuntos EXPRESION
                   | valor_id dospuntos EXPRESION;
 
-ELEMENTOS_ARRAY::=  
-                 | LISTA_ARRAY;
-LISTA_ARRAY::= LISTA_ARRAY coma EXPRESION
-             | EXPRESION;
+ELEMENTOS_ARRAY::={:RESULT=new LinkedList<>();:}
+                 | LISTA_ARRAY:a{:RESULT=a;:};
+LISTA_ARRAY::= LISTA_ARRAY:a coma EXPRESION:b{:
+                                                RESULT=a;
+                                                RESULT.add(b);
+                                             :}
+             | EXPRESION:a{:
+                            RESULT=new LinkedList<>();
+                            RESULT.add(a);
+                          :};
 LISTA_ID::= LISTA_ID:a coma valor_id:b{:
                                        RESULT=a;
-                                       Declaracion declaracion=new Declaracion(Type.PrimitiveType.NULL,b.toString(),null,bleft);
+                                       Declaracion declaracion=new Declaracion(Type.PrimitiveType.NULL,b.toString(),null,false,bleft);
                                        RESULT.add(declaracion);
                                       :}
           | valor_id:a{:
                         RESULT=new LinkedList<NodoAST>();
-                        Declaracion declaracion=new Declaracion(Type.PrimitiveType.NULL,a.toString(),null,aleft);
+                        Declaracion declaracion=new Declaracion(Type.PrimitiveType.NULL,a.toString(),null,false,aleft);
                         RESULT.add(declaracion);
                       :};
 
@@ -314,10 +414,24 @@ EXPRESION::= menos EXPRESION:a{:
            | valor_falso:a{:
                             RESULT=new Aritmetica(a.toString(),Type.PrimitiveType.BOOLEAN);
                           :}
-           | valor_id punto FUNCIONES_LENGUAJE
-           | valor_id corchea EXPRESION corchec
-           | LLAMADA_FUNCION
-           | TERNARIO:a{:RESULT=a;:};
+           //| valor_id punto FUNCIONES_LENGUAJE
+           //| valor_id corchea EXPRESION corchec
+           | LLAMADA_FUNCION:a{:RESULT=a;:}
+           | TERNARIO:a{:RESULT=a;:}
+           | valor_nulo:a{:
+                            RESULT=new Aritmetica(a.toString(),Type.PrimitiveType.NULL);
+                         :}
+           | LLAMADA_ARREGLO:a{:RESULT=a;:}
+           | EXPRESION:a decremental{:
+                                        RESULT=new Aritmetica(a,true,Operador.AUMENTO);
+                                    :}
+           | EXPRESION:a incremental{:
+                                        RESULT=new Aritmetica(a,true,Operador.AUMENTO);
+                                    :};
+
+LLAMADA_ARREGLO::= valor_id:a corchea EXPRESION:b corchec{:
+                                                        RESULT=new AccesoArreglo(a,b);
+                                                     :};
 
 TERNARIO::=EXPRESION:a signoi EXPRESION:b dospuntos EXPRESION:c{:RESULT=new Ternario(a,b,c);:};
 
@@ -334,9 +448,24 @@ FUNCIONES_LENGUAJE::= descendente parena parenc
                     | alguno parena LISTA_PARAMETRO parenc;
 
 
-LLAMADA_FUNCION::= valor_id parena LISTA_PARAMETROS parenc;
+LLAMADA_FUNCION::= valor_id:a parena LISTA_PARAMETROS:b parenc{:
+                                                                RESULT=new Llamada_Funcion(Type.PrimitiveType.FUNCION,a,b);
+                                                              :};
 
-LISTA_PARAMETROS::=
-                  | LISTA_PARAMETRO;
-LISTA_PARAMETRO::= LISTA_PARAMETRO coma EXPRESION
-                  | EXPRESION;
+LISTA_PARAMETROS::={:
+                        RESULT=new LinkedList<>();
+                   :}
+                  | LISTA_PARAMETRO:a{:
+                                        RESULT=a;
+                                     :};
+LISTA_PARAMETRO::= LISTA_PARAMETRO:a coma EXPRESION:b{:
+                                                        RESULT=a;
+                                                        RESULT.add(b);
+                                                     :}
+                  | EXPRESION:a{:
+                                RESULT=new LinkedList<>();
+                                RESULT.add(a);
+                               :};
+
+
+

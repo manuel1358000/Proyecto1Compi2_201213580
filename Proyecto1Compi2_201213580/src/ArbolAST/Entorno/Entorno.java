@@ -26,13 +26,18 @@ public class Entorno {
     }
 
     public void Agregar(String s,Simbolo sim){
-        Simbolo com=(Simbolo)Obtener(s);
+        Simbolo com=(Simbolo)this.Obtener(s);
         if(com!=null){
-            System.out.println("ERROR SEMANTICO: Ya existe una variable/funcion con el identificador "+s);
         }else{
-            tabla.put(s,sim);
+            this.tabla.put(s,sim);
         }
         
+    }
+    public void AgregarParametro(String s,Simbolo sim){
+        this.tabla.put(s, sim);
+    }
+    public void Actualizar(String s,Simbolo sim){
+            this.tabla.put(s,sim);
     }
     public void Crear(Entorno padre){
         this.padre=padre;
@@ -43,6 +48,13 @@ public class Entorno {
             if(encontro!=null)return encontro;
         }
         return null;
+    }
+     public Entorno ObtenerUltimo(){
+        Entorno respuesta=null;
+         for(Entorno e=this;e!=null;e=e.padre){
+            respuesta=e;
+        }
+        return respuesta;
     }
     public void Imprimir(){
        

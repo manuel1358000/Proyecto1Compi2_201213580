@@ -12,14 +12,28 @@ import Analizadores.GramaticaGXML.sintacticoGXML;
 import ArbolAST.AST;
 import ArbolAST.Componente.EjecutarGXML;
 import ArbolAST.Componente.NodoGXML;
+import Elementos_Interfaz.Pesta;
+import java.awt.Component;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rtextarea.Gutter;
+import org.fife.ui.rtextarea.RTextScrollPane;
 
 /**
  *
@@ -27,6 +41,11 @@ import java.util.logging.Logger;
  */
 public class Principal extends javax.swing.JFrame {
     public static NodoGXML raiz;
+    public static Pesta nueva;
+    public int contador_pesta=0;
+    RSyntaxTextArea textArea;
+    public static boolean control_ambientes=false;
+    public static ArrayList<JTextArea> listAreas = new ArrayList<JTextArea>();
     /**
      * Creates new form Principal
      */
@@ -43,22 +62,80 @@ public class Principal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
         jButton1 = new javax.swing.JButton();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        jMenuItem4 = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
+        jMenu4 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
-
-        jButton1.setText("GENERAR GXML");
+        jButton1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jButton1.setText("COMPILAR");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
+
+        jMenu1.setText("ARCHIVO");
+
+        jMenuItem1.setText("ABRIR PESTAÑA");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem1);
+
+        jMenuItem2.setText("GUARDAR");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem2);
+
+        jMenuItem3.setText("GUARDAR COMO");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem3);
+
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("PESTAÑAS");
+
+        jMenuItem4.setText("NUEVA PESTAÑA");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem4);
+
+        jMenuItem5.setText("CERRAR PESTAÑA");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem5);
+
+        jMenuBar1.add(jMenu2);
+
+        jMenu4.setText("ERRORES");
+        jMenuBar1.add(jMenu4);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -66,21 +143,21 @@ public class Principal extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1)
+                .addComponent(jTabbedPane1)
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
-                .addGap(265, 265, 265)
+                .addGap(344, 344, 344)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(467, Short.MAX_VALUE))
+                .addContainerGap(388, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 413, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(168, Short.MAX_VALUE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
 
         pack();
@@ -88,11 +165,82 @@ public class Principal extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        String ruta=Proyecto1Compi2_201213580.ruta_proyecto+"\\src\\Auxiliares\\entrada.txt";
-        Escribir_Archivo(jTextArea1.getText().toString(),ruta);
-        File archivo=new File(ruta);
-        if(archivo.exists()){
-            try {
+        System.out.println("BOTON COMPILAR");
+//        if(control_ambientes==true){
+//            if((this.jTabbedPane1.getTabCount()-1)==this.jTabbedPane1.getSelectedIndex()){
+//                nueva=new Pesta(listAreas.get(0).getText());
+//                nueva.setContenido(listAreas.get(1).getText());
+//                //x,y,ancho,alto
+//                this.jTabbedPane1.add(nueva,"",this.jTabbedPane1.getTabCount());
+//                this.jTabbedPane1.setSelectedIndex(this.jTabbedPane1.getTabCount()-1);
+//                contador_pesta++;
+//            }
+//        }
+        if(contador_pesta>0){
+            System.out.println(this.jTabbedPane1.getSelectedIndex());
+            Pesta pesta=(Pesta)this.jTabbedPane1.getComponentAt(this.jTabbedPane1.getSelectedIndex());
+            for(Component cmp2:pesta.getComponents()){
+                if(cmp2.getName()=="scroll"){
+                    RTextScrollPane scroll=(RTextScrollPane)cmp2;
+                    String [] direccion=pesta.path.split("\\.");
+                    if(direccion.length==2){
+                        if(direccion[1].toLowerCase().equals("fs")){
+                            Escribir_Archivo(scroll.getTextArea().getText(),pesta.path);
+                            JOptionPane.showMessageDialog(null,"SE GUARDO LA PESTAÑA A EJECUTAR");
+                            File archivo=new File(pesta.path);
+                            if(archivo.exists()){
+                                try {
+                                    InputStreamReader ir = new InputStreamReader(new FileInputStream(archivo));
+                                    lexicoFS analizador_lexico=new lexicoFS(ir);
+                                     sintacticoFS parser=new sintacticoFS(analizador_lexico);
+                                    parser.parse();
+                                    AST nodoRaiz=parser.root;
+                                    nodoRaiz.execute();
+                                    System.out.println("Finalizo la ejecucion de FS");
+                                } catch (Exception ex) {
+                                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            }else{
+                                javax.swing.JOptionPane.showMessageDialog(null,"No se pudo cargar el archivo. Intente nuevamente");
+                            }
+                        }else if(direccion[1].toLowerCase().equals("gxml")){
+                            Escribir_Archivo(scroll.getTextArea().getText(),pesta.path);
+                            JOptionPane.showMessageDialog(null,"SE GUARDO LA PESTAÑA A EJECUTAR");
+                            File archivo=new File(pesta.path);
+                            if(archivo.exists()){
+                                try {
+                                    InputStreamReader ir = new InputStreamReader(new FileInputStream(archivo));
+                                    lexicoGXML analizador_lexico=new lexicoGXML(ir);
+                                    sintacticoGXML parser=new sintacticoGXML(analizador_lexico);
+                                    parser.parse();
+                                    EjecutarGXML nodoEjecutar=new EjecutarGXML(parser.root);
+                                    nodoEjecutar.OrdenarPrincipal();
+                                    nodoEjecutar.Importaciones(parser.root);
+                                    String respuesta=nodoEjecutar.Ejecutar(parser.root,"");
+                                    System.out.println("RESPUESTA \n" + respuesta);
+                                } catch (Exception ex) {
+                                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            }else{
+                                javax.swing.JOptionPane.showMessageDialog(null,"No se pudo cargar el archivo. Intente nuevamente");
+                            }
+                        }else{
+                            JOptionPane.showMessageDialog(null,"LA PESTAÑA QUE QUIERE ANALIZAR NO TIENE UNA EXTENSION VALIDA");
+                        }
+                        
+                    }else{
+                        JOptionPane.showMessageDialog(null,"La pestaña que quiere analizar no tiene una extension valida");
+                    }
+                }
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "NO HAY PESTAÑAS PARA COMPILAR");
+        }        
+//        String ruta=Proyecto1Compi2_201213580.ruta_proyecto+"\\src\\Auxiliares\\entrada.txt";
+//        Escribir_Archivo(jTextArea1.getText().toString(),ruta);
+//        File archivo=new File(ruta);
+//        if(archivo.exists()){
+//            try {
 //                InputStreamReader ir = new InputStreamReader(new FileInputStream(archivo));
 //                lexicoGXML analizador_lexico=new lexicoGXML(ir);
 //                sintacticoGXML parser=new sintacticoGXML(analizador_lexico);
@@ -100,28 +248,232 @@ public class Principal extends javax.swing.JFrame {
 //                EjecutarGXML nodoEjecutar=new EjecutarGXML(parser.root);
 //                String respuesta=nodoEjecutar.Ejecutar(parser.root,"");
 //                System.out.println("RESPUESTA \n" + respuesta);
-                try{
-                    InputStreamReader ir = new InputStreamReader(new FileInputStream(archivo));
-                    lexicoFS analizador_lexico=new lexicoFS(ir);
-                    sintacticoFS parser=new sintacticoFS(analizador_lexico);
-                    parser.parse();
-                    AST nodoRaiz=parser.root;
-                    nodoRaiz.execute();
-                    System.out.println("Se finalizo correctamente EL ANALISIS DE FS");
-                }catch(Exception e){
-                    System.out.println("ERROR EN LA EJECUCION");
-                }
-                
-                
-            } catch (Exception ex) {
-                Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }else{
-            javax.swing.JOptionPane.showMessageDialog(null,"No se pudo cargar el archivo. Intente nuevamente");
-        }
+//                try{
+//                    InputStreamReader ir = new InputStreamReader(new FileInputStream(archivo));
+//                    lexicoFS analizador_lexico=new lexicoFS(ir);
+//                    sintacticoFS parser=new sintacticoFS(analizador_lexico);
+//                    parser.parse();
+//                    AST nodoRaiz=parser.root;
+//                    nodoRaiz.execute();
+//                    System.out.println("Se finalizo correctamente EL ANALISIS DE FS");
+//                }catch(Exception e){
+//                    System.out.println("ERROR EN LA EJECUCION");
+//                }
+//                
+//                
+//            } catch (Exception ex) {
+//                Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//        }else{
+//            javax.swing.JOptionPane.showMessageDialog(null,"No se pudo cargar el archivo. Intente nuevamente");
+//        }
 
     }//GEN-LAST:event_jButton1ActionPerformed
-public void Escribir_Archivo(String contenido,String ruta){
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        // TODO add your handling code here:
+        try{
+            JFrame parentFrame = new JFrame();
+            JFileChooser fileChooser = new JFileChooser(Proyecto1Compi2_201213580.ruta_proyecto);
+            fileChooser.setDialogTitle("Specify a file to save");   
+            int userSelection = fileChooser.showSaveDialog(parentFrame); 
+            if (userSelection == JFileChooser.APPROVE_OPTION) {
+                File fileToSave = fileChooser.getSelectedFile();
+                String[] ruta=fileToSave.getAbsoluteFile().toString().split("\\.");
+                if(ruta.length==2){
+                    if(ruta[1].toLowerCase().equals("fs")){
+                        GenerarPesta("",fileToSave.getName(),fileToSave.getAbsolutePath(),"fs");
+                    }else if(ruta[1].toLowerCase().equals("gxml")){
+                        GenerarPesta("",fileToSave.getName(),fileToSave.getAbsolutePath(),"gxml");
+                    }else{
+                        JOptionPane.showMessageDialog(null,"ERROR EXTENSION INCORRECTA, SOLO SE PUEDEN ANALIZAR ARCHIVOS CON EXTENSION .FS Y .GXML");
+                    }
+                    if(Crear_Archivo(fileToSave.getAbsolutePath())){
+                        
+                    }else{
+                        JOptionPane.showMessageDialog(null,"OCURRIO UN ERROR EN LA CREACION DEL ARCHIVO");
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(null,"ERROR EXTENSION INCORRECTA, EL ARCHIVO NO TIENE UNA EXTENSION VALIDA");
+                }
+                
+            }
+        }catch(Exception e){
+            
+        }
+        
+        
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        // TODO add your handling code here:
+        try{
+            if(contador_pesta>0){
+                this.jTabbedPane1.remove(this.jTabbedPane1.getSelectedIndex());
+                contador_pesta--;
+            }else{
+                JOptionPane.showMessageDialog(null, "No hay pestañas para cerrar");
+            }
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, "Ocurrio un error " +e.toString());
+        }
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+        if(contador_pesta>0){
+            System.out.println(this.jTabbedPane1.getSelectedIndex());
+            Pesta pesta=(Pesta)this.jTabbedPane1.getComponentAt(this.jTabbedPane1.getSelectedIndex());
+            for(Component cmp2:pesta.getComponents()){
+                if(cmp2.getName()=="scroll"){
+                    RTextScrollPane scroll=(RTextScrollPane)cmp2;
+                    System.out.println(scroll.getTextArea().getText());
+                    EscribirArchivo(pesta.path,scroll.getTextArea().getText());
+                    JOptionPane.showMessageDialog(null, "Se guardo con exito la pestaña");
+                }
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "No hay pestañas para guardar");
+        }
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        try{
+            JFrame parentFrame = new JFrame();
+            JFileChooser fileChooser = new JFileChooser(Proyecto1Compi2_201213580.ruta_proyecto);
+            fileChooser.setDialogTitle("Specify a file to Open");   
+            int userSelection = fileChooser.showSaveDialog(parentFrame); 
+            if (userSelection == JFileChooser.APPROVE_OPTION) {
+                File fileToSave = fileChooser.getSelectedFile();                
+                String[] ruta=fileToSave.getAbsoluteFile().toString().split("\\.");
+                if(ruta.length==2){
+                    if(ruta[1].toLowerCase().equals("fs")){
+                        GenerarPesta(LeerArchivo(fileToSave.getAbsolutePath()),fileToSave.getName(),fileToSave.getAbsolutePath(),"fs");
+                    }else if(ruta[1].toLowerCase().equals("gxml")){
+                        GenerarPesta(LeerArchivo(fileToSave.getAbsolutePath()),fileToSave.getName(),fileToSave.getAbsolutePath(),"gxml");
+                    }else{
+                        JOptionPane.showMessageDialog(null,"ERROR EXTENSION INCORRECTA, SOLO SE PUEDEN ANALIZAR ARCHIVOS CON EXTENSION .FS Y .GXML");
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(null,"ERROR EXTENSION INCORRECTA, EL ARCHIVO NO TIENE UNA EXTENSION VALIDA");
+                }
+            }
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, "Ocurrio un error " +e.toString());
+        }
+        
+        
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        // TODO add your handling code here:
+        try{
+            JFrame parentFrame = new JFrame();
+            JFileChooser fileChooser = new JFileChooser(Proyecto1Compi2_201213580.ruta_proyecto);
+            fileChooser.setDialogTitle("Specify a file to save");   
+            int userSelection = fileChooser.showSaveDialog(parentFrame); 
+            if (userSelection == JFileChooser.APPROVE_OPTION) {
+                File fileToSave = fileChooser.getSelectedFile();
+                if(contador_pesta>0){
+                    System.out.println(this.jTabbedPane1.getSelectedIndex());
+                    Pesta pesta=(Pesta)this.jTabbedPane1.getComponentAt(this.jTabbedPane1.getSelectedIndex());
+                    for(Component cmp2:pesta.getComponents()){
+                        if(cmp2.getName()=="scroll"){
+                            RTextScrollPane scroll=(RTextScrollPane)cmp2;
+                            System.out.println(scroll.getTextArea().getText());
+                            EscribirArchivo(fileToSave.getAbsolutePath(),scroll.getTextArea().getText());
+                            JOptionPane.showMessageDialog(null, "Se guardo con exito la pestaña");
+                        }
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(null, "No hay pestañas para guardar");
+                }
+            }
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, "Ocurrio un error " +e.toString());
+        }
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+    public String LeerArchivo(String path){
+        String respuesta="";
+        File archivo = null;
+        FileReader fr = null;
+        BufferedReader br = null;
+        try {
+            archivo = new File (path);
+            fr = new FileReader (archivo);
+            br = new BufferedReader(fr);
+            String linea;
+            while((linea=br.readLine())!=null){
+                respuesta+=linea+"\n";
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally{
+            try{                    
+                if( null != fr ){   
+                fr.close();     
+                }                  
+            }catch (Exception e2){ 
+                e2.printStackTrace();
+            }
+        }
+        return respuesta;
+    }
+    public void EscribirArchivo(String nombre, String contenido){
+        FileWriter fichero = null;
+        PrintWriter pw = null;
+        try{
+            fichero = new FileWriter(nombre);
+            pw = new PrintWriter(fichero);
+            pw.println(contenido);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+           try {
+           if (null != fichero)
+              fichero.close();
+           } catch (Exception e2) {
+              e2.printStackTrace();
+           }
+        }
+    }
+    public boolean Crear_Archivo(String ruta){
+        boolean respuesta=false;
+        try{
+            File archivo = new File(ruta);
+            BufferedWriter bw=null;
+            if(archivo.exists()) {
+                JOptionPane.showMessageDialog(null, "Ya existe un archivo con ese nombre");
+            }else {
+                bw = new BufferedWriter(new FileWriter(archivo));
+                bw.write("");
+                respuesta=true;
+            }
+            bw.close();
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, "Ocurrio un error " +e.toString());
+        }
+        return respuesta;
+    }
+    public void GenerarPesta(String entrada,String nombre,String path,String tipo){
+        try{
+            if((this.jTabbedPane1.getTabCount()-1)==this.jTabbedPane1.getSelectedIndex()){
+                nueva=new Pesta(path,tipo);
+                nueva.setContenido(entrada);
+                //x,y,ancho,alto
+                nueva.setName(nombre);
+                this.jTabbedPane1.add(nueva,nombre,this.jTabbedPane1.getTabCount());
+                this.jTabbedPane1.setSelectedIndex(this.jTabbedPane1.getTabCount()-1);
+                contador_pesta++;
+            }
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, "Ocurrio un error " +e.toString());
+        }
+    }
+    
+    
+    public void Escribir_Archivo(String contenido,String ruta){
         FileWriter fichero = null;
         PrintWriter pw = null;
         try{
@@ -179,7 +531,15 @@ public void Escribir_Archivo(String contenido,String ruta){
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JTabbedPane jTabbedPane1;
     // End of variables declaration//GEN-END:variables
 }

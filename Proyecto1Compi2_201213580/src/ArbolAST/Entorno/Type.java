@@ -30,7 +30,8 @@ public class Type {
         VIDEO,
         AUDIO,
         IMAGEN,
-        NULL
+        NULL,
+        ARREGLO
     }    
     public boolean esNumero(){
         return primitive_type==Type.PrimitiveType.INTEGER;

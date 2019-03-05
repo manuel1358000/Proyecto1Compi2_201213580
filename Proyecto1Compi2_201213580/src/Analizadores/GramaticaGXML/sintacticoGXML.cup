@@ -35,9 +35,9 @@ terminal String negrita,cursiva,maximo,minimo,path,auto_reproduccion,principal,s
 //DEFINICION DE SIGNOS DEL LENGUAJE GXML
 terminal String abre,cierra,div,igual,comilladoble,llavea,llavec,parena,parenc,coma,salto;
 terminal String mas,menos,por,potencia,mayorq,menorq,mayorigualq,menorigualq,igualigual,diferente,or,and,not;
-
+terminal String dospuntos,pyc,interrogaa,interrogac;
 //DEFINICION VALORES IMPLICITOS LENGUAJE GXML
-terminal String valor_id,valor_numero_completo,valor_path,valor_path2,valor_cadena,valor_verdadero,valor_falso,valor_simbolo;
+terminal String valor_id,valor_numero_completo,valor_path,valor_path2,valor_path3,valor_path4,valor_cadena,valor_verdadero,valor_falso,valor_simbolo;
 //comentarios
 
 
@@ -129,13 +129,25 @@ ETIQUETA_IMPORTAR::= abre e_importar:a cierra CONTENIDO_IMPORTAR:b abre div e_im
                                                                                                 RESULT.id=a.toString();
                                                                                             :};
 CONTENIDO_IMPORTAR::= valor_path:a{:
-                                    RESULT=new NodoGXML();
+                                    RESULT=new NodoGXML(true);
                                     RESULT.valor=a.toString();
                                     RESULT.index=this.parser.index;
                                     this.parser.index++;
                                   :}
                     | valor_path2:a{:
-                                        RESULT=new NodoGXML();
+                                        RESULT=new NodoGXML(false);
+                                        RESULT.valor=a.toString();
+                                        RESULT.index=this.parser.index;
+                                        this.parser.index++;
+                                   :}
+                    | valor_path3:a{:
+                                        RESULT=new NodoGXML(true);
+                                        RESULT.valor=a.toString();
+                                        RESULT.index=this.parser.index;
+                                        this.parser.index++;
+                                   :}
+                    | valor_path4:a{:
+                                        RESULT=new NodoGXML(false);
                                         RESULT.valor=a.toString();
                                         RESULT.index=this.parser.index;
                                         this.parser.index++;
@@ -164,7 +176,7 @@ ETIQUETA_VENTANA::= abre e_ventana:a ELEMENTOS_VENTANAS:b cierra CONTENIDO_VENTA
                                                                                                                 if(respuesta.equals("")){
                                                                                                                 }else{
                                                                                                                     RESULT=null;
-                                                                                                                    System.out.println(respuesta);
+                                                                                                                    JOptionPane.showMessageDialog(null,respuesta);
                                                                                                                 }
                                                                                                               :};
 ELEMENTOS_VENTANAS::= ELEMENTOS_VENTANAS:a ELEMENTO_VENTANA:b{:
@@ -188,7 +200,7 @@ ELEMENTO_VENTANA::= id igual valor_cadena:b {:
                                                 if(b.toString().replaceAll("\"","").toLowerCase().equals("principal")||b.toString().replaceAll("\"","").toLowerCase().equals("secundaria")){
                                                     RESULT=new NodoElemento("ELEMENTO",b.toString().replaceAll("\"",""),"tipo");
                                                 }else{
-                                                    System.out.println("Error en la asignacion de tipo en la etiqueta ventana Linea:" + bleft + " Columna: " + bright);
+                                                    JOptionPane.showMessageDialog(null,"Error en la asignacion de tipo en la etiqueta ventana Linea:" + bleft + " Columna: " + bright);
                                                 }
                                              :}
                   | color igual valor_cadena:b{:
@@ -196,7 +208,7 @@ ELEMENTO_VENTANA::= id igual valor_cadena:b {:
                                                     Color.decode(b.toString().replaceAll("\"",""));
                                                     RESULT=new NodoElemento("ELEMENTO",b.toString().replaceAll("\"",""),"color");
                                                 }catch(Exception e){
-                                                    System.out.println(e.toString()+" Error en la asignacion de valor en el elemento color etiqueta ventana Linea: "+bleft + " Columna: " + bright);
+                                                    JOptionPane.showMessageDialog(null,e.toString()+" Error en la asignacion de valor en el elemento color etiqueta ventana Linea: "+bleft + " Columna: " + bright);
                                                 }
                                               :}
                   | alto igual valor_numero_completo:a{:
@@ -265,7 +277,7 @@ ETIQUETA_CONTENEDOR::=abre e_contenedor:a ELEMENTOS_CONTENEDORES:b cierra CONTEN
                                                                                                                                 if(respuesta.equals("")){ 
                                                                                                                                 }else{
                                                                                                                                     RESULT=null;
-                                                                                                                                    System.out.println(respuesta);
+                                                                                                                                    JOptionPane.showMessageDialog(null,respuesta);
                                                                                                                                 }
                                                                                                                              :};
 
@@ -302,7 +314,7 @@ ELEMENTO_CONTENEDOR::= id igual valor_cadena:a{:
                                                         Color.decode(a.toString().replaceAll("\"",""));
                                                         RESULT=new NodoElemento("ELEMENTO",a.toString().replaceAll("\"",""),"color");
                                                     }catch(Exception e){
-                                                        System.out.println(e.toString()+" Error en la asignacion de valor en el elemento color etiqueta ventana Linea: "+aleft + " Columna: " + aright);
+                                                        JOptionPane.showMessageDialog(null,e.toString()+" Error en la asignacion de valor en el elemento color etiqueta ventana Linea: "+aleft + " Columna: " + aright);
                                                     }                        
                                                :}
                      | borde igual TIPO_BOOL:a{:
@@ -347,17 +359,19 @@ ETIQUETAS_CONTENEDOR::= ETIQUETA_TEXTO:a{:
                                             RESULT=a;
                                         :};
 
-ETIQUETA_TEXTO::= abre e_texto:a ELEMENTOS_TEXTOS:b cierra CONTENIDO_ENVIAR:c abre div e_texto cierra{:
+ETIQUETA_TEXTO::= abre e_texto:a ELEMENTOS_TEXTOS:b cierra CONTENIDO_TOTAL:c abre div e_texto cierra{:
                                                                                                         RESULT=new NodoGXML(this.parser.index,a.toString().toLowerCase(),a.toString().toLowerCase(),b);
                                                                                                         this.parser.index++;
                                                                                                         //vamos a verificar los elementos de texto
-                                                                                                        RESULT.valor=c.valor;
+                                                                                                        RESULT.valor=c.toString();
                                                                                                         RESULT.elemento_id=RESULT.obtenerNombre();
                                                                                                         String respuesta=RESULT.elementosTexto(RESULT.elementos);
                                                                                                         if(respuesta.equals("")){ 
+                                                                                                            
                                                                                                         }else{
-                                                                                                            RESULT=null;
-                                                                                                            System.out.println(respuesta);
+                                                                                                            //RESULT=new NodoGXML(this.parser.index,a.toString().toLowerCase(),a.toString().toLowerCase(),new LinkedList<>());
+                                                                                                            //RESULT.valor=c.toString();
+                                                                                                            JOptionPane.showMessageDialog(null,respuesta);
                                                                                                         }
                                                                                                      :};
 ELEMENTOS_TEXTOS::= ELEMENTOS_TEXTOS:a ELEMENTO_TEXTO:b{:
@@ -393,7 +407,7 @@ ELEMENTO_TEXTO::= nombre igual valor_cadena:a{:
                                                     Color.decode(a.toString().replaceAll("\"",""));
                                                     RESULT=new NodoElemento("ELEMENTO",a.toString().replaceAll("\"",""),"color");
                                                 }catch(Exception e){
-                                                    System.out.println(e.toString()+" Error en la asignacion de valor en el elemento color etiqueta ventana Linea: "+aleft + " Columna: " + aright);
+                                                    JOptionPane.showMessageDialog(null,e.toString()+" Error en la asignacion de valor en el elemento color etiqueta ventana Linea: "+aleft + " Columna: " + aright);
                                                 }  
                                             :}
                 | negrita igual TIPO_BOOL:a{:
@@ -413,10 +427,23 @@ ETIQUETA_CONTROL::= abre e_control:a ELEMENTOS_CONTROLES:b cierra CONTENIDO_CONT
                                                                                                                 String respuesta=RESULT.elementosControl(RESULT.elementos);
                                                                                                                 if(respuesta.equals("")){ 
                                                                                                                 }else{
-                                                                                                                    RESULT=null;
-                                                                                                                    System.out.println(respuesta);
+                                                                                                                    //RESULT=null;
+                                                                                                                    JOptionPane.showMessageDialog(null,respuesta);
                                                                                                                 }
-                                                                                                             :};
+                                                                                                             :}
+                  | abre e_control:a ELEMENTOS_CONTROLES:b cierra abre div e_control cierra{:
+                                                                                            RESULT=new NodoGXML(this.parser.index,a.toString().toLowerCase(),a.toString().toLowerCase(),b);
+                                                                                            this.parser.index++;
+                                                                                            //vamos a verificar los elementos de texto
+                                                                                            RESULT.nodos=new LinkedList<>();
+                                                                                            RESULT.elemento_id=RESULT.obtenerNombre();
+                                                                                            String respuesta=RESULT.elementosControl(RESULT.elementos);
+                                                                                            if(respuesta.equals("")){ 
+                                                                                            }else{
+                                                                                                //RESULT=null;
+                                                                                                JOptionPane.showMessageDialog(null,respuesta);
+                                                                                            }
+                                                                                          :};
 //contenido control es un NodoGXML
 CONTENIDO_CONTROL::= abre e_defecto:a cierra CONTENIDO_TOTAL:b abre div e_defecto cierra{:
                                                                                             RESULT=new LinkedList<NodoGXML>();
@@ -438,7 +465,14 @@ CONTENIDO_CONTROL::= abre e_defecto:a cierra CONTENIDO_TOTAL:b abre div e_defect
                                                                                             RESULT.add(nodo_listado);
                                                                                             RESULT.add(nodo_defecto);
                                                                                             this.parser.index++;
-                                                                                           :};
+                                                                                           :}
+                   | abre e_listadatos:a cierra CONTENIDOS_LISTAS:b abre div e_listadatos cierra {:
+                                                                                            RESULT=new LinkedList<NodoGXML>();
+                                                                                            NodoGXML nodo_listado=new NodoGXML(this.parser.index,a.toString().toLowerCase(),a.toString().toLowerCase(),new LinkedList<NodoElemento>());
+                                                                                            nodo_listado.nodos=b;
+                                                                                            RESULT.add(nodo_listado);
+                                                                                            this.parser.index++;
+                                                                                                                                          :};
 CONTENIDOS_LISTAS::= CONTENIDOS_LISTAS:a CONTENIDO_LISTA:b{:
                                                             RESULT=a;
                                                             if(b!=null){
@@ -513,7 +547,7 @@ ELEMENTO_CONTROL::= tipo igual valor_cadena:a{:
                                                     Color.decode(a.toString().replaceAll("\"",""));
                                                     RESULT=new NodoElemento("ELEMENTO",a.toString().replaceAll("\"",""),"color");
                                                 }catch(Exception e){
-                                                    System.out.println(e.toString()+" Error en la asignacion de valor en el elemento color etiqueta ventana Linea: "+aleft + " Columna: " + aright);
+                                                    JOptionPane.showMessageDialog(null,e.toString()+" Error en la asignacion de valor en el elemento color etiqueta ventana Linea: "+aleft + " Columna: " + aright);
                                                 }  
                                               :}
                   | negrita igual TIPO_BOOL:a{:
@@ -538,8 +572,8 @@ ETIQUETA_MULTIMEDIA::= abre e_multimedia:a ELEMENTOS_MULTIMEDIAS:b cierra abre d
                                                                                                         String respuesta=RESULT.elementosMultimedia(RESULT.elementos);
                                                                                                         if(respuesta.equals("")){ 
                                                                                                         }else{
-                                                                                                            RESULT=null;
-                                                                                                            System.out.println(respuesta);
+                                                                                                            //RESULT=null;
+                                                                                                            JOptionPane.showMessageDialog(null,respuesta);
                                                                                                         }
                                                                                                     :};
 
@@ -604,8 +638,8 @@ ETIQUETA_BOTON::= abre e_boton:a ELEMENTOS_BOTONES:b cierra CONTENIDO_BOTON:c ab
                                                                                                         String respuesta=RESULT.elementosBoton(RESULT.elementos,bandera);
                                                                                                         if(respuesta.equals("")){ 
                                                                                                         }else{
-                                                                                                            RESULT=null;
-                                                                                                            System.out.println(respuesta);
+                                                                                                            //RESULT=null;
+                                                                                                            JOptionPane.showMessageDialog(null,respuesta);
                                                                                                         }
                                                                                                     :};
 ELEMENTO_BOTON::= nombre igual valor_cadena:a{:
@@ -633,7 +667,14 @@ ELEMENTO_BOTON::= nombre igual valor_cadena:a{:
                                                                                           :};
 
 CONTENIDO_BOTON::= ETIQUETA_TEXTO:a{:
-                                    RESULT=new NodoElemento("ETIQUETA",a,"ETIQUETA");
+                                    if(a!=null){
+                                        if(a.elemento_id.equals("")){
+                                            RESULT=new NodoElemento("TEXTO",a.valor.toString(),"TEXTO");
+                                        }else{
+                                            RESULT=new NodoElemento("ETIQUETA",a,"ETIQUETA");
+                                        }
+                                        
+                                    }
                                    :}
                  | CONTENIDO_TOTAL:a{:
                                         RESULT=new NodoElemento("TEXTO",a,"TEXTO");
@@ -667,8 +708,8 @@ ETIQUETA_ENVIAR::= abre e_enviar:a ELEMENTOS_ENVIAR:b cierra CONTENIDO_ENVIAR:c 
                                                                                                         String respuesta=RESULT.elementosEnviar(RESULT.elementos);
                                                                                                         if(respuesta.equals("")){ 
                                                                                                         }else{
-                                                                                                            RESULT=null;
-                                                                                                            System.out.println(respuesta);
+                                                                                                            //RESULT=null;
+                                                                                                            JOptionPane.showMessageDialog(null,respuesta);
                                                                                                         }
                                                                                      :};
 ELEMENTOS_ENVIAR::= ELEMENTOS_ENVIAR:a ELEMENTO_ENVIAR:b{:
@@ -782,4 +823,8 @@ CONTENIDO::= valor_cadena:a{:RESULT=a.toString()+" ";:}
            | e_boton:a{:RESULT=a.toString()+" ";:}
            | e_enviar:a{:RESULT=a.toString()+" ";:}
            | cierra:a{:RESULT=a.toString()+" ";:}
-           | salto:a{:RESULT=a.toString();:};
+           | salto:a{:RESULT=a.toString();:}
+           | dospuntos:a{:RESULT=a.toString()+" ";:}
+           | pyc :a{:RESULT=a.toString()+" ";:}
+           | interrogaa:a{:RESULT=a.toString()+" ";:}
+           | interrogac:a{:RESULT=a.toString()+" ";:};

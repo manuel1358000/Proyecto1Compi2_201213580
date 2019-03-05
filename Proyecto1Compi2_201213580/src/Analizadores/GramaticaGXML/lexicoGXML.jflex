@@ -27,6 +27,8 @@ COMENTARIO_SIMPLE =("##".*\r\n)|("##".*\n)|("##".*\r)
 COMENTARIO_MULTIPLE ="#$""/"*([^*/]|[^*]"/"|"*"[^/])*"*"*"$#"
 PATH={LETRA}[":"]["\\"]({ID}|["\\"])*["."]["g"]["x"]["m"]["l"]
 PATH2=["/"]({ID}|["\\"])*["."]["g"]["x"]["m"]["l"] 
+PATH3={LETRA}[":"]["\\"]({ID}|["\\"])*["."]["f"]["s"]
+PATH4=["/"]({ID}|["\\"])*["."]["f"]["s"] 
 CADENA="\""~"\""
 %%
 //DEFINICION DE ETIQUETAS LENGUAJE GXML
@@ -95,6 +97,11 @@ CADENA="\""~"\""
 <YYINITIAL> "||" { return new Symbol(simbolo.or, yyline, yycolumn,yytext());}
 <YYINITIAL> "&&" { return new Symbol(simbolo.and, yyline, yycolumn,yytext());}
 <YYINITIAL> "!" { return new Symbol(simbolo.not, yyline, yycolumn,yytext());}
+<YYINITIAL> ":" { return new Symbol(simbolo.dospuntos, yyline, yycolumn,yytext());}
+<YYINITIAL> ";" { return new Symbol(simbolo.pyc, yyline, yycolumn,yytext());}
+<YYINITIAL> "?" { return new Symbol(simbolo.interrogaa, yyline, yycolumn,yytext());}
+<YYINITIAL> "¿" { return new Symbol(simbolo.interrogac, yyline, yycolumn,yytext());}
+
 
 
 
@@ -107,6 +114,8 @@ CADENA="\""~"\""
 <YYINITIAL> {ID} { return new Symbol(simbolo.valor_id, yyline, yycolumn,yytext());}
 <YYINITIAL> {PATH} { return new Symbol(simbolo.valor_path, yyline, yycolumn,yytext());}
 <YYINITIAL> {PATH2} { return new Symbol(simbolo.valor_path2, yyline, yycolumn,yytext());}
+<YYINITIAL> {PATH3} { return new Symbol(simbolo.valor_path3, yyline, yycolumn,yytext());}
+<YYINITIAL> {PATH4} { return new Symbol(simbolo.valor_path4, yyline, yycolumn,yytext());}
 <YYINITIAL> {CADENA} { return new Symbol(simbolo.valor_cadena, yyline, yycolumn,yytext());}
 <YYINITIAL> {SIMBOLOS} { return new Symbol(simbolo.valor_simbolo, yyline, yycolumn,yytext());}
 //DEFINICION DE COMENTARIOS

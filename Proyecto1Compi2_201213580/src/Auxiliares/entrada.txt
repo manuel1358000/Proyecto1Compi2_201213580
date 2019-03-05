@@ -1,13 +1,14 @@
-selecciona(10){
-caso 10:{
-imprimir("puto1");
+funcion fibonacci (var n)
+{
+	si(n<0){
+		imprimir("Debes ingresar un tamaño mayor o igual a 0");
+		retornar -1;
+	}sino si(n == 0){
+		retornar 0;
+	}sino si(n == 1){
+		retornar 1;
+	}sino{
+		retornar fibonacci(n-1) + fibonacci(n-2);
+	}
 }
-caso 11:{
-imprimir("puto2");
-detener;
-}
-caso 12:{
-imprimir("puto3");
-
-}
-}
+imprimir("El fibonacci de 2 es "+fibonacci(10));

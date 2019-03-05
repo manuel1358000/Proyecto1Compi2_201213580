@@ -1,0 +1,171 @@
+<Importar>
+C:\Users\anton\Desktop\U\PrimerSemestre2019\Laboratorio\Proyecto1Compi2_201213580\Proyecto1Compi2_201213580\VentanasEvaluacion.gxml
+</Importar>
+<importar>
+/FuncionesEvaluacion.fs
+</importar>
+<Ventana id = "VentanaLogica" Color = "#2E2EFE" tipo = "Secundaria">
+	<Contenedor id = "ContenedorLogica" X = 10 Y = 10 Alto = 1000 Ancho = 1000 Borde = verdadero>
+		<Texto Nombre = "lblBienvenida" X = 450 Y = 20 Fuente = "Times New Roman" Tam = 18 Negrita = verdadero Cursiva = verdadero>
+			Bienvenido a la prueba de Logica, responda las siguientes preguntas
+		</Texto>
+		<Texto Nombre = "lblNombre" X = 10 Y = 20>
+			Ingrese su Nombre:
+		</Texto>
+		<Control tipo = "texto" Nombre = "CTNombre" X = 100 Y = 20 Alto = 10 Ancho = 100>
+			<Defecto>Ingrese aqui su nombre</Defecto>
+		</Control>
+
+		###################### Hanoi
+		<Texto Nombre = "lblHanoi" X = 10 Y = 150>
+			Resuelva las torres de Hanoi con 3 discos, origen 1, destino 3 y auxiliar 2
+		</Texto>
+		<Control tipo = "TextoArea" Nombre = "CHanoi" X = 150 Y = 150 Alto = 150>
+		</Control>
+		<Boton Nombre = "btnHanoi" X = 300 Y = 150 Alto = 50 Ancho = 100 Accion = {hanoi(3,1,2,3)}>
+			Ver Respuesta
+		</Boton>
+		###################### hofstaderFemenina
+		<Texto Nombre = "lblHF" X = 10 Y = 350>
+			Ingrese el Hofstader Femenina 10:
+		</Texto>
+		<Control tipo = "texto" Nombre = "CTHF" X = 150 Y = 350 Alto = 50 Ancho = 100>
+		</Control>
+		<Boton Nombre = "btnHF" X = 300 Y = 350 Alto = 50 Ancho = 100 Accion = {VerFemenina()}>
+			Ver Respuesta
+		</Boton>
+		###################### hofstaderMasculino
+		<Texto Nombre = "lblHM" X = 10 Y = 450>
+			Ingrese el Hofstader Maculino 10:
+		</Texto>
+		<Control tipo = "texto" Nombre = "CTHM" X = 150 Y = 450 Alto = 50 Ancho = 100>
+		</Control>
+		<Boton Nombre = "btnHM" X = 300 Y = 450 Alto = 50 Ancho = 100 Accion = {VerMasculino()}>
+			Ver Respuesta
+		</Boton>
+		###################### Par
+		<Texto Nombre = "lblPar" X = 10 Y = 550>
+			Ingrese si 26 es par o impar
+		</Texto>
+		<Control tipo = "texto" Nombre = "CTPar" X = 150 Y = 550 Alto = 50 Ancho = 100>
+		</Control>
+		<Boton Nombre = "btnPar" X = 300 Y = 550 Alto = 50 Ancho = 100 Accion = {VerPar(26)}>
+			Ver Respuesta
+		</Boton>
+		###################### Impar
+		<Texto Nombre = "lblImpar" X = 10 Y = 650>
+			Ingrese si 27 es par o impar
+		</Texto>
+		<Control tipo = "texto" Nombre = "CTImpar" X = 150 Y = 650 Alto = 50 Ancho = 100>
+			<defecto>hola</defecto>
+		</Control>
+		<Boton Nombre = "btnImpar" X = 300 Y = 650 Alto = 50 Ancho = 100 Accion = {VerImpar(27)}>
+			Ver Respuesta
+		</Boton>
+	</Contenedor>
+	<Contenedor id = "ContEnviarLogicas" x = 10 Y = 1010 Alto = 100 Ancho = 200>
+		<Enviar Nombre = "btnEnviar" X = 75 Y = 30 Alto = 70 Ancho = 40 Referencia = "VentanaReportes">
+			Contestar
+		</Enviar>
+	</Contenedor>
+</Ventana>
+
+
+<Ventana id = "VentanaPrincipal" Color = "#000000" tipo = "prinCipal">
+	<Contenedor id = "Contenedor1" x=10 Y = 10 Alto = 400 Ancho = 400 Borde = verdadero>
+		<Texto Nombre = "lblEvaluacion" Y = 10 Negrita = verdadero>
+			Haga clic en el siguiente boton para iniciar la evaluacion 
+		</Texto>
+		<Boton Nombre = "btnEvaluacion" X = 60 Y = 40 Referencia = "VentanaAritmetica">
+			<Texto Nombre = "lbEvaluacion">
+				Iniciar Evaluacion
+			</Texto>
+		</Boton>
+		<Texto Nombre = "lblReportes" X = 10 Y = 250 Cursiva = verdadero>
+			Haga clic en el siguiente boton para iniciar el area de reportes
+		</Texto>
+		<Boton Nombre = "btnReportes" X = 60 Y = 300 Accion = {BienvenidoReporte()} Referencia = "VentanaReportes">
+			Iniciar Reportes
+		</Boton>
+		<Enviar Nombre = "btnEnviar" X = 60 Y = 350 Accion = {EnviarSinFuncionalidad()}>
+			Sin funcionalidad
+		</Enviar>
+	</Contenedor>
+</Ventana>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

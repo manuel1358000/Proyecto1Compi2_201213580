@@ -21,6 +21,7 @@ public class Operacion implements Expresion{
     Type.PrimitiveType type;
     Object valor;
     boolean negacion;
+    Type.PrimitiveType tipo_respuesta;
     public Operacion(Expresion expresion1,Expresion expresion2,Operador operador){
         this.expresion1=expresion1;
         this.expresion2=expresion2;
@@ -50,7 +51,9 @@ public class Operacion implements Expresion{
     public int getLine() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+    public Type.PrimitiveType getTipo_Respuesta(){
+        return this.tipo_respuesta;
+    }
     
     public enum Operador{
         UNARIO,
@@ -70,6 +73,7 @@ public class Operacion implements Expresion{
         NOT,
         OR,
         AND,
+        IGUAL,
         A_SUMA,
         A_RESTA,
         A_MULT,

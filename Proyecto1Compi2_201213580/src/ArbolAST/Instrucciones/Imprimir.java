@@ -6,6 +6,7 @@
 package ArbolAST.Instrucciones;
 
 import ArbolAST.Entorno.Entorno;
+import ArbolAST.Entorno.Type;
 import ArbolAST.Expresiones.Expresion;
 
 
@@ -14,13 +15,32 @@ import ArbolAST.Expresiones.Expresion;
  * @author anton
  */
 public class Imprimir implements Instruccion{
+    Type.PrimitiveType tipo;
     Expresion expresion;
     public Imprimir(Expresion expresion){
         this.expresion=expresion;
+        this.tipo=Type.PrimitiveType.NULL;
     }
     public Imprimir(){
     
     }
+
+    public Type.PrimitiveType getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(Type.PrimitiveType tipo) {
+        this.tipo = tipo;
+    }
+
+    public Expresion getExpresion() {
+        return expresion;
+    }
+
+    public void setExpresion(Expresion expresion) {
+        this.expresion = expresion;
+    }
+    
     @Override
     public Object execute(Entorno entorno) {
         Object nuevo=expresion.getValue(entorno);

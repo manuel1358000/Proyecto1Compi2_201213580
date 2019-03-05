@@ -10,6 +10,7 @@ import ArbolAST.Entorno.Entorno;
 import ArbolAST.Entorno.Simbolo;
 import ArbolAST.Entorno.Type;
 import ArbolAST.Expresiones.Expresion;
+import ArbolAST.Expresiones.Llamada_Funcion;
 
 /**
  *
@@ -68,6 +69,23 @@ public class Logica extends Operacion implements Expresion{
             if(this.expresion1!=null&&this.expresion2!=null){
                 Type.PrimitiveType tipo1=this.expresion1.getType(entorno);
                 Type.PrimitiveType tipo2=this.expresion2.getType(entorno);
+                Object val1=null;
+                Object val2=null;
+                if(this.expresion1 instanceof Llamada_Funcion){
+                    Llamada_Funcion llamada=(Llamada_Funcion)this.expresion1;
+                    val1=llamada.getValue(entorno);
+                    tipo1=llamada.getTipo_respuesta();
+                }else{
+                    tipo1=this.expresion1.getType(entorno);
+                }
+                
+                if(this.expresion2 instanceof Llamada_Funcion){
+                    Llamada_Funcion llamada=(Llamada_Funcion)this.expresion2;
+                    val2=llamada.getValue(entorno);
+                    tipo2=llamada.getTipo_respuesta();
+                }else{
+                    tipo2=this.expresion2.getType(entorno);
+                }
                 Type.PrimitiveType tipo=GenerarTipo(tipo1,tipo2);
                 if(this.operador==Operador.AND){
                     this.type=tipo;
@@ -82,8 +100,11 @@ public class Logica extends Operacion implements Expresion{
                 if(this.type==Type.PrimitiveType.ID){
                     Simbolo referencia=entorno.Obtener(this.valor.toString());
                     if(referencia!=null){
-                        this.type=referencia.tipo;
-                        respuesta=referencia.valor;
+                        if(referencia.valor instanceof Expresion){
+                            respuesta=((Expresion)referencia.valor).getValue(entorno);
+                        }else{
+                            respuesta=referencia.valor;
+                        }
                     }else{
                         System.out.println("No existe el id " + this.valor.toString());
                         respuesta=null;
