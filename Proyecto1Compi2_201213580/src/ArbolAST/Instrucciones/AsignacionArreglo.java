@@ -56,9 +56,91 @@ public class AsignacionArreglo implements Instruccion{
                             aux.add(pos, nuevo);
                         }
                     }else if(this.operador==Operador.A_SUMA){
+                        if(this.asigna instanceof Llamada_Funcion){
+                            Llamada_Funcion llama=(Llamada_Funcion)this.asigna;
+                            Aritmetica control=new Aritmetica(aux.get(pos),llama,Operador.SUMA);
+                            Object aux_valor=control.getValue(entorno);
+                            Type.PrimitiveType aux_tipo=control.getTipo_Respuesta();
+                            Aritmetica nuevo=new Aritmetica(aux_valor,aux_tipo);
+                            aux.remove(pos);
+                            aux.add(pos,nuevo);
+                        }else{
+                            Aritmetica control=new Aritmetica(aux.get(pos),this.asigna,Operador.SUMA);
+                            Object aux_valor=control.getValue(entorno);
+                            if(aux_valor!=null){
+                                Type.PrimitiveType aux_tipo=control.getTipo_Respuesta();
+                                Aritmetica nuevo=new Aritmetica(aux_valor,aux_tipo);
+                                aux.remove(pos);
+                                aux.add(pos,nuevo);
+                            }else{
+                                System.out.println("ERROR SEMANTICO: NO SE PUDO REALIZAR LA OPERACION += CON EL ARREGLO "+this.id);
+                            }                    
+                        }
                     }else if(this.operador==Operador.A_RESTA){
+                        if(this.asigna instanceof Llamada_Funcion){
+                            Llamada_Funcion llama=(Llamada_Funcion)this.asigna;
+                            Aritmetica control=new Aritmetica(aux.get(pos),llama,Operador.RESTA);
+                            Object aux_valor=control.getValue(entorno);
+                            Type.PrimitiveType aux_tipo=control.getTipo_Respuesta();
+                            Aritmetica nuevo=new Aritmetica(aux_valor,aux_tipo);
+                            aux.remove(pos);
+                            aux.add(pos,nuevo);
+                        }else{
+                            Aritmetica control=new Aritmetica(aux.get(pos),this.asigna,Operador.RESTA);
+                            Object aux_valor=control.getValue(entorno);
+                            if(aux_valor!=null){
+                                Type.PrimitiveType aux_tipo=control.getTipo_Respuesta();
+                                Aritmetica nuevo=new Aritmetica(aux_valor,aux_tipo);
+                                aux.remove(pos);
+                                aux.add(pos,nuevo);
+                            }else{
+                                System.out.println("ERROR SEMANTICO: NO SE PUDO REALIZAR LA OPERACION += CON EL ARREGLO "+this.id);
+                            }
+                            
+                        }
                     }else if(this.operador==Operador.A_MULT){
+                        if(this.asigna instanceof Llamada_Funcion){
+                            Llamada_Funcion llama=(Llamada_Funcion)this.asigna;
+                            Aritmetica control=new Aritmetica(aux.get(pos),llama,Operador.MULTIPLICACION);
+                            Object aux_valor=control.getValue(entorno);
+                            Type.PrimitiveType aux_tipo=control.getTipo_Respuesta();
+                            Aritmetica nuevo=new Aritmetica(aux_valor,aux_tipo);
+                            aux.remove(pos);
+                            aux.add(pos,nuevo);
+                        }else{
+                            Aritmetica control=new Aritmetica(aux.get(pos),this.asigna,Operador.MULTIPLICACION);
+                            Object aux_valor=control.getValue(entorno);
+                            if(aux_valor!=null){
+                                Type.PrimitiveType aux_tipo=control.getTipo_Respuesta();
+                                Aritmetica nuevo=new Aritmetica(aux_valor,aux_tipo);
+                                aux.remove(pos);
+                                aux.add(pos,nuevo);
+                            }else{
+                                System.out.println("ERROR SEMANTICO: NO SE PUDO REALIZAR LA OPERACION += CON EL ARREGLO "+this.id);
+                            }
+                            
+                        }
                     }else if(this.operador==Operador.A_DIV){
+                        if(this.asigna instanceof Llamada_Funcion){
+                            Llamada_Funcion llama=(Llamada_Funcion)this.asigna;
+                            Aritmetica control=new Aritmetica(aux.get(pos),llama,Operador.DIVISION);
+                            Object aux_valor=control.getValue(entorno);
+                            Type.PrimitiveType aux_tipo=control.getTipo_Respuesta();
+                            Aritmetica nuevo=new Aritmetica(aux_valor,aux_tipo);
+                            aux.remove(pos);
+                            aux.add(pos,nuevo);
+                        }else{
+                            Aritmetica control=new Aritmetica(aux.get(pos),this.asigna,Operador.DIVISION);
+                            Object aux_valor=control.getValue(entorno);
+                            if(aux_valor!=null){
+                                Type.PrimitiveType aux_tipo=control.getTipo_Respuesta();
+                                Aritmetica nuevo=new Aritmetica(aux_valor,aux_tipo);
+                                aux.remove(pos);
+                                aux.add(pos,nuevo);
+                            }else{
+                                System.out.println("ERROR SEMANTICO: NO SE PUDO REALIZAR LA OPERACION += CON EL ARREGLO "+this.id);
+                            }
+                        }
                     }else{
                         System.out.println("ERROR SEMANTICO: OPERADOR INCORRECTO PARA REALIZAR LA ASIGNACION A UN ARREGLO");
                     }

@@ -9,6 +9,7 @@ import ArbolAST.Expresiones.operacion.Operacion.Operador;
 import ArbolAST.Entorno.Entorno;
 import ArbolAST.Entorno.Simbolo;
 import ArbolAST.Entorno.Type;
+import ArbolAST.Expresiones.AccesoArreglo;
 import ArbolAST.Expresiones.Expresion;
 import ArbolAST.Expresiones.Llamada_Funcion;
 
@@ -40,7 +41,7 @@ public class Logica extends Operacion implements Expresion{
                         this.type=tipo;
                         boolean var1=false;
                         String va1=this.expresion1.getValue(entorno).toString();
-                        if(va1.equals("verdadero")||va1.equals("true")){
+                        if(va1.equals("true")){
                             var1=true;
                         }
                         respuesta=!var1;
@@ -67,32 +68,36 @@ public class Logica extends Operacion implements Expresion{
             }
         }else{
             if(this.expresion1!=null&&this.expresion2!=null){
+                Object val1=this.expresion1.getValue(entorno);
+                Object val2=this.expresion2.getValue(entorno);
                 Type.PrimitiveType tipo1=this.expresion1.getType(entorno);
                 Type.PrimitiveType tipo2=this.expresion2.getType(entorno);
-                Object val1=null;
-                Object val2=null;
+                if(this.expresion1 instanceof AccesoArreglo){
+                    AccesoArreglo acceso=(AccesoArreglo)this.expresion1;
+                    tipo1=acceso.getTipo_Respuesta();
+                }
+                if(this.expresion2 instanceof AccesoArreglo){
+                    AccesoArreglo acceso=(AccesoArreglo)this.expresion2;
+                    tipo2=acceso.getTipo_Respuesta();
+                }
                 if(this.expresion1 instanceof Llamada_Funcion){
                     Llamada_Funcion llamada=(Llamada_Funcion)this.expresion1;
                     val1=llamada.getValue(entorno);
                     tipo1=llamada.getTipo_respuesta();
-                }else{
-                    tipo1=this.expresion1.getType(entorno);
                 }
-                
                 if(this.expresion2 instanceof Llamada_Funcion){
                     Llamada_Funcion llamada=(Llamada_Funcion)this.expresion2;
                     val2=llamada.getValue(entorno);
                     tipo2=llamada.getTipo_respuesta();
-                }else{
-                    tipo2=this.expresion2.getType(entorno);
                 }
                 Type.PrimitiveType tipo=GenerarTipo(tipo1,tipo2);
                 if(this.operador==Operador.AND){
                     this.type=tipo;
-                    respuesta=Boolean.valueOf(this.expresion1.getValue(entorno).toString())&&Boolean.valueOf(this.expresion2.getValue(entorno).toString());
+                    respuesta=Boolean.valueOf(val1.toString())&&Boolean.valueOf(val2.toString());
                 }else if(this.operador==Operador.OR){
                     this.type=tipo;
-                    respuesta=Boolean.valueOf(this.expresion1.getValue(entorno).toString())||Boolean.valueOf(this.expresion2.getValue(entorno).toString());
+                    respuesta=Boolean.valueOf(val1.toString())||Boolean.valueOf(val2.toString());
+                    //System.out.println("Respuesta");
                 }else{
                     respuesta=null;
                 }
@@ -106,7 +111,7 @@ public class Logica extends Operacion implements Expresion{
                             respuesta=referencia.valor;
                         }
                     }else{
-                        System.out.println("No existe el id " + this.valor.toString());
+                        System.out.println("Error Semantico: No existe en LOGICAS el id " + this.valor.toString());
                         respuesta=null;
                     }
                 }else{

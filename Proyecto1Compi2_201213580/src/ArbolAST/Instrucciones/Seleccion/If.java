@@ -40,7 +40,8 @@ public class If implements Instruccion{
         Object respuesta=null;
         Entorno local=new Entorno(entorno);
         Object condi=this.condicion.getValue(local);
-        if(this.condicion.getType(local)==Type.PrimitiveType.BOOLEAN){
+        Type.PrimitiveType tipo_verificar=this.condicion.getType(local);
+        if(tipo_verificar==Type.PrimitiveType.BOOLEAN){
             if(Boolean.valueOf(condi.toString())==true){
                 flag=true;
                 for(NodoAST node:this.sentencias_if){
@@ -54,12 +55,13 @@ public class If implements Instruccion{
                     }else if(node instanceof Expresion){
                         if(node instanceof Retornar){
                             Retornar retorno=(Retornar)node;
-                            this.tipo=retorno.getType(local);
                             respuesta=retorno.getValue(local);
+                            this.tipo=retorno.getType(local);
+                            System.out.println("asd");
                         }else{
                             Expresion expresion=(Expresion)node;
-                            this.tipo=expresion.getType(local);
                             respuesta=expresion.getValue(local);
+                            this.tipo=expresion.getType(local);
                         }
                     }else{
                         respuesta=null;
@@ -89,12 +91,14 @@ public class If implements Instruccion{
                             }else if(node instanceof Expresion){
                                 if(node instanceof Retornar){
                                     Retornar retorno=(Retornar)node;
-                                    this.tipo=retorno.getType(local);
                                     respuesta=retorno.getValue(local);
+                                    this.tipo=retorno.getType(local);
+                                }else if(node instanceof Llamada_Funcion){
+                                    System.out.println("putos");
                                 }else{
                                     Expresion expresion=(Expresion)node;
-                                    this.tipo=expresion.getType(local);
                                     respuesta=expresion.getValue(local);
+                                    this.tipo=expresion.getType(local);
                                 }
                             }else{
                                 respuesta=null;
@@ -128,12 +132,12 @@ public class If implements Instruccion{
                     }else if(node instanceof Expresion){
                         if(node instanceof Retornar){
                             Retornar retorno=(Retornar)node;
-                            this.tipo=retorno.getType(local);
                             respuesta=retorno.getValue(local);
+                            this.tipo=retorno.getType(local);
                         }else{
                             Expresion expresion=(Expresion)node;
-                            this.tipo=expresion.getType(local);
                             respuesta=expresion.getValue(local);
+                            this.tipo=expresion.getType(local);
                         }
                     }else{
                         respuesta=null;

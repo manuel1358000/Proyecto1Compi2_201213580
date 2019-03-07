@@ -1,7 +1,7 @@
-var j=0;
-j++;
-imprimir(j);
+var hola=[verdadero,2];
 
+hola[0]+=3;
+imprimir(hola[0]);
 
 
 

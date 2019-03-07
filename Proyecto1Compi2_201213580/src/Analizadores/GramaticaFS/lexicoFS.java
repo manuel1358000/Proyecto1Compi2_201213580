@@ -905,7 +905,7 @@ public class lexicoFS implements java_cup.runtime.Scanner {
           }
         case 64: break;
         case 2: 
-          { return new Symbol(simbolofs.punto, yyline, yycolumn,yytext());
+          { return new Symbol(simbolofs.pto, yyline, yycolumn,yytext());
           }
         case 65: break;
         case 3: 

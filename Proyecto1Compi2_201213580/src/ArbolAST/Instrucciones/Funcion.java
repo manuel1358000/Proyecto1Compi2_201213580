@@ -6,6 +6,7 @@
 package ArbolAST.Instrucciones;
 
 import ArbolAST.AST;
+import static ArbolAST.AST.global;
 import ArbolAST.Entorno.Entorno;
 import ArbolAST.Entorno.Simbolo;
 import ArbolAST.Entorno.Type;
@@ -84,17 +85,14 @@ public class Funcion implements Instruccion{
                 }else if(nodo instanceof Llamada_Funcion){
                     Llamada_Funcion llamada=(Llamada_Funcion)nodo;
                     respuesta=llamada.getValue(local);
-                    if(respuesta==null){
-                            System.out.println("asdasdas");
-                            System.out.println("asdasdas");
-                            System.out.println("asdasdas");
-                            System.out.println("asdasdas");
-                            System.out.println("asdasdas");
-                            System.out.println("asdasdas");
-                        }
                 }else if(nodo instanceof Declaracion){
-                    Declaracion declaracion=(Declaracion)nodo;
-                    respuesta=declaracion.execute(local);
+                    if(nodo instanceof Declaracion_Arreglo){
+                        Declaracion_Arreglo declaracion_arreglo=(Declaracion_Arreglo)nodo;
+                        declaracion_arreglo.execute(local);
+                    }else{
+                        Declaracion declaracion=(Declaracion) nodo;
+                        declaracion.execute(local);
+                    }
                 }else if(nodo instanceof Asignacion){
                     Asignacion asignacion=(Asignacion)nodo;
                     respuesta=asignacion.execute(local);
@@ -110,10 +108,10 @@ public class Funcion implements Instruccion{
                     respuesta=detener.execute(local);
                 }else if(nodo instanceof Retornar){
                     Retornar retornar=(Retornar)nodo;
-                    if(respuesta==null){
-                        respuesta= retornar.getValue(local).toString();             
-                        this.tipo=retornar.getType(local);
-                    }
+                    respuesta= retornar.getValue(local).toString();             
+                    this.tipo=retornar.getType(local);
+                    System.out.println("sad");
+                    
                     
                 }else{
                     System.out.println("ERROR SEMANTICO: ESTA OPERACION ES INVALIDA DENTRO DE UNA FUNCION");

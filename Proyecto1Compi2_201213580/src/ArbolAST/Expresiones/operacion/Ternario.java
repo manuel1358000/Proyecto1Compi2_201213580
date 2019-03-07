@@ -14,7 +14,7 @@ import ArbolAST.Expresiones.Expresion;
  * @author anton
  */
 public class Ternario implements Expresion {
-
+    Type.PrimitiveType tipo;
     Expresion condicion;
     Expresion isVerdadero;
     Expresion isFalso;
@@ -31,12 +31,23 @@ public class Ternario implements Expresion {
    
     @Override
     public Object getValue(Entorno entorno) {
-        return (boolean)condicion.getValue(entorno)?isVerdadero.getValue(entorno):isFalso.getValue(entorno);
+        Object respuesta=null;
+        Object v_condicion=condicion.getValue(entorno);
+        if(Boolean.parseBoolean(v_condicion.toString())){
+            respuesta=isVerdadero.getValue(entorno);
+            this.tipo=isVerdadero.getType(entorno);
+            System.out.println("");
+        }else{
+            respuesta=isFalso.getValue(entorno);
+            this.tipo=isFalso.getType(entorno);
+            System.out.println("asd");
+        }
+        return respuesta;
     }
 
     @Override
     public Type.PrimitiveType getType(Entorno entorno) {
-        return (boolean)condicion.getValue(entorno)?isVerdadero.getType(entorno):isFalso.getType(entorno);
+        return this.tipo;
     }
 
     @Override

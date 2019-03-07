@@ -34,7 +34,41 @@ public class Asignacion implements Instruccion{
         Object valor=this.asigna.getValue(entorno);
         Type.PrimitiveType tipo_asigna=this.asigna.getType(entorno);
         if(valor!=null){
-            if(this.operador==Operador.IGUAL){
+            if(this.operador==Operador.AUMENTO){
+                Simbolo sim=(Simbolo)entorno.Obtener(this.id);
+                if(sim!=null){
+                    if(tipo_asigna==Type.PrimitiveType.INTEGER){
+                        sim.valor=Integer.parseInt(valor.toString())+1;
+                        sim.tipo=tipo_asigna;
+                        entorno.Actualizar(this.id, sim);
+                    }else if(tipo_asigna==Type.PrimitiveType.DOUBLE){
+                        sim.valor=Double.parseDouble(valor.toString())+1;
+                        sim.tipo=tipo_asigna;
+                        entorno.Actualizar(id, sim);
+                    }else{
+                        System.out.println("ERROR SEMANTICO: SOLO SE PUEDEN INCREMENTAR VARIABLES DE TIPO INTEGER Y DOUBLE");
+                    }   
+                }else{
+                    System.out.println("NO EXISTE LA VARIABLE A AUMENTAR");
+                }
+            }else if(this.operador==Operador.DECREMENTO){
+                Simbolo sim=(Simbolo)entorno.Obtener(this.id);
+                if(sim!=null){
+                    if(tipo_asigna==Type.PrimitiveType.INTEGER){
+                        sim.valor=Integer.parseInt(valor.toString())-1;
+                        sim.tipo=tipo_asigna;
+                        entorno.Actualizar(this.id, sim);
+                    }else if(tipo_asigna==Type.PrimitiveType.DOUBLE){
+                        sim.valor=Double.parseDouble(valor.toString())-1;
+                        sim.tipo=tipo_asigna;
+                        entorno.Actualizar(id, sim);
+                    }else{
+                        System.out.println("ERROR SEMANTICO: SOLO SE PUEDEN INCREMENTAR VARIABLES DE TIPO INTEGER Y DOUBLE");
+                    }   
+                }else{
+                    System.out.println("NO EXISTE LA VARIABLE A AUMENTAR");
+                }
+            }else if(this.operador==Operador.IGUAL){
                 Simbolo sim=(Simbolo)entorno.Obtener(this.id);
                 if(sim!=null){
                     sim.valor=valor;

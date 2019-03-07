@@ -6,6 +6,7 @@
 package proyecto1compi2_201213580;
 
 import Analizadores.GramaticaFS.lexicoFS;
+import Analizadores.GramaticaFS.simbolofs;
 import Analizadores.GramaticaFS.sintacticoFS;
 import Analizadores.GramaticaGXML.lexicoGXML;
 import Analizadores.GramaticaGXML.sintacticoGXML;
@@ -165,7 +166,6 @@ public class Principal extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        System.out.println("BOTON COMPILAR");
 //        if(control_ambientes==true){
 //            if((this.jTabbedPane1.getTabCount()-1)==this.jTabbedPane1.getSelectedIndex()){
 //                nueva=new Pesta(listAreas.get(0).getText());
@@ -194,8 +194,15 @@ public class Principal extends javax.swing.JFrame {
                                     lexicoFS analizador_lexico=new lexicoFS(ir);
                                      sintacticoFS parser=new sintacticoFS(analizador_lexico);
                                     parser.parse();
+                                    
                                     AST nodoRaiz=parser.root;
-                                    nodoRaiz.execute();
+                                    if(nodoRaiz!=null){
+                                        nodoRaiz.execute();
+                                        System.out.println("TODO CORRECTO");
+                                    }else{
+                                        System.out.println("diablos se;ira");
+                                    }
+                                    
                                     System.out.println("Finalizo la ejecucion de FS");
                                 } catch (Exception ex) {
                                     Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);

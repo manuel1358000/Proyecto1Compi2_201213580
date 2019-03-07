@@ -9,6 +9,7 @@ import ArbolAST.Entorno.Entorno;
 import ArbolAST.Entorno.Simbolo;
 import ArbolAST.Entorno.Type;
 import ArbolAST.Expresiones.Llamada_Funcion;
+import ArbolAST.Expresiones.operacion.Aritmetica;
 import ArbolAST.Expresiones.operacion.Retornar;
 import ArbolAST.Instrucciones.Asignacion;
 import ArbolAST.Instrucciones.AsignacionArreglo;

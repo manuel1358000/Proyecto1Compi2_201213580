@@ -35,7 +35,7 @@ public class AccesoArreglo implements Expresion{
         if(sim!=null){
             LinkedList<Expresion> aux=(LinkedList)sim.valor;
             if(pos<aux.size()){
-                respuesta=aux.get(pos).getValue(entorno).toString().replaceAll("\"","");
+                respuesta=aux.get(pos).getValue(entorno).toString();
                 this.tipo_respuesta=aux.get(pos).getType(entorno);
             }else{
                 System.out.println("ERROR SEMANTICO: LA POSICION QUE QUIERE ACCEDER AL ID "+this.id+" ESTA FUERA DE RANGO");

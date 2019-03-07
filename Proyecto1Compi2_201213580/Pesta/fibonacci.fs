@@ -12,3 +12,11 @@ funcion fibonacci (var n)
 	}
 }
 imprimir("El fibonacci de 10 es "+fibonacci(20));
+
+
+
+
+
+
+
+

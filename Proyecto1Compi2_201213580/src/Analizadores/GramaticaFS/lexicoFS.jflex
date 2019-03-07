@@ -29,9 +29,10 @@ COMENTARIO_MULTIPLE ="/*""/"*([^*/]|[^*]"/"|"*"[^/])*"*"*"*/"
 PATH=["\""]{LETRA}[":"]["\\"]({ID}|["\\"])*["."]["f"]["s"]["\""]
 PATH2=["\""](["/"]({ID}|["\\"])*["."]["f"]["s"])["\""] 
 CADENA="\""~"\""
+PUNTO=["."]
 %%
 //definicion de simbolos del lenguaje
-<YYINITIAL> "." { return new Symbol(simbolofs.punto, yyline, yycolumn,yytext());}
+<YYINITIAL> "." { return new Symbol(simbolofs.pto, yyline, yycolumn,yytext());}
 <YYINITIAL> ":" { return new Symbol(simbolofs.dospuntos, yyline, yycolumn,yytext());}
 <YYINITIAL> "(" { return new Symbol(simbolofs.parena, yyline, yycolumn,yytext());}
 <YYINITIAL> ")" { return new Symbol(simbolofs.parenc, yyline, yycolumn,yytext());}

@@ -27,7 +27,7 @@ public class Retornar implements Expresion{
     public Object getValue(Entorno entorno) {
         Object respuesta=null;
         if(this.retorno instanceof Llamada_Funcion){
-            respuesta=this.retorno.getValue(AST.global);
+            respuesta=this.retorno.getValue(entorno);
         }else{
             respuesta=this.retorno.getValue(entorno);
         }
@@ -36,7 +36,8 @@ public class Retornar implements Expresion{
 
     @Override
     public Type.PrimitiveType getType(Entorno entorno) {
-        return this.retorno.getType(entorno); 
+        Type.PrimitiveType re=this.retorno.getType(entorno);
+        return re; 
     }
 
     public Expresion getRetorno() {

@@ -10,6 +10,7 @@ import ArbolAST.Expresiones.operacion.Operacion.Operador;
 import ArbolAST.Entorno.Entorno;
 import ArbolAST.Entorno.Simbolo;
 import ArbolAST.Entorno.Type;
+import ArbolAST.Expresiones.AccesoArreglo;
 import ArbolAST.Expresiones.Expresion;
 import ArbolAST.Expresiones.Llamada_Funcion;
 import ArbolAST.Instrucciones.Funcion;
@@ -34,25 +35,60 @@ public class Aritmetica extends Operacion implements Expresion{
         Object respuesta = null;
         if(this.unario){
             try{
-                System.out.println(this.type);
                 if(this.expresion1!=null){
+                    Object val=this.expresion1.getValue(entorno);
                     Type.PrimitiveType valor=this.expresion1.getType(entorno);
-                    Object val=null;
                     if(this.expresion1 instanceof Llamada_Funcion){
                         Llamada_Funcion llamada=(Llamada_Funcion)this.expresion1;
                         val=llamada.getValue(entorno);
                         valor=llamada.getTipo_respuesta();
-                    }else{
-                        valor=this.expresion1.getType(entorno);
                     }
                     this.type=valor;
-                    respuesta=-Integer.parseInt(val.toString());
+                    if(this.type==Type.PrimitiveType.INTEGER){
+                        if(this.operador==Operador.UNARIO){
+                            respuesta=-Integer.parseInt(val.toString());
+                        }else if(this.operador==Operador.AUMENTO){
+                            respuesta=Integer.parseInt(val.toString())+1;
+                        }else if(this.operador==Operador.DECREMENTO){
+                            respuesta=Integer.parseInt(val.toString())-1;
+                        }
+                        
+                    }else if(this.type==Type.PrimitiveType.DOUBLE){
+                        if(this.operador==Operador.UNARIO){
+                            respuesta=-Double.parseDouble(val.toString());
+                        }else if(this.operador==Operador.AUMENTO){
+                            respuesta=Double.parseDouble(val.toString())+1;
+                        }else if(this.operador==Operador.DECREMENTO){
+                            respuesta=Double.parseDouble(val.toString())-1;
+                        }
+                    }else if(this.type==Type.PrimitiveType.ARREGLO){
+                        AccesoArreglo acceso=(AccesoArreglo)this.expresion1;
+                        Object valor_arreglo=acceso.getValue(entorno);
+                        Type.PrimitiveType tipo_arreglo=acceso.getTipo_Respuesta();
+                        if(tipo_arreglo==Type.PrimitiveType.INTEGER){
+                            this.type=tipo_arreglo;
+                            if(this.operador==Operador.UNARIO){
+                                respuesta=-Integer.parseInt(valor_arreglo.toString());
+                            }else if(this.operador==Operador.AUMENTO){
+                                respuesta=Integer.parseInt(valor_arreglo.toString())+1;
+                            }else if(this.operador==Operador.DECREMENTO){
+                                respuesta=Integer.parseInt(valor_arreglo.toString())-1;
+                            }
+                        }else if(tipo_arreglo==Type.PrimitiveType.DOUBLE){
+                            this.type=tipo_arreglo;
+                            if(this.operador==Operador.UNARIO){
+                                respuesta=-Double.parseDouble(valor_arreglo.toString());
+                            }else if(this.operador==Operador.AUMENTO){
+                                respuesta=Double.parseDouble(valor_arreglo.toString())+1;
+                            }else if(this.operador==Operador.DECREMENTO){
+                                respuesta=Double.parseDouble(valor_arreglo.toString())-1;
+                            }
+                        }
+                    }
                 }else{
-                    System.out.println(this.type);
                     if(this.type==Type.PrimitiveType.ID){
                         Simbolo referencia=entorno.Obtener(this.valor.toString());
                         if(referencia!=null){
-                            this.type=referencia.tipo;
                             respuesta=referencia.valor;
                         }else{
                             System.out.println("ERROR SEMANTICO: No existe el id " + this.valor.toString());
@@ -66,38 +102,35 @@ public class Aritmetica extends Operacion implements Expresion{
                 System.out.println("OCURRIO UN ERROR EN LA OPERACION UNARIA");
             }
         }else{
-            System.out.println(this.type);
             if(this.expresion1!=null&&this.expresion2!=null){
-                Type.PrimitiveType valor3=this.expresion1.getType(entorno);
-                Type.PrimitiveType valor4=this.expresion2.getType(entorno);
                 Object val1=null;
                 Object val2=null;
+                Type.PrimitiveType valor3=null;
+                Type.PrimitiveType valor4=null;
                 if(this.expresion1 instanceof Llamada_Funcion){
                     Llamada_Funcion llamada=(Llamada_Funcion)this.expresion1;
                     val1=llamada.getValue(entorno);
                     valor3=llamada.getTipo_respuesta();
+                    System.out.println("");
                 }else{
+                    val1=this.expresion1.getValue(entorno).toString().replaceAll("\"","");
                     valor3=this.expresion1.getType(entorno);
                 }
-                
                 if(this.expresion2 instanceof Llamada_Funcion){
                     Llamada_Funcion llamada=(Llamada_Funcion)this.expresion2;
                     val2=llamada.getValue(entorno);
                     valor4=llamada.getTipo_respuesta();
+                    System.out.println("");
                 }else{
+                    val2=this.expresion2.getValue(entorno).toString().replaceAll("\"","");
                     valor4=this.expresion2.getType(entorno);
                 }
+                
                 Type.PrimitiveType tipo=GenerarTipo(valor3,valor4,this.operador); 
                 if(this.operador==Operador.SUMA){
                     try{
                         if(tipo==Type.PrimitiveType.STRING){
                             this.type=tipo;
-                            if(val1==null){
-                                val1=this.expresion1.getValue(entorno).toString().replaceAll("\"","");
-                            }
-                            if(val2==null){
-                                val2=this.expresion2.getValue(entorno).toString().replaceAll("\"","");
-                            }
                             respuesta=String.valueOf(val1)+String.valueOf(val2);
                         }else if(tipo==Type.PrimitiveType.BOOLEAN){
                             respuesta= null;
@@ -106,21 +139,10 @@ public class Aritmetica extends Operacion implements Expresion{
                             respuesta=null;
                         }else if(tipo==Type.PrimitiveType.INTEGER){
                             this.type=tipo;
-                            if(val1==null){
-                                val1=this.expresion1.getValue(entorno).toString().replaceAll("\"","");
-                            }
-                            if(val2==null){
-                                val2=this.expresion2.getValue(entorno).toString().replaceAll("\"","");
-                            }
-                            respuesta=Integer.valueOf(val1.toString())+Integer.valueOf(val2.toString());
+                            respuesta=Double.valueOf(val1.toString())+Double.valueOf(val2.toString());
+                            //System.out.println("Que lleva respuesta");
                         }else{
                             this.type=tipo;
-                            if(val1==null){
-                                val1=this.expresion1.getValue(entorno).toString().replaceAll("\"","");
-                            }
-                            if(val2==null){
-                                val2=this.expresion2.getValue(entorno).toString().replaceAll("\"","");
-                            }
                             respuesta=Double.valueOf(val1.toString())+Double.valueOf(val2.toString());
                         }
                     }catch(Exception e){
@@ -130,10 +152,10 @@ public class Aritmetica extends Operacion implements Expresion{
                     try{
                         if(tipo==Type.PrimitiveType.INTEGER){
                             this.type=tipo;
-                            respuesta= Integer.valueOf(this.expresion1.getValue(entorno).toString().replaceAll("\"",""))-Integer.valueOf(this.expresion2.getValue(entorno).toString().replaceAll("\"",""));
+                            respuesta= Double.valueOf(val1.toString())-Double.valueOf(val2.toString());
                         }else if(tipo==Type.PrimitiveType.DOUBLE){
                             this.type=tipo;
-                            respuesta= Double.valueOf(this.expresion1.getValue(entorno).toString().replaceAll("\"",""))-Double.valueOf(this.expresion2.getValue(entorno).toString().replaceAll("\"",""));
+                            respuesta= Double.valueOf(val1.toString())-Double.valueOf(val2.toString());
                         }else{
                             respuesta=null;
                         }
@@ -144,12 +166,13 @@ public class Aritmetica extends Operacion implements Expresion{
                     try{
                         if(tipo==Type.PrimitiveType.INTEGER){
                             this.type=tipo;
-                            respuesta= Integer.valueOf(this.expresion1.getValue(entorno).toString().replaceAll("\"",""))*Integer.valueOf(this.expresion2.getValue(entorno).toString().replaceAll("\"",""));
+                            respuesta=Double.parseDouble(val1.toString())*Double.parseDouble(val2.toString());
                         }else if(tipo==Type.PrimitiveType.DOUBLE){
-                            this.type=tipo;
-                            respuesta= Double.valueOf(this.expresion1.getValue(entorno).toString().replaceAll("\"",""))*Double.valueOf(this.expresion2.getValue(entorno).toString().replaceAll("\"",""));
+                            this.type=Type.PrimitiveType.DOUBLE;
+                            respuesta= Double.valueOf(val1.toString())*Double.valueOf(val2.toString());
                         }else{
                             //error semantico
+                            System.out.println("multiplicacion");
                             respuesta=null;
                         }
                     }catch(Exception e){
@@ -158,13 +181,14 @@ public class Aritmetica extends Operacion implements Expresion{
                 }else if(this.operador==Operador.DIVISION){
                     try{
                         if(tipo==Type.PrimitiveType.DOUBLE){
-                            this.type=tipo;
-                            respuesta= Double.valueOf(this.expresion1.getValue(entorno).toString().replaceAll("\"",""))/Double.valueOf(this.expresion2.getValue(entorno).toString().replaceAll("\"",""));
+                            this.type=type.DOUBLE;
+                            respuesta= Double.valueOf(val1.toString())/Double.valueOf(val2.toString());
                             if(Double.parseDouble(respuesta.toString())==Double.POSITIVE_INFINITY){
                                 respuesta= null;
                             }
                         }else{
                             //error semantico
+                            System.out.println("division rara");
                             respuesta=null;
                         }
                     }catch(Exception e){
@@ -174,10 +198,10 @@ public class Aritmetica extends Operacion implements Expresion{
                     try{
                         if(tipo==Type.PrimitiveType.DOUBLE){
                             this.type=tipo;
-                            respuesta= Math.pow(Double.valueOf(this.expresion1.getValue(entorno).toString().replaceAll("\"","")),Double.valueOf(this.expresion2.getValue(entorno).toString().replaceAll("\"","")));
+                            respuesta= Math.pow(Double.valueOf(val1.toString()),Double.valueOf(val2.toString()));
                         }else if(tipo==Type.PrimitiveType.INTEGER){
                             this.type=tipo;
-                            respuesta= Math.pow(Integer.valueOf(this.expresion1.getValue(entorno).toString().replaceAll("\"","")),Integer.valueOf(this.expresion2.getValue(entorno).toString().replaceAll("\"","")));
+                            respuesta= Math.pow(Double.valueOf(val1.toString()),Double.valueOf(val2.toString()));
                         }else{
                             respuesta=null;
                         }
@@ -196,17 +220,17 @@ public class Aritmetica extends Operacion implements Expresion{
                         }else{
                             this.type=referencia.tipo;
                             respuesta=referencia.valor;
+                            if(referencia.valor.equals("n")){
+                                System.out.println("");
+                            }
                         }
                     }else{
                         System.out.println("ERROR SEMANTICO: No existe el id "+this.valor);
                         respuesta=null;
                     }
-                }else if(this.type==Type.PrimitiveType.FUNCION){
-                    System.out.println("ESTA INGRESANDO AQUI");
-                    
                 }else{
                     try{
-                        respuesta=this.valor;    
+                        respuesta=this.valor;             
                     }catch(Exception e){
                         System.out.println("ERROR SEMANTICO: OCURRIO UN ERROR AL MOMENTO DE RETORNAR EL VALOR EN ARITMETICA");
                     }

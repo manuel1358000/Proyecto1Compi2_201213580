@@ -36,9 +36,14 @@ public class Declaracion implements Instruccion {
         try{
             if(inicializado==true){
                 Object valor=intValue.getValue(entorno);
-                
                 Object tipo_v=null;
-                tipo_v=intValue.getType(entorno);
+                if(intValue instanceof Llamada_Funcion){
+                    Llamada_Funcion llamada=(Llamada_Funcion)intValue;
+                    tipo_v=llamada.getTipo_respuesta();
+                }else{
+                    tipo_v=intValue.getType(entorno);
+                }
+                
                 
                 if(valor!=null){
                     Simbolo simbolo=new Simbolo(false,false, (Type.PrimitiveType) tipo_v,id,null,valor);

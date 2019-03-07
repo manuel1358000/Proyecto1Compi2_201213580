@@ -72,7 +72,6 @@ public class Llamada_Funcion implements Expresion{
             //aqui es donde se le tiene que mandar solo los parametros globales pero esperemos a verificar
             respuesta=funcion.execute(AST.global);
             this.tipo_respuesta=funcion.getTipo();
-            System.out.println("asd");
         }else{
             System.out.println("ERROR SEMANTICO: LA FUNCION "+this.id+" NO EXISTE, O EL NUMERO DE PARAMETROS ES INCORRECTO");
         }
