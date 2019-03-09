@@ -13,9 +13,9 @@ import ArbolAST.Expresiones.Expresion;
  */
 public class Componente_Funcion_Arreglo {
     String id;
-    Expresion parametro;
+    String parametro;
 
-    public Componente_Funcion_Arreglo(String id, Expresion parametro) {
+    public Componente_Funcion_Arreglo(String id, String parametro) {
         this.id = id;
         this.parametro = parametro;
     }

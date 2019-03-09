@@ -30,6 +30,8 @@ import ArbolAST.Instrucciones.Declaracion;
 import ArbolAST.Instrucciones.AsignacionArreglo;
 import ArbolAST.Instrucciones.Declaracion_Arreglo;
 import ArbolAST.Expresiones.AccesoArreglo;
+import ArbolAST.Instrucciones.Componente_Funcion_Arreglo;
+import ArbolAST.Instrucciones.Funciones_Arreglos;
 parser code
 {:
     public AST root;
@@ -88,12 +90,12 @@ non terminal LinkedList<NodoAST> DECLARAR_FUNCIONES;
 non terminal LinkedList<NodoAST> LISTA_PARAMETRO;
 non terminal LinkedList<Expresion> LISTA_ARRAY;
 non terminal LinkedList<Expresion> ELEMENTOS_ARRAY;
-non terminal String FUNCIONES_LENGUAJE;
+non terminal Componente_Funcion_Arreglo FUNCIONES_LENGUAJE;
 non terminal String ELEMENTOS_OBJETO,ELEMENTO_PATH;
 non terminal Expresion LLAMADA_ARREGLO;
 
 non terminal Funciones_Arreglos SENTENCIAS_ARREGLOS;
-non terminal LinkedList<Funcion_Arreglo> FUNCIONES_LENGUAJES;
+non terminal LinkedList<Componente_Funcion_Arreglo> FUNCIONES_LENGUAJES;
 
 //DEFINICION DE LA PRECEDENCIA DE LOS OPERADORES
 precedence left signoi;
@@ -135,10 +137,18 @@ DECLARAR_FUNCIONES::= funcion valor_id:a parena parenc llavea SENTENCIAS_INTERNA
                                                                                                                         RESULT.add(new Funcion(a.toString().toLowerCase(),b,c));
                                                                                                                     :};
 
-DEFINICIONES_PARAMETROS::= DEFINICIONES_PARAMETROS:a coma var valor_id:b{:
+DEFINICIONES_PARAMETROS::= DEFINICIONES_PARAMETROS:a coma valor_id:b{:
                                                                         RESULT=a;
                                                                         RESULT.add(new Declaracion(Type.PrimitiveType.ID,b.toString().toLowerCase(),null,false,bright));
                                                                         :}
+                         | DEFINICIONES_PARAMETROS:a coma var valor_id:b{:
+                                                                        RESULT=a;
+                                                                        RESULT.add(new Declaracion(Type.PrimitiveType.ID,b.toString().toLowerCase(),null,false,bright));
+                                                                        :}
+                         | valor_id:a{:
+                                            RESULT=new LinkedList<>();
+                                            RESULT.add(new Declaracion(Type.PrimitiveType.ID,a.toString().toLowerCase(),null,false,aright));
+                                         :}
                          | var valor_id:a{:
                                             RESULT=new LinkedList<>();
                                             RESULT.add(new Declaracion(Type.PrimitiveType.ID,a.toString().toLowerCase(),null,false,aright));
@@ -167,28 +177,57 @@ SENTENCIAS_GENERALES::= SENTENCIA_IMPRIMIR:a{:
                                                 RESULT=new LinkedList<>();
                                                 RESULT.add(a);
                                              :}
-                      | SENTENCIAS_ARREGLOS{:
-                                            
+                      | SENTENCIAS_ARREGLOS:a pyc{:
+                                                RESULT=new LinkedList<>();
+                                                RESULT.add(a);
+                                             :};
+
+
+SENTENCIAS_ARREGLOS::= valor_id:a pto FUNCIONES_LENGUAJES:b {:
+                                                                RESULT=new Funciones_Arreglos(a,b);
+                                                            :};
+
+FUNCIONES_LENGUAJES::= FUNCIONES_LENGUAJES:a pto FUNCIONES_LENGUAJE:b{:
+                                                                        RESULT=a;
+                                                                        RESULT.add(b);
+                                                                     :}
+                     | FUNCIONES_LENGUAJE:a{:
+                                            RESULT=new LinkedList<>();
+                                            RESULT.add(a);
                                            :};
-
-
-SENTENCIAS_ARREGLOS::= valor_id pto FUNCIONES_LENGUAJES pyc;
-
-FUNCIONES_LENGUAJES::= FUNCIONES_LENGUAJES pto FUNCIONES_LENGUAJE
-                     | FUNCIONES_LENGUAJE;
-FUNCIONES_LENGUAJE::= descendente:a parena parenc
-                    | ascendente:a parena parenc
-                    | invertir:a parena parenc
-                    | maximo:a parena parenc
-                    | minimo:a parena parenc
-                    | filtrar:a parena EXPRESION:b parenc
-                    | buscar:a parena EXPRESION:b parenc
-                    | map:a parena EXPRESION:b parenc
-                    | reduce:a parena EXPRESION:b parenc
-                    | todos:a parena EXPRESION:b parenc
-                    | alguno:a parena EXPRESION:b parenc{:
-                                                            RESULT=new Componente_Funcion_Arreglo(a,b);
-                                                        :};
+FUNCIONES_LENGUAJE::= descendente parena parenc{:
+                                                RESULT=new Componente_Funcion_Arreglo("descendente");
+                                               :}
+                    | ascendente parena parenc{:
+                                                RESULT=new Componente_Funcion_Arreglo("ascendente");
+                                              :}
+                    | invertir parena parenc{:
+                                              RESULT=new Componente_Funcion_Arreglo("invertir");
+                                            :}
+                    | maximo parena parenc{:
+                                            RESULT=new Componente_Funcion_Arreglo("maximo");
+                                          :}
+                    | minimo parena parenc{:
+                                            RESULT=new Componente_Funcion_Arreglo("minimo");
+                                          :}
+                    | filtrar parena valor_id:a parenc{:
+                                                        RESULT=new Componente_Funcion_Arreglo("filtrar",a.toString().toLowerCase());
+                                                       :}
+                    | buscar parena valor_id:a parenc{:
+                                                        RESULT=new Componente_Funcion_Arreglo("buscar",a.toString().toLowerCase());
+                                                      :}
+                    | map parena valor_id:a parenc{:
+                                                    RESULT=new Componente_Funcion_Arreglo("map",a.toString().toLowerCase());
+                                                   :}
+                    | reduce parena valor_id:a parenc{:
+                                                        RESULT=new Componente_Funcion_Arreglo("reduce",a.toString().toLowerCase());
+                                                      :}
+                    | todos parena valor_id:a parenc{:
+                                                        RESULT=new Componente_Funcion_Arreglo("todos",a.toString().toLowerCase());
+                                                     :}
+                    | alguno parena valor_id:a parenc{:
+                                                        RESULT=new Componente_Funcion_Arreglo("alguno",a.toString().toLowerCase());
+                                                      :};
 
 SENTENCIA_ASIGNACION::= valor_id:a igual EXPRESION:b pyc{:
                                                             RESULT=new LinkedList<>();
@@ -440,7 +479,7 @@ EXPRESION::= menos EXPRESION:a{:
            | valor_falso:a{:
                             RESULT=new Aritmetica("false",Type.PrimitiveType.BOOLEAN);
                           :}
-           //| valor_id punto FUNCIONES_LENGUAJE
+           | SENTENCIAS_ARREGLOS:a{:RESULT=a;:}
            //| valor_id corchea EXPRESION corchec
            | LLAMADA_FUNCION:a{:RESULT=a;:}
            | TERNARIO:a{:RESULT=a;:}

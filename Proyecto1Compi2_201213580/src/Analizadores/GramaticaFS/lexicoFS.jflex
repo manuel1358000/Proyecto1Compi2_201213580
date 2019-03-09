@@ -3,6 +3,11 @@ import java.util.LinkedList;
 import java_cup.runtime.*;
 %%
 %{
+public boolean advance() throws java.io.IOException {
+  value = new String("");
+  token = yylex();
+  return (token != YYEOF);
+}
 %}
 //victor con don alejandro catalan
 %public

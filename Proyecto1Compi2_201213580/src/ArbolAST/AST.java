@@ -17,6 +17,7 @@ import ArbolAST.Instrucciones.Declaracion;
 import ArbolAST.Instrucciones.Declaracion_Arreglo;
 import ArbolAST.Instrucciones.Detener;
 import ArbolAST.Instrucciones.Funcion;
+import ArbolAST.Instrucciones.Funciones_Arreglos;
 import ArbolAST.Instrucciones.Importar;
 import ArbolAST.Instrucciones.Imprimir;
 import ArbolAST.Instrucciones.Seleccion.If;
@@ -90,6 +91,10 @@ public class AST {
                 }else if(node instanceof Llamada_Funcion){
                     Llamada_Funcion llamada=(Llamada_Funcion)node;
                     llamada.getValue(global);
+                }else if(node instanceof Funciones_Arreglos){
+                    //aqui vamos a hacer la ejecucion de todo
+                    Funciones_Arreglos funciones=(Funciones_Arreglos)node;
+                    funciones.getValue(global);
                 }else{
                     System.out.println("INSTRUCCION RARA");
                 }

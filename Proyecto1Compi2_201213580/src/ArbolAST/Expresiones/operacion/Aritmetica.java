@@ -140,7 +140,7 @@ public class Aritmetica extends Operacion implements Expresion{
                         }else if(tipo==Type.PrimitiveType.INTEGER){
                             this.type=tipo;
                             respuesta=Double.valueOf(val1.toString())+Double.valueOf(val2.toString());
-                            //System.out.println("Que lleva respuesta");
+                            System.out.println("Que lleva respuesta");
                         }else{
                             this.type=tipo;
                             respuesta=Double.valueOf(val1.toString())+Double.valueOf(val2.toString());
@@ -218,11 +218,10 @@ public class Aritmetica extends Operacion implements Expresion{
                         if(referencia.valor instanceof Expresion){
                             respuesta=((Expresion)referencia.valor).getValue(entorno);
                         }else{
-                            this.type=referencia.tipo;
+                            
                             respuesta=referencia.valor;
-                            if(referencia.valor.equals("n")){
-                                System.out.println("");
-                            }
+                            this.type=referencia.tipo;
+                            
                         }
                     }else{
                         System.out.println("ERROR SEMANTICO: No existe el id "+this.valor);
@@ -230,7 +229,7 @@ public class Aritmetica extends Operacion implements Expresion{
                     }
                 }else{
                     try{
-                        respuesta=this.valor;             
+                        respuesta=this.valor;
                     }catch(Exception e){
                         System.out.println("ERROR SEMANTICO: OCURRIO UN ERROR AL MOMENTO DE RETORNAR EL VALOR EN ARITMETICA");
                     }

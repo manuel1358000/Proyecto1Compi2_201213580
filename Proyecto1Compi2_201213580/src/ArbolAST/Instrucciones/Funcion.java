@@ -109,10 +109,11 @@ public class Funcion implements Instruccion{
                 }else if(nodo instanceof Retornar){
                     Retornar retornar=(Retornar)nodo;
                     respuesta= retornar.getValue(local).toString();             
-                    this.tipo=retornar.getType(local);
-                    System.out.println("sad");
-                    
-                    
+                    this.tipo=retornar.getType(local);         
+                }else if(nodo instanceof Funciones_Arreglos){
+                    //aqui vamos a hacer la ejecucion de todo
+                    Funciones_Arreglos funciones=(Funciones_Arreglos)nodo;
+                    funciones.getValue(local);
                 }else{
                     System.out.println("ERROR SEMANTICO: ESTA OPERACION ES INVALIDA DENTRO DE UNA FUNCION");
                 }

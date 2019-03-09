@@ -8,6 +8,8 @@ package ArbolAST.Expresiones.operacion;
 import ArbolAST.Entorno.Entorno;
 import ArbolAST.Entorno.Type;
 import ArbolAST.Expresiones.Expresion;
+import ArbolAST.Instrucciones.Componente_Funcion_Arreglo;
+import java.util.LinkedList;
 /**
  *
  * @author anton
@@ -26,6 +28,8 @@ public class Operacion implements Expresion{
         this.expresion1=expresion1;
         this.expresion2=expresion2;
         this.operador=operador;
+    }
+    public Operacion(String id,LinkedList<Componente_Funcion_Arreglo>funciones_arreglo){
     }
     public Operacion(Expresion expresion1,boolean valor,Operador operador){
         this.expresion1=expresion1;

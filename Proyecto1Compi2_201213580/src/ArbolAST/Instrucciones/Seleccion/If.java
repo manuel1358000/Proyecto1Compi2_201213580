@@ -42,7 +42,8 @@ public class If implements Instruccion{
         Object condi=this.condicion.getValue(local);
         Type.PrimitiveType tipo_verificar=this.condicion.getType(local);
         if(tipo_verificar==Type.PrimitiveType.BOOLEAN){
-            if(Boolean.valueOf(condi.toString())==true){
+            Object con=condi.toString();
+            if(Boolean.valueOf(con.toString())==true){
                 flag=true;
                 for(NodoAST node:this.sentencias_if){
                     if(node instanceof Instruccion){
@@ -57,7 +58,6 @@ public class If implements Instruccion{
                             Retornar retorno=(Retornar)node;
                             respuesta=retorno.getValue(local);
                             this.tipo=retorno.getType(local);
-                            System.out.println("asd");
                         }else{
                             Expresion expresion=(Expresion)node;
                             respuesta=expresion.getValue(local);

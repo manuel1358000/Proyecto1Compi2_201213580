@@ -823,7 +823,7 @@ public class EjecutarGXML {
                 }else{
                     pendiente+=y+",";
                 }
-                fin+=nombre+"_"+arriba+".alclic(guardarformulario());\n";
+                fin+=nombre+"_"+arriba+".alclic(guardar"+arriba+"());\n";
                 if(referencia.equals("vacio")){
                     pendiente+="\"\",";
                 }else{
@@ -857,6 +857,11 @@ public class EjecutarGXML {
 
                 respuesta=pendiente+respuesta;
                 respuesta+=fin;
+                String []ultimo=arriba.split("_");
+                if(ultimo.length>0){
+                    respuesta+="funcion guardar"+arriba+"(){\nventana_"+ ultimo[ultimo.length-1] +".creararraydesdearchivo();\n}";
+                }
+                
                 if(accion.equals("")){
                 }else{
                     if(accion.equals("vacio")){
