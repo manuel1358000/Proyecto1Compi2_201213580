@@ -9,7 +9,9 @@ funcion ackerman(var m,var n){
 }
 
 
-imprimir(ackerman(3,10));
+imprimir(ackerman(3,8));
+
+
 
 
 

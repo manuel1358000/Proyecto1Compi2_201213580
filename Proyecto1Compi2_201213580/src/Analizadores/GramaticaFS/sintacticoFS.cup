@@ -32,6 +32,7 @@ import ArbolAST.Instrucciones.Declaracion_Arreglo;
 import ArbolAST.Expresiones.AccesoArreglo;
 import ArbolAST.Instrucciones.Componente_Funcion_Arreglo;
 import ArbolAST.Instrucciones.Funciones_Arreglos;
+import ArbolAST.Instrucciones.Declaracion_UI;
 parser code
 {:
     public AST root;
@@ -59,6 +60,10 @@ terminal String defecto;
 //DEFINICION VALORES IMPLICITOS LENGUAJE FS
 terminal String valor_id,valor_numero_completo,valor_path,valor_path2,valor_cadena,valor_verdadero,valor_falso,valor_simbolo;
 terminal String valor_numero_decimal,valor_nulo;
+
+//DEFINICION DE PALABRAS RESERVADAS ELEMENTOS_UI
+terminal String crearventana,crearcontenedor,crearboton,creartexto,crearareatexto,crearcajatexto,crearcontrolnumerico,creardesplegable;
+
 
 //definicion de no terminales
 non terminal AST INICIAL;
@@ -93,9 +98,11 @@ non terminal LinkedList<Expresion> ELEMENTOS_ARRAY;
 non terminal Componente_Funcion_Arreglo FUNCIONES_LENGUAJE;
 non terminal String ELEMENTOS_OBJETO,ELEMENTO_PATH;
 non terminal Expresion LLAMADA_ARREGLO;
-
 non terminal Funciones_Arreglos SENTENCIAS_ARREGLOS;
 non terminal LinkedList<Componente_Funcion_Arreglo> FUNCIONES_LENGUAJES;
+
+non terminal Declaracion_UI EXPRESION_UI;
+non terminal String LISTADO_NUEVO,LISTADO_NUEVOS;
 
 //DEFINICION DE LA PRECEDENCIA DE LOS OPERADORES
 precedence left signoi;
@@ -382,7 +389,85 @@ DECLARACION_VARIABLES::= var LISTA_ID:a pyc{:
                                                                                 a.add(declaracion_arreglo);
                                                                                 RESULT=a;
                                                                                :}
-                       | var LISTA_ID igual llavea ELEMENTOS_OBJETO llavec pyc;
+                       | var LISTA_ID igual llavea ELEMENTOS_OBJETO llavec pyc
+                       | var LISTA_ID:a igual EXPRESION_UI:b pyc{:
+                                                                RESULT=new LinkedList<>();
+                                                                int indice=a.size()-1;
+                                                                Declaracion ultima=(Declaracion)a.get(indice);
+                                                                b.setId(ultima.getId());
+                                                                RESULT.add(b);
+                                                            :}
+                       | valor_id:a pto creartexto parena LISTA_PARAMETROS:b parenc pyc{:
+                                                                                        RESULT=new LinkedList<>();
+                                                                                        Declaracion_UI decla=new Declaracion_UI(Type.PrimitiveType.TEXTO,b);
+                                                                                        decla.setId_padre(a.toString());
+                                                                                        RESULT.add(decla);
+                                                                                       :}
+                       | valor_id:a pto crearareatexto parena LISTA_PARAMETROS:b parenc pyc{:
+                                                                                            RESULT=new LinkedList<>();
+                                                                                            Declaracion_UI decla=new Declaracion_UI(Type.PrimitiveType.AREATEXTO,b);
+                                                                                            decla.setId_padre(a.toString());
+                                                                                            RESULT.add(decla);
+                                                                                           :}
+                       | valor_id:a pto crearcajatexto parena LISTA_PARAMETROS:b parenc pyc{:
+                                                                                            RESULT=new LinkedList<>();
+                                                                                            Declaracion_UI decla=new Declaracion_UI(Type.PrimitiveType.CAJATEXTO,b);
+                                                                                            decla.setId_padre(a.toString());
+                                                                                            RESULT.add(decla);
+                                                                                           :}
+                       | valor_id:a pto crearcontrolnumerico parena LISTA_PARAMETROS:b parenc pyc{:
+                                                                                                    RESULT=new LinkedList<>();
+                                                                                                    Declaracion_UI decla=new Declaracion_UI(Type.PrimitiveType.NUMERICO,b);
+                                                                                                    decla.setId_padre(a.toString());
+                                                                                                    RESULT.add(decla);
+                                                                                                 :}
+                       | valor_id:a pto creardesplegable parena LISTA_PARAMETROS:b parenc pyc{:
+                                                                                                    RESULT=new LinkedList<>();
+                                                                                                    Declaracion_UI decla=new Declaracion_UI(Type.PrimitiveType.DESPLEGABLE,b);
+                                                                                                    decla.setId_padre(a.toString());
+                                                                                                    RESULT.add(decla);
+                                                                                                 :}; 
+
+
+
+
+
+
+
+
+
+
+
+EXPRESION_UI::= crearventana:a parena LISTA_PARAMETRO:b parenc{:
+                                                                RESULT=new Declaracion_UI(Type.PrimitiveType.VENTANA,b);
+                                                             :}
+              | valor_id:a pto crearcontenedor parena LISTA_PARAMETRO:b parenc{:
+                                                                                    RESULT=new Declaracion_UI(Type.PrimitiveType.CONTENEDOR,b);
+                                                                                    RESULT.setId_padre(a.toString());
+                                                                                :}
+              | valor_id:a pto crearboton parena LISTA_PARAMETRO:b parenc{:
+                                                                            RESULT=new Declaracion_UI(Type.PrimitiveType.BOTON,b);
+                                                                            RESULT.setId_padre(a.toString());
+                                                                         :};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ELEMENTO_PATH::= valor_path
@@ -517,7 +602,20 @@ LISTA_PARAMETRO::= LISTA_PARAMETRO:a coma EXPRESION:b{:
                   | EXPRESION:a{:
                                 RESULT=new LinkedList<>();
                                 RESULT.add(a);
+                               :}
+                  | LISTA_PARAMETRO:a coma corchea LISTADO_NUEVOS:b corchec{:
+                                                                            RESULT=a;
+                                                                            RESULT.add(new Aritmetica(b.toString(),Type.PrimitiveType.STRING));
+                                                                          :};
+LISTADO_NUEVOS::= {:RESULT="";:}
+                | LISTADO_NUEVO:a{:RESULT=a;:};
+
+
+
+LISTADO_NUEVO::= LISTADO_NUEVO:a coma valor_cadena:b{:
+                                                        RESULT=a;
+                                                        RESULT+=","+b.toString();
+                                                    :}
+               | valor_cadena:a{:
+                                RESULT=a.toString();
                                :};
-
-
-

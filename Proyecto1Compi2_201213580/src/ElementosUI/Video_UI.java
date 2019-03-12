@@ -5,10 +5,17 @@
  */
 package ElementosUI;
 
+import ArbolAST.NodoAST;
+
 /**
  *
  * @author anton
  */
-public class Video_UI {
+public class Video_UI implements NodoAST{
+
+    @Override
+    public int getLine() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

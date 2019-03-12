@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package ElementosUI;
+import ArbolAST.NodoAST;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.io.File;
@@ -23,7 +24,7 @@ import javax.swing.JPanel;
  *
  * @author anton
  */
-public class Ventana extends JPanel{
+public class Ventana extends JPanel implements NodoAST{
     public static String nombre;
     public static String ruta;
     public static String x;
@@ -50,7 +51,7 @@ public class Ventana extends JPanel{
      public void asignarElementos(){
         
         try {
-            setBounds(Integer.parseInt(x),Integer.parseInt(y),Integer.parseInt(alto),Integer.parseInt(ancho));
+            setBounds(Integer.parseInt(x),Integer.parseInt(y),Integer.parseInt(ancho),Integer.parseInt(alto));
         } catch (Exception e) {
             System.out.println("" + e);
         }
@@ -74,5 +75,10 @@ public class Ventana extends JPanel{
             } catch (Exception ex) {
                 Logger.getLogger(Ventana.class.getName()).log(Level.SEVERE, null, ex);
             }
+    }
+
+    @Override
+    public int getLine() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

@@ -5,42 +5,48 @@
  */
 package ElementosUI;
 
-import ArbolAST.NodoAST;
+import ArbolAST.Expresiones.operacion.Aritmetica;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
-import javax.swing.JLabel;
+import javax.swing.BorderFactory;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 /**
  *
  * @author anton
  */
-public class Texto_UI extends JLabel implements NodoAST{
-    public static String nombre;
-    public static String x;
-    public static String y;
-    public static String fuente;
-    public static String tam;
-    public static String color;
-    public static String negrita;
-    public static String cursiva;
-    public static String valor;
-    public Texto_UI(String nombre,String x,String y,String fuente,String tam,String color,String negrita,String cursiva,String valor){
-        this.nombre=nombre;
-        this.x=x;
-        this.y=y;
+public class Caja_UI extends JTextField{
+    String alto;
+    String ancho;
+    String fuente;
+    String tam;
+    String color;
+    String x;
+    String y;
+    String negrita;
+    String cursiva;
+    String defecto;
+    String nombre;
+    public Caja_UI(String alto,String ancho,String fuente,String tam,String color,String x,String y,String negrita,String cursiva,String defecto,String nombre){
+        this.alto=alto;
+        this.ancho=ancho;
         this.fuente=fuente;
         this.tam=tam;
         this.color=color;
+        this.x=x;
+        this.y=y;
         this.negrita=negrita;
         this.cursiva=cursiva;
-        this.valor=valor;
+        this.defecto=defecto;
+        this.nombre=nombre;
         asignarValores();
     }
-    
     public void asignarValores(){
         try{
             setName(this.nombre);
-            setBounds(Integer.parseInt(this.x),Integer.parseInt(this.y),1000,100);
+            setBounds(Integer.parseInt(this.x), Integer.parseInt(this.y),Integer.parseInt(this.ancho),Integer.parseInt(this.alto));
             if(this.negrita.equals("true")&&this.cursiva.equals("true")){
                 Font font=new Font(this.fuente, Font.ITALIC+Font.BOLD,Integer.parseInt(this.tam));
                 setFont(font);
@@ -54,16 +60,13 @@ public class Texto_UI extends JLabel implements NodoAST{
                 Font font=new Font(this.fuente, Font.PLAIN,Integer.parseInt(this.tam));
                 setFont(font);
             }
-            setText(this.valor);
+            this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+            setText(this.defecto);
             Color col=Color.decode(this.color.toString());
             setForeground(col);
         }catch(Exception e){
-            System.out.println("Ocurrio un error al momento de crear el texto "+this.nombre);
+            System.out.println("OCURRIO UN ERROR AL MOMENTO DE CARGAR LOS VALORES DE LA CAJA_UI");
         }
-    }
-
-    @Override
-    public int getLine() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    
     }
 }

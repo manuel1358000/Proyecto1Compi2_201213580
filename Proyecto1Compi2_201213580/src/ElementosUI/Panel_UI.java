@@ -5,12 +5,14 @@
  */
 package ElementosUI;
 
+import ArbolAST.NodoAST;
 import static ElementosUI.Ventana_UI.id;
 import java.awt.Color;
 import java.awt.Component;
 import java.util.LinkedList;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
@@ -19,7 +21,7 @@ import javax.swing.border.TitledBorder;
  *
  * @author anton
  */
-public class Panel_UI extends JPanel{
+public class Panel_UI extends JPanel implements NodoAST {
     public static LinkedList<Component>lista_componentes;
     public String id;
     public String x;
@@ -44,8 +46,8 @@ public class Panel_UI extends JPanel{
     
     public void asignarElementos(){
         try{
-            setBounds(Integer.parseInt(this.x),Integer.parseInt(this.y),Integer.parseInt(this.alto),Integer.parseInt(this.ancho));
-            Color col=Color.decode(this.color.toString());
+            setBounds(Integer.parseInt(this.x),Integer.parseInt(this.y),Integer.parseInt(this.ancho),Integer.parseInt(this.alto));
+            Color col=Color.decode(this.color.toString().replaceAll("\"",""));
             this.setBackground(col);
             if(this.borde.equals("verdadero")){
                this.setBorder(BorderFactory.createTitledBorder("Contenedor "+this.id));
@@ -121,5 +123,10 @@ public class Panel_UI extends JPanel{
 
     public void setBorde(String borde) {
         this.borde = borde;
+    }
+
+    @Override
+    public int getLine() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

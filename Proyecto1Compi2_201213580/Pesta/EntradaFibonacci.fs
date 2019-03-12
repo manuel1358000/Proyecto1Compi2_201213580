@@ -4,7 +4,9 @@ funcion VerFibonacci(var num){
 funcion fibonaci(var n){
     retornar (n==1 || n==2) ? 1 : fibonaci(n-1) + fibonaci(n-2);
 } 
-verfibonacci(10);
+verfibonacci(25);
+
+
 
 
 

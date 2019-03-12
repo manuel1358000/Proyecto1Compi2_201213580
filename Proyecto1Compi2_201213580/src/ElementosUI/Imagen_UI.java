@@ -5,6 +5,7 @@
  */
 package ElementosUI;
 
+import ArbolAST.NodoAST;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.net.URL;
@@ -15,7 +16,7 @@ import javax.swing.JLabel;
  *
  * @author anton
  */
-public class Imagen_UI extends JLabel{
+public class Imagen_UI extends JLabel implements NodoAST{
     public static String nombre;
     public static String ruta;
     public static String x;
@@ -36,11 +37,16 @@ public class Imagen_UI extends JLabel{
     public void asignarElementos(){
         try{
             setName(this.nombre);
-            setBounds(Integer.parseInt(this.x),Integer.parseInt(this.y),Integer.parseInt(this.alto),Integer.parseInt(this.ancho));
+            setBounds(Integer.parseInt(this.x),Integer.parseInt(this.y),Integer.parseInt(this.ancho),Integer.parseInt(this.alto));
             ImageIcon image = new ImageIcon(proyecto1compi2_201213580.Proyecto1Compi2_201213580.ruta_proyecto+this.ruta);  
             setIcon(image);
         }catch(Exception e){
             System.out.println("Ocurrio un error al momento de crear la imagen "+nombre);
         }
+    }
+
+    @Override
+    public int getLine() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

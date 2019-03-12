@@ -46,14 +46,25 @@ public class Declaracion implements Instruccion {
                 
                 
                 if(valor!=null){
+                    Simbolo aux=(Simbolo)entorno.Obtener(id);
                     Simbolo simbolo=new Simbolo(false,false, (Type.PrimitiveType) tipo_v,id,null,valor);
-                    entorno.Agregar(id, simbolo);
+                    
+                    if(aux==null){
+                        entorno.Agregar(id, simbolo);
+                    }else{
+                        System.out.println("ERROR SEMANTICO: YA EXISTE UNA VARIABLE DECLARADA CON EL NOMBRE "+id);
+                    }
                 }else{
                     System.out.println("Error Semantico: Error de tipos no se puede operar el tipo de la declaracion "+id + " Linea: "+line);
                 }
             }else{
                 Simbolo simbolo=new Simbolo(false,false,Type.PrimitiveType.NULL,id,null,null);
-                entorno.Agregar(id,simbolo);
+                Simbolo aux=(Simbolo)entorno.Obtener(id);
+                if(aux==null){
+                    entorno.Agregar(id, simbolo);
+                }else{
+                    System.out.println("ERROR SEMANTICO: YA EXISTE UNA VARIABLE DECLARADA CON EL NOMBRE "+id);
+                }
             }
             
         }catch(Exception e){

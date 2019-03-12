@@ -38,7 +38,14 @@ public class Declaracion_Arreglo extends Declaracion implements Instruccion{
         }
         LinkedList<Integer>dimen=new LinkedList<>();
         dimen.add(lista.size());
+        
         Simbolo simbolo=new Simbolo(false,false,Type.PrimitiveType.ARREGLO,this.id,new LinkedList<>(),lista);
+        Simbolo aux=(Simbolo)entorno.Obtener(id);
+        if(aux==null){
+            entorno.Agregar(id, simbolo);
+        }else{
+            System.out.println("ERROR SEMANTICO: YA EXISTE UNA VARIABLE DECLARADA CON EL NOMBRE "+id);
+        }
         entorno.Agregar(id, simbolo);
         return null;
     }

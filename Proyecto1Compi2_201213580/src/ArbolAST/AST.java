@@ -15,6 +15,7 @@ import ArbolAST.Instrucciones.Asignacion;
 import ArbolAST.Instrucciones.AsignacionArreglo;
 import ArbolAST.Instrucciones.Declaracion;
 import ArbolAST.Instrucciones.Declaracion_Arreglo;
+import ArbolAST.Instrucciones.Declaracion_UI;
 import ArbolAST.Instrucciones.Detener;
 import ArbolAST.Instrucciones.Funcion;
 import ArbolAST.Instrucciones.Funciones_Arreglos;
@@ -95,6 +96,10 @@ public class AST {
                     //aqui vamos a hacer la ejecucion de todo
                     Funciones_Arreglos funciones=(Funciones_Arreglos)node;
                     funciones.getValue(global);
+                }else if(node instanceof Declaracion_UI){
+                    Declaracion_UI decla_ui=(Declaracion_UI)node;
+                    Object respuesta=decla_ui.getValue(global);
+                    Type.PrimitiveType tipo=decla_ui.getTipo();
                 }else{
                     System.out.println("INSTRUCCION RARA");
                 }

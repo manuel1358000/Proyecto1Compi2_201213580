@@ -3,11 +3,7 @@ import java.util.LinkedList;
 import java_cup.runtime.*;
 %%
 %{
-public boolean advance() throws java.io.IOException {
-  value = new String("");
-  token = yylex();
-  return (token != YYEOF);
-}
+
 %}
 //victor con don alejandro catalan
 %public
@@ -90,6 +86,14 @@ PUNTO=["."]
 <YYINITIAL> "sino" { return new Symbol(simbolofs.sino, yyline, yycolumn,yytext());}
 <YYINITIAL> "funcion" { return new Symbol(simbolofs.funcion, yyline, yycolumn,yytext());}
 
+<YYINITIAL> "crearventana" { return new Symbol(simbolofs.crearventana, yyline, yycolumn,yytext());}
+<YYINITIAL> "crearcontenedor" { return new Symbol(simbolofs.crearcontenedor, yyline, yycolumn,yytext());}
+<YYINITIAL> "crearboton" { return new Symbol(simbolofs.crearboton, yyline, yycolumn,yytext());}
+<YYINITIAL> "creartexto" { return new Symbol(simbolofs.creartexto, yyline, yycolumn,yytext());}
+<YYINITIAL> "crearareatexto" { return new Symbol(simbolofs.crearareatexto, yyline, yycolumn,yytext());}
+<YYINITIAL> "crearcajatexto" { return new Symbol(simbolofs.crearcajatexto, yyline, yycolumn,yytext());}
+<YYINITIAL> "crearcontrolnumerico" { return new Symbol(simbolofs.crearcontrolnumerico, yyline, yycolumn,yytext());}
+<YYINITIAL> "creardesplegable" { return new Symbol(simbolofs.creardesplegable, yyline, yycolumn,yytext());}
 
 
 

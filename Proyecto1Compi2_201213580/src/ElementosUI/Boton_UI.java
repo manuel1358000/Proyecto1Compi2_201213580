@@ -5,9 +5,14 @@
  */
 package ElementosUI;
 
+import ArbolAST.AST;
+import ArbolAST.Expresiones.Llamada_Funcion;
+import ArbolAST.NodoAST;
 import static ElementosUI.Ventana_UI.id;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.LinkedList;
 import javax.swing.JButton;
 
@@ -15,8 +20,8 @@ import javax.swing.JButton;
  *
  * @author anton
  */
-public class Boton_UI extends JButton{
-    public static String nombre;
+public class Boton_UI extends JButton implements NodoAST{
+    public static String id;
     public static String fuente;
     public static String tam;
     public static String color;
@@ -26,14 +31,16 @@ public class Boton_UI extends JButton{
     public static String alto;
     public static String ancho;
     public static LinkedList<Component> lista_textos;
-    
-    public Boton_UI(String nombre,String fuente,String tam,String color,String x,String y,String valor,String alto,String ancho){
-        this.nombre=nombre;//
+    public static String id_superior;
+    public static Llamada_Funcion referencia;
+    public Boton_UI(String id,String fuente,String tam,String color,String x,String y,Llamada_Funcion referencia,String valor,String alto,String ancho){
+        this.id=id;//
         this.fuente=fuente;
         this.tam=tam;
         this.color=color;
         this.x=x;//
         this.y=y;//
+        this.referencia=referencia;
         this.valor=valor;//
         this.alto=alto;//
         this.ancho=ancho;//
@@ -41,11 +48,17 @@ public class Boton_UI extends JButton{
         asignarElementos();
     }
     public void asignarElementos(){
-        setNombre(this.nombre);
-        setBounds(Integer.parseInt(this.x),Integer.parseInt(this.y),Integer.parseInt(this.alto),Integer.parseInt(this.ancho));
+        setNombre(this.id);
+        setBounds(Integer.parseInt(this.x),Integer.parseInt(this.y),Integer.parseInt(this.ancho),Integer.parseInt(this.alto));
         setText(this.valor);
         Font font=new Font(this.fuente, Font.PLAIN,Integer.parseInt(this.tam));
         setFont(font);
+        this.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("ACA LE TENGO QUE HACER LA LLAMADA A LA REFERENCIA QUE TIENE QUE HACER EL BOTON");
+            }
+        });
     }
     public void agregarComponente(Component componente){
         try{
@@ -56,11 +69,11 @@ public class Boton_UI extends JButton{
         }
     }
     public static String getNombre() {
-        return nombre;
+        return id;
     }
 
     public static void setNombre(String nombre) {
-        Boton_UI.nombre = nombre;
+        Boton_UI.id = nombre;
     }
 
     public static String getFuente() {
@@ -118,6 +131,11 @@ public class Boton_UI extends JButton{
 
     public static void setAncho(String ancho) {
         Boton_UI.ancho = ancho;
+    }
+
+    @Override
+    public int getLine() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

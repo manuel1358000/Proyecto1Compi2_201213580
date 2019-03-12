@@ -21,17 +21,19 @@ public class Type {
         OBJECT,
         ID,
         FUNCION,
+        NULL,
+        ARREGLO,
         VENTANA,
+        CONTENEDOR,
         BOTON,
-        PANEL,
         TEXTO,
         CAJATEXTO,
         AREATEXTO,
         VIDEO,
         AUDIO,
         IMAGEN,
-        NULL,
-        ARREGLO
+        DESPLEGABLE,
+        NUMERICO
     }    
     public boolean esNumero(){
         return primitive_type==Type.PrimitiveType.INTEGER;

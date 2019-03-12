@@ -140,7 +140,6 @@ public class Aritmetica extends Operacion implements Expresion{
                         }else if(tipo==Type.PrimitiveType.INTEGER){
                             this.type=tipo;
                             respuesta=Double.valueOf(val1.toString())+Double.valueOf(val2.toString());
-                            System.out.println("Que lleva respuesta");
                         }else{
                             this.type=tipo;
                             respuesta=Double.valueOf(val1.toString())+Double.valueOf(val2.toString());

@@ -13,6 +13,7 @@ import Analizadores.GramaticaGXML.sintacticoGXML;
 import ArbolAST.AST;
 import ArbolAST.Componente.EjecutarGXML;
 import ArbolAST.Componente.NodoGXML;
+import ElementosUI.Reproductor;
 import Elementos_Interfaz.Pesta;
 import java.awt.Component;
 import java.io.BufferedReader;
@@ -65,6 +66,7 @@ public class Principal extends javax.swing.JFrame {
 
         jButton1 = new javax.swing.JButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
+        jButton2 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -82,6 +84,13 @@ public class Principal extends javax.swing.JFrame {
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("jButton2");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
             }
         });
 
@@ -149,7 +158,9 @@ public class Principal extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(344, 344, 344)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(388, Short.MAX_VALUE))
+                .addGap(141, 141, 141)
+                .addComponent(jButton2)
+                .addContainerGap(174, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -157,7 +168,9 @@ public class Principal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 413, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2))
                 .addContainerGap(21, Short.MAX_VALUE))
         );
 
@@ -401,6 +414,13 @@ public class Principal extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Ocurrio un error " +e.toString());
         }
     }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        Reproductor repro=new Reproductor();
+        repro.setRuta("C:\\Users\\anton\\Desktop\\U\\PrimerSemestre2019\\Laboratorio\\Proyecto1Compi2_201213580\\Proyecto1Compi2_201213580\\Ackerman.mp3");
+        repro.iniciarReproduccion();
+    }//GEN-LAST:event_jButton2ActionPerformed
     public String LeerArchivo(String path){
         String respuesta="";
         File archivo = null;
@@ -538,6 +558,7 @@ public class Principal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu4;

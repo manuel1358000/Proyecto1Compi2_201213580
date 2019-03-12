@@ -136,10 +136,11 @@ public class EjecutarGXML {
                     elementos+=alto+",";
                 }
                 if(ancho.equals("vacio")){
-                    elementos+="100";
+                    elementos+="100,";
                 }else{
                     elementos+=alto+",";
                 }
+                elementos+="\""+id+"\"";
                 pendiente+=elementos+");\n";
                 respuesta+=pendiente;
                 VerificarId(raiz.nodos);
@@ -152,14 +153,14 @@ public class EjecutarGXML {
                     if(accioninicial.equals("vacio")){
                         accioninicial="";
                     }
-                    respuesta+="\nventana_"+id+"=alcargar("+accioninicial+");\n";
+                    respuesta+="\nventana_"+id+".alcargar("+accioninicial+");\n";
                 }
                 if(accionfinal.equals("")){
                 }else{
                     if(accionfinal.equals("vacio")){
                         accionfinal="";
                     }
-                    respuesta+="\nventana_"+id+"=alcerrar("+accionfinal+");\n";
+                    respuesta+="\nventana_"+id+".alcerrar("+accionfinal+");\n";
                 }
             }catch(Exception e){
                 JOptionPane.showMessageDialog(null,"ERROR EJECUCION GXML: VENTANA");
@@ -413,15 +414,15 @@ public class EjecutarGXML {
                             pendiente+=cursiva+",";
                         }
                         if(valor.equals("")){
-                            pendiente+="\"\"";
+                            pendiente+="\"\",";
                         }else{
                             pendiente+="\""+valor+"\",";
                         }
                         if(nombre.equals("vacio")){
                             System.out.println("El controlador no tiene nombre");
-                            pendiente+=",\"\"";
+                            pendiente+="\"\"";
                         }else{
-                            pendiente+=",\""+nombre+"\"";
+                            pendiente+="\""+nombre+"\"";
                         }
                         pendiente+=");\n";
                         respuesta+=pendiente;
@@ -471,9 +472,9 @@ public class EjecutarGXML {
                         }
                         if(nombre.equals("vacio")){
                             System.out.println("El controlador no tiene nombre");
-                            pendiente+=",\"\"";
+                            pendiente+="\"\"";
                         }else{
-                            pendiente+=",\""+nombre+"\"";
+                            pendiente+="\""+nombre+"\"";
                         }     
                         pendiente+=");\n";
                         respuesta+=pendiente;
@@ -499,6 +500,7 @@ public class EjecutarGXML {
                         }else{
                             pendiente+=ancho+",";
                         }
+                        pendiente+=expresion+",";
                         if(x.equals("vacio")){
                             pendiente+="0,";
                         }else{
@@ -509,7 +511,7 @@ public class EjecutarGXML {
                         }else{
                             pendiente+=y+",";
                         }
-                        pendiente+=expresion+",";
+                        
                         for(int i=0;i<raiz.nodos.size();i++){   
                             if(raiz.nodos.get(i).tipo_etiqueta.toLowerCase().equals("defecto")){
                                 valor+=Ejecutar(raiz.nodos.get(i),"");
@@ -517,9 +519,9 @@ public class EjecutarGXML {
                         }
                         pendiente+="\""+valor+"\",";
                         if(nombre.equals("vacio")){
-                            pendiente+=",\"\"";
+                            pendiente+="\"\"";
                         }else{
-                            pendiente+=",\""+nombre+"\"";
+                            pendiente+="\""+nombre+"\"";
                         }
                         pendiente+=");\n";
                         respuesta+=pendiente;

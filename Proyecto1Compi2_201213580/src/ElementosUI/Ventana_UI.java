@@ -5,6 +5,8 @@
  */
 package ElementosUI;
 
+import ArbolAST.Entorno.Simbolo;
+import ArbolAST.NodoAST;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
@@ -15,32 +17,33 @@ import javax.swing.JFrame;
  *
  * @author anton
  */
-public class Ventana_UI extends JFrame{
+public class Ventana_UI extends JFrame implements NodoAST{
     //aqui se van a almacenar los paneles
     public static LinkedList<Component> lista_paneles;
     public static String id;
     public static String color;
     public static String alto;
     public static String ancho;
-    
-    public Ventana_UI(String id,String color,String alto,String ancho){
+    public static String id_real;
+    public Ventana_UI(String id,String color,String alto,String ancho,String id_real){
         this.id=id;
         this.color=color;        
         this.alto=alto;
         this.ancho=ancho;
+        this.id_real=id_real;
         this.lista_paneles=new LinkedList<>();
         AsignarElementos();
     }    
     public void AsignarElementos(){
         try{
-            setBounds(0,0,Integer.parseInt(this.alto),Integer.parseInt(this.ancho));
-            Color col=Color.decode(this.color.toString());
+            setBounds(0,0,Integer.parseInt(this.ancho),Integer.parseInt(this.alto));
+            Color col=Color.decode(this.color.toString().replaceAll("\"",""));
             this.getContentPane().setBackground(col);
             this.setLayout(null);
             this.setVisible(true);
             setName(this.id);
         }catch(Exception e){
-            System.out.println("Ocurrio un error en la creacion de la ventana con id"+ this.id);
+            System.out.println("Ocurrio un error en la creacion de la ventana con id "+ this.id);
         }
         
     }
@@ -91,6 +94,11 @@ public class Ventana_UI extends JFrame{
 
     public void setAncho(String ancho) {
         this.ancho = ancho;
+    }
+
+    @Override
+    public int getLine() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }
