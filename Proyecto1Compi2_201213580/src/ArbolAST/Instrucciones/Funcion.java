@@ -114,6 +114,16 @@ public class Funcion implements Instruccion{
                     //aqui vamos a hacer la ejecucion de todo
                     Funciones_Arreglos funciones=(Funciones_Arreglos)nodo;
                     funciones.getValue(local);
+                }else if(nodo instanceof Declaracion_UI){
+                    Declaracion_UI decla_ui=(Declaracion_UI)nodo;
+                    decla_ui.getValue(local);
+                    decla_ui.getTipo();
+                }else if(nodo instanceof Eventos_Botones){
+                    Eventos_Botones eve_boton=(Eventos_Botones)nodo;
+                    eve_boton.execute(local);
+                }else if(nodo instanceof Eventos_Ventanas){
+                    Eventos_Ventanas eve_ventana=(Eventos_Ventanas)nodo;
+                    eve_ventana.execute(local);
                 }else{
                     System.out.println("ERROR SEMANTICO: ESTA OPERACION ES INVALIDA DENTRO DE UNA FUNCION");
                 }

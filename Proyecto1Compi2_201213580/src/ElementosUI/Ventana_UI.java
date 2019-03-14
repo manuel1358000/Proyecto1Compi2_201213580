@@ -5,35 +5,66 @@
  */
 package ElementosUI;
 
+import ArbolAST.Entorno.Entorno;
 import ArbolAST.Entorno.Simbolo;
+import ArbolAST.Expresiones.Expresion;
 import ArbolAST.NodoAST;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.LinkedList;
 import javax.swing.JFrame;
+import javax.swing.JScrollPane;
 
 /**
  *
  * @author anton
  */
-public class Ventana_UI extends JFrame implements NodoAST{
+public class Ventana_UI extends JFrame implements Expresion{
     //aqui se van a almacenar los paneles
-    public static LinkedList<Component> lista_paneles;
-    public static String id;
-    public static String color;
-    public static String alto;
-    public static String ancho;
-    public static String id_real;
+    LinkedList<Expresion> lista_cerrar;
+    LinkedList<Component> lista_paneles;
+    String id;
+    String color;
+    String alto;
+    String ancho;
+    String id_real;
     public Ventana_UI(String id,String color,String alto,String ancho,String id_real){
         this.id=id;
         this.color=color;        
         this.alto=alto;
         this.ancho=ancho;
         this.id_real=id_real;
+        this.lista_cerrar=new LinkedList<>();
         this.lista_paneles=new LinkedList<>();
         AsignarElementos();
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                //Hacer lo que yo quiero
+                System.out.println("Estoy cerrando "+lista_cerrar.size());
+            }
+        });
     }    
+
+    public LinkedList<Expresion> getLista_cerrar() {
+        return lista_cerrar;
+    }
+
+    public void setLista_cerrar(LinkedList<Expresion> lista_cerrar) {
+        this.lista_cerrar = lista_cerrar;
+    }
+
+    public String getId_real() {
+        return id_real;
+    }
+
+    public void setId_real(String id_real) {
+        this.id_real = id_real;
+    }
+    
     public void AsignarElementos(){
         try{
             setBounds(0,0,Integer.parseInt(this.ancho),Integer.parseInt(this.alto));
@@ -47,21 +78,33 @@ public class Ventana_UI extends JFrame implements NodoAST{
         }
         
     }
-    public void Agregar_Panel(Component componente){
+    public void Agregar_Panel_Normal(Component componente){
         try{
             this.lista_paneles.add(componente);
+        }catch(Exception e){
+            System.out.println("Ocurrio un error al agregar un componente a la ventana "+id);
+        }
+    }
+    
+    
+    public void Agregar_Panel_Scroll(Component componente){
+        try{
             this.add(componente);
             this.setLocationRelativeTo(componente);
         }catch(Exception e){
             System.out.println("Ocurrio un error al agregar un componente a la ventana "+id);
         }
     }
-    public static LinkedList<Component> getLista_paneles() {
+    public void agregarEventos(Expresion llamada){
+        this.lista_cerrar.add(llamada);
+    
+    }
+    public LinkedList<Component> getLista_paneles() {
         return lista_paneles;
     }
 
-    public static void setLista_paneles(LinkedList<Component> lista_paneles) {
-        Ventana_UI.lista_paneles = lista_paneles;
+    public void setLista_paneles(LinkedList<Component> lista_paneles) {
+        this.lista_paneles = lista_paneles;
     }
 
     public String getId() {
@@ -98,6 +141,16 @@ public class Ventana_UI extends JFrame implements NodoAST{
 
     @Override
     public int getLine() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object getValue(Entorno entorno) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ArbolAST.Entorno.Type.PrimitiveType getType(Entorno entorno) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

@@ -23,6 +23,7 @@ public class Numerico_UI extends JSpinner{
     String y;
     String defecto;
     String nombre;
+    String id_padre;
     public Numerico_UI(String alto,String ancho,String maximo,String minimo,String x,String y,String defecto,String nombre){
         this.alto=alto;
         this.ancho=ancho;
@@ -32,12 +33,21 @@ public class Numerico_UI extends JSpinner{
         this.y=y;
         this.defecto=defecto;
         this.nombre=nombre;
+        this.id_padre="";
         asignarValores();
+    }
+
+    public String getId_padre() {
+        return id_padre;
+    }
+
+    public void setId_padre(String id_padre) {
+        this.id_padre = id_padre;
     }
     
     public void asignarValores(){
         setBounds(Integer.parseInt(this.x),Integer.parseInt(this.y),Integer.parseInt(this.ancho),Integer.parseInt(this.alto));
-        setName(nombre+defecto);
+        setName(nombre);
         try{
             SpinnerModel model=new SpinnerNumberModel(Integer.parseInt(this.defecto),Integer.parseInt(this.minimo),Integer.parseInt(this.maximo),1);
             setModel(model);

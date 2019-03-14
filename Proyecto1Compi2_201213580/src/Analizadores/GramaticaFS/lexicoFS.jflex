@@ -1,6 +1,7 @@
 package Analizadores.GramaticaFS;
 import java.util.LinkedList;
 import java_cup.runtime.*;
+import Auxiliares.Errores;
 %%
 %{
 
@@ -94,6 +95,11 @@ PUNTO=["."]
 <YYINITIAL> "crearcajatexto" { return new Symbol(simbolofs.crearcajatexto, yyline, yycolumn,yytext());}
 <YYINITIAL> "crearcontrolnumerico" { return new Symbol(simbolofs.crearcontrolnumerico, yyline, yycolumn,yytext());}
 <YYINITIAL> "creardesplegable" { return new Symbol(simbolofs.creardesplegable, yyline, yycolumn,yytext());}
+<YYINITIAL> "crearimagen" { return new Symbol(simbolofs.crearimagen, yyline, yycolumn,yytext());}
+<YYINITIAL> "alclic" { return new Symbol(simbolofs.alclic, yyline, yycolumn,yytext());}
+<YYINITIAL> "alcargar" { return new Symbol(simbolofs.alcargar, yyline, yycolumn,yytext());}
+<YYINITIAL> "alcerrar" { return new Symbol(simbolofs.alcerrar, yyline, yycolumn,yytext());}
+<YYINITIAL> "creararraydesdearchivo" { return new Symbol(simbolofs.arraydesdearchivo, yyline, yycolumn,yytext());}
 
 
 
@@ -118,4 +124,8 @@ PUNTO=["."]
 [ \t\r\n\f EOF]
 { /* ignore white space. */ }
 .   {
-    System.out.println("Linea: " + (yyline+1) + " Columna: " + (yycolumn+1) + " - Error Lexico en: " + yytext());}
+        System.out.println("Linea: " + (yyline+1) + " Columna: " + (yycolumn+1) + " - Error Lexico en: " + yytext());
+        //id,archivo,tipo,descripcion,acciones,linea,columna,aux
+         Errores errores=new Errores(yytext(),"lexicoFS","ERROR LEXICO","EL SIMBOLO NO PERTENECE AL LENGUAJE","NO SE REALIZARON ACCIONES",String.valueOf(yyline+1),String.valueOf(yycolumn+1),"");
+         proyecto1compi2_201213580.Proyecto1Compi2_201213580.errores_lexicos.add(errores);
+    }

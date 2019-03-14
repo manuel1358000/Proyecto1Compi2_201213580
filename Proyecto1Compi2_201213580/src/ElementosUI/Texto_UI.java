@@ -24,6 +24,7 @@ public class Texto_UI extends JLabel implements NodoAST{
     public static String negrita;
     public static String cursiva;
     public static String valor;
+    public static String id_padre;
     public Texto_UI(String nombre,String x,String y,String fuente,String tam,String color,String negrita,String cursiva,String valor){
         this.nombre=nombre;
         this.x=x;
@@ -34,7 +35,16 @@ public class Texto_UI extends JLabel implements NodoAST{
         this.negrita=negrita;
         this.cursiva=cursiva;
         this.valor=valor;
+        this.id_padre="";
         asignarValores();
+    }
+
+    public static String getId_padre() {
+        return id_padre;
+    }
+
+    public static void setId_padre(String id_padre) {
+        Texto_UI.id_padre = id_padre;
     }
     
     public void asignarValores(){

@@ -201,17 +201,31 @@ public class Relacional extends Operacion implements Expresion{
                 }else if(tipo==Type.PrimitiveType.BOOLEAN){
                     try{
                         this.type=Type.PrimitiveType.BOOLEAN;
-                        String valor1=val1.toString();
-                        String valor2=val2.toString();
-                        boolean va1=false;
-                        boolean va2=false;
-                        if(valor1.equals("true")){
-                            va1=true;
+                        String valor1;
+                        String valor2;
+                        if(val1==null){
+                            valor1="nulo";
+                        }else{
+                            valor1=val1.toString();
                         }
-                        if(valor2.equals("true")){
-                            va2=true;
+                        if(val2==null){
+                            valor2="nulo";
+                        }else{
+                            valor2=val2.toString();
                         }
-                        respuesta=va1!=va2;
+                        if(valor1.equals("nulo")||valor2.equals("nulo")){
+                            respuesta=!(valor1.equals(valor2));
+                        }else{
+                            boolean va1=false;
+                            boolean va2=false;
+                            if(valor1.equals("true")){
+                                va1=true;
+                            }
+                            if(valor2.equals("true")){
+                                va2=true;
+                            }
+                            respuesta=va1!=va2;
+                        }
                     }catch(Exception e){
                         System.out.println("ERROR SEMANTICOS AL OPERAR IGUALIGUAL CON EL TIPO BOOLEAN");
                     }
@@ -248,17 +262,31 @@ public class Relacional extends Operacion implements Expresion{
                 }else if(tipo==Type.PrimitiveType.BOOLEAN){
                     try{
                         this.type=Type.PrimitiveType.BOOLEAN;
-                        String valor1=val1.toString();
-                        String valor2=val2.toString();
-                        boolean va1=false;
-                        boolean va2=false;
-                        if(valor1.equals("true")){
-                            va1=true;
+                        String valor1;
+                        String valor2;
+                        if(val1==null){
+                            valor1="nulo";
+                        }else{
+                            valor1=val1.toString();
                         }
-                        if(valor2.equals("true")){
-                            va2=true;
+                        if(val2==null){
+                            valor2="nulo";
+                        }else{
+                            valor2=val2.toString();
                         }
-                        respuesta=va1==va2;
+                        if(valor1.equals("nulo")||valor2.equals("nulo")){
+                            respuesta=valor1.equals(valor2);
+                        }else{
+                            boolean va1=false;
+                            boolean va2=false;
+                            if(valor1.equals("true")){
+                                va1=true;
+                            }
+                            if(valor2.equals("true")){
+                                va2=true;
+                            }
+                            respuesta=va1==va2;
+                        }
                     }catch(Exception e){
                         System.out.println("ERROR SEMANTICOS AL OPERAR IGUALIGUAL CON EL TIPO BOOLEAN");
                     }
@@ -307,7 +335,9 @@ public class Relacional extends Operacion implements Expresion{
     public Type.PrimitiveType GenerarTipo(Type.PrimitiveType primero,Type.PrimitiveType segundo){
         Type.PrimitiveType respuesta=null;
         try{
-            if(primero==Type.PrimitiveType.STRING&&segundo==Type.PrimitiveType.STRING){
+            if(primero==Type.PrimitiveType.NULO||segundo==Type.PrimitiveType.NULO){
+                respuesta=Type.PrimitiveType.BOOLEAN;
+            }else if(primero==Type.PrimitiveType.STRING&&segundo==Type.PrimitiveType.STRING){
                 respuesta=Type.PrimitiveType.STRING;
             }else if((primero==Type.PrimitiveType.INTEGER||primero==Type.PrimitiveType.DOUBLE)&&(segundo==Type.PrimitiveType.INTEGER||segundo==Type.PrimitiveType.DOUBLE)){
                 respuesta=Type.PrimitiveType.DOUBLE;

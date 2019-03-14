@@ -6,8 +6,8 @@ funcion factorial(var n) {
     retornar n == 0 ? 1 : n * factorial(n - 1);
 }
 
-funcion invertir (var n){
-    retornar n < 10 ? n : modulo(n, 10) + invertir (n / 10) * 10;
+funcion invertirNumero (var n){
+    retornar n < 10 ? n : modulo(n, 10) + invertirNumero (n / 10) * 10;
 }
 
 funcion modulo(var n, var p){
@@ -15,7 +15,7 @@ funcion modulo(var n, var p){
 }
 
 funcion sacar_mcd(var a, var b) {
-    retornar b == 0 ? a : sacar_mcd(b, modulo(a , b);
+    retornar b == 0 ? a : sacar_mcd(b, modulo(a , b));
 }
 
 funcion fibonaci(var n){
@@ -31,11 +31,11 @@ funcion VerFactorial(var num){
 }
 
 funcion VerInvertido(var num){
-    Imprimir("El numero invertido de " + num + " es " + invertir(num));
+    Imprimir("El numero invertido de " + num + " es " + invertirNumero(num));
 }
 
 funcion VerMCD(var num, var p){
-    Imprimir("El numero MCD de " + num + "a la " + p " es " + sacar_mcd(num, p));
+    Imprimir("El numero MCD de " + num + "a la " + p + " es " + sacar_mcd(num, p));
 }
 
 funcion VerFibonacci(var num){

@@ -66,7 +66,8 @@ public class Principal extends javax.swing.JFrame {
 
         jButton1 = new javax.swing.JButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        jButton2 = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -76,6 +77,7 @@ public class Principal extends javax.swing.JFrame {
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
+        jMenuItem6 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -87,12 +89,13 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setText("jButton2");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
+        jTextArea1.setEditable(false);
+        jTextArea1.setBackground(new java.awt.Color(0, 0, 0));
+        jTextArea1.setColumns(20);
+        jTextArea1.setFont(new java.awt.Font("Monospaced", 0, 14)); // NOI18N
+        jTextArea1.setForeground(new java.awt.Color(255, 255, 255));
+        jTextArea1.setRows(5);
+        jScrollPane1.setViewportView(jTextArea1);
 
         jMenu1.setText("ARCHIVO");
 
@@ -143,6 +146,15 @@ public class Principal extends javax.swing.JFrame {
         jMenuBar1.add(jMenu2);
 
         jMenu4.setText("ERRORES");
+
+        jMenuItem6.setText("LIMPIAR ERRORES");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItem6);
+
         jMenuBar1.add(jMenu4);
 
         setJMenuBar(jMenuBar1);
@@ -152,15 +164,18 @@ public class Principal extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jTabbedPane1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jTabbedPane1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(344, 344, 344)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 378, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1)))
                 .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(344, 344, 344)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(141, 141, 141)
-                .addComponent(jButton2)
-                .addContainerGap(174, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -168,27 +183,16 @@ public class Principal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 413, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2))
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-//        if(control_ambientes==true){
-//            if((this.jTabbedPane1.getTabCount()-1)==this.jTabbedPane1.getSelectedIndex()){
-//                nueva=new Pesta(listAreas.get(0).getText());
-//                nueva.setContenido(listAreas.get(1).getText());
-//                //x,y,ancho,alto
-//                this.jTabbedPane1.add(nueva,"",this.jTabbedPane1.getTabCount());
-//                this.jTabbedPane1.setSelectedIndex(this.jTabbedPane1.getTabCount()-1);
-//                contador_pesta++;
-//            }
-//        }
         if(contador_pesta>0){
             System.out.println(this.jTabbedPane1.getSelectedIndex());
             Pesta pesta=(Pesta)this.jTabbedPane1.getComponentAt(this.jTabbedPane1.getSelectedIndex());
@@ -237,7 +241,11 @@ public class Principal extends javax.swing.JFrame {
                                     nodoEjecutar.OrdenarPrincipal();
                                     nodoEjecutar.Importaciones(parser.root);
                                     String respuesta=nodoEjecutar.Ejecutar(parser.root,"");
-                                    System.out.println("RESPUESTA \n" + respuesta);
+                                    //System.out.println("RESPUESTA \n" + respuesta);
+                                    String direc=direccion[0].toString()+".fs";
+                                    Escribir_Archivo(respuesta,direc);
+                                    String mensaje="\nCONSOLA>Finalizo el analisis del archivo GXML,\n se creo el nuevo archivo en "+direc;
+                                    Principal.jTextArea1.setText(Principal.jTextArea1.getText()+mensaje);
                                 } catch (Exception ex) {
                                     Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
                                 }
@@ -415,12 +423,12 @@ public class Principal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
         // TODO add your handling code here:
-        Reproductor repro=new Reproductor();
-        repro.setRuta("C:\\Users\\anton\\Desktop\\U\\PrimerSemestre2019\\Laboratorio\\Proyecto1Compi2_201213580\\Proyecto1Compi2_201213580\\Ackerman.mp3");
-        repro.iniciarReproduccion();
-    }//GEN-LAST:event_jButton2ActionPerformed
+        Proyecto1Compi2_201213580.errores_lexicos.clear();
+        Proyecto1Compi2_201213580.errores_sintacticos.clear();
+        Proyecto1Compi2_201213580.errores_semanticos.clear();
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
     public String LeerArchivo(String path){
         String respuesta="";
         File archivo = null;
@@ -558,7 +566,6 @@ public class Principal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu4;
@@ -568,6 +575,9 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
+    public static javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
 }

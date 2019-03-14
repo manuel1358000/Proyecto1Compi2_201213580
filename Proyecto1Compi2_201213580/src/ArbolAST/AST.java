@@ -17,6 +17,8 @@ import ArbolAST.Instrucciones.Declaracion;
 import ArbolAST.Instrucciones.Declaracion_Arreglo;
 import ArbolAST.Instrucciones.Declaracion_UI;
 import ArbolAST.Instrucciones.Detener;
+import ArbolAST.Instrucciones.Eventos_Botones;
+import ArbolAST.Instrucciones.Eventos_Ventanas;
 import ArbolAST.Instrucciones.Funcion;
 import ArbolAST.Instrucciones.Funciones_Arreglos;
 import ArbolAST.Instrucciones.Importar;
@@ -24,7 +26,6 @@ import ArbolAST.Instrucciones.Imprimir;
 import ArbolAST.Instrucciones.Seleccion.If;
 import ArbolAST.Instrucciones.Seleccion.Switch;
 import java.util.LinkedList;
-
 /**
  *
  * @author anton
@@ -100,6 +101,12 @@ public class AST {
                     Declaracion_UI decla_ui=(Declaracion_UI)node;
                     Object respuesta=decla_ui.getValue(global);
                     Type.PrimitiveType tipo=decla_ui.getTipo();
+                }else if(node instanceof Eventos_Botones){
+                    Eventos_Botones eve_boton=(Eventos_Botones)node;
+                    eve_boton.execute(global);
+                }else if(node instanceof Eventos_Ventanas){
+                    Eventos_Ventanas eve_ventana=(Eventos_Ventanas)node;
+                    eve_ventana.execute(global);
                 }else{
                     System.out.println("INSTRUCCION RARA");
                 }
@@ -122,5 +129,4 @@ public class AST {
         }
         return respuesta;
     }
-    
 }

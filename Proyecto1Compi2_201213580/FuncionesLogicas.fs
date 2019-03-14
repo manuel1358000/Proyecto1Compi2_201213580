@@ -8,7 +8,7 @@ funcion Hanoi(var discos, var origen, var auxiliar, var destino) {
     }
 }
 
-var hofstaderFemenina(var n) {
+funcion hofstaderFemenina(var n) {
     si (n < 0) {
         retornar 0;
     } sino {
@@ -16,7 +16,7 @@ var hofstaderFemenina(var n) {
     }
 }
 
-var hofstaderMasculino(var n) {
+funcion hofstaderMasculino(var n) {
     si (n < 0) {
         retornar 0;
     } sino {

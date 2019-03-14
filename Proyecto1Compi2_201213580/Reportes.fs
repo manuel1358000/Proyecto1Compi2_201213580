@@ -1,19 +1,20 @@
 funcion ReporteAritmetico(){
 	var contenido = CrearArrayDesdeArchivo("VentanaAritmetica.gdato");
-	var TodoCorrecto = contenido.filtrar(RevisionAritmetica).Ascendente();
-	Imprimir("Los estudiantes que ganaron la evaluacion aritmetica son:")
-	Imprimir("Verificar que esten ordenados alfabeticamente")
+	var TodoCorrecto = contenido.filtrar(RevisionAritmetica).map(nombresAritmeticos);
+	TodoCorrecto.Ascendente();
+	Imprimir("Los estudiantes que ganaron la evaluacion aritmetica son:");
+	Imprimir("Verificar que esten ordenados alfabeticamente");
 	TodoCorrecto.map(ImprimirGanadores);
-	Imprimir("Verificar que esten ordenados alfabeticamente invertido")
+	Imprimir("Verificar que esten ordenados alfabeticamente invertido");
 	TodoCorrecto.Invertir();
 	TodoCorrecto.map(ImprimirGanadores);
 }
 
 funcion ReporteHistorico(){
 	var contenido = CrearArrayDesdeArchivo("VentanaHistoria.gdato");	
-	var TodoCorrecto = contenido.filtrar(RevisionHistoria);
-	Imprimir("El primer alumno en contestar todo buen fue ")
-	var primero = TodoCorrecto.Buscar(BuscarHistoria);
+	var TodoCorrecto = contenido.filtrar(RevisionHistoria).map(nombresAritmeticos);
+	Imprimir("El primer alumno en contestar todo buen fue ");
+	var primero = contenido.filtrar(RevisionHistoria).Buscar(BuscarHistoria);
 	Imprimir(primero.CTNombre);
     Imprimir("Todos Los estudiantes que ganaron la evaluacion de historia son: (Orden Descendente)");
     TodoCorrecto.Descendente();
@@ -29,7 +30,7 @@ funcion ReporteIngles(){
 funcion ReporteLogico(){
 	var contenido = CrearArrayDesdeArchivo("VentanaLogica.gdato");
 	Imprimir("Imprimiendo nombres de los estudiantes que saben par e impar"); 
-	var concatenacion = contenido.Reduce(EstudiantesParidad);
+	var concatenacion = contenido.map(EstudiantesParidad).Reduce(ObtencionParidad);
 }
 
 funcion RevisionAritmetica(var item){
@@ -44,22 +45,30 @@ funcion BuscarHistoria(var item){
 	retornar item.CDPaisaje1 == "Playa" && item.CDPaisaje2 == "Luna" && item.CDPaisaje3 == "Selva" && item.CDPaisaje4 == "Desierto" && item.CDPaisaje5 == "Oceano";
 }
 
-funcion ImprimirGanadores(item){
-	Imprimir(item.CTNombre);
+funcion ImprimirGanadores(var item){
+	Imprimir(item);
 }
 
-funcion NombreAckerman(item){
+funcion NombreAckerman(var item){
 	retornar item.CTPregunta != "Ackermann";
 }
 
-funcion CalculoAckerman(item){
+funcion CalculoAckerman(var item){
 	retornar item.CAckerman == 16381;
 }
 
-funcion EstudiantesParidad(var total, var item){
+funcion EstudiantesParidad(var item){
 	Si(item.CTPar == "Par" && item.CTImpar == "Impar"){
-		retornar total + item.CTNombre;
+		retornar item.CTNombre + "  ";
 	}sino{
-		retornar total + "";
+		retornar "";
 	}
+}
+
+funcion ObtencionParidad(var concatenado, var item){
+	retornar concatenado + item;
+}
+
+funcion nombresAritmeticos(var item){
+	retornar item.CTNombre;
 }

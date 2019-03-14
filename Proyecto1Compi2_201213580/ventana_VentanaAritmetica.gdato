@@ -1,0 +1,55 @@
+<lista>
+
+
+
+
+<principal>
+<ctnombre>"ingrese aqui su nombre "</ctnombre>
+<cpotencia>"8"</cpotencia>
+<cfactorial>"4"</cfactorial>
+<cinvertido>"5"</cinvertido>
+<cmcd>"7"</cmcd>
+<cfibonacci>"4"</cfibonacci>
+</principal>
+
+
+<principal>
+<ctnombre>"ingrese aqui su nombre "</ctnombre>
+<cpotencia>"0"</cpotencia>
+<cfactorial>"0"</cfactorial>
+<cinvertido>"0"</cinvertido>
+<cmcd>"0"</cmcd>
+<cfibonacci>"0"</cfibonacci>
+</principal>
+
+
+<principal>
+<ctnombre>"ingrese aqui su nombre "</ctnombre>
+<cpotencia>"0"</cpotencia>
+<cfactorial>"0"</cfactorial>
+<cinvertido>"0"</cinvertido>
+<cmcd>"0"</cmcd>
+<cfibonacci>"0"</cfibonacci>
+</principal>
+
+
+<principal>
+<ctnombre>"ingrese aqui su nombre "</ctnombre>
+<cpotencia>"0"</cpotencia>
+<cfactorial>"0"</cfactorial>
+<cinvertido>"0"</cinvertido>
+<cmcd>"0"</cmcd>
+<cfibonacci>"0"</cfibonacci>
+</principal>
+
+
+<principal>
+<ctnombre>"ingrese aqui su nombre "</ctnombre>
+<cpotencia>"0"</cpotencia>
+<cfactorial>"0"</cfactorial>
+<cinvertido>"0"</cinvertido>
+<cmcd>"0"</cmcd>
+<cfibonacci>"0"</cfibonacci>
+</principal>
+</lista>
+

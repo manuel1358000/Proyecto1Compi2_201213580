@@ -8,6 +8,10 @@ package ArbolAST.Instrucciones;
 import ArbolAST.Entorno.Entorno;
 import ArbolAST.Entorno.Type;
 import ArbolAST.Expresiones.Expresion;
+import static com.sun.media.BuildInfo.date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import proyecto1compi2_201213580.Principal;
 
 
 /**
@@ -45,7 +49,7 @@ public class Imprimir implements Instruccion{
     public Object execute(Entorno entorno) {
         Object nuevo=expresion.getValue(entorno);
         if(nuevo!=null){
-            System.out.println("SALIDA CONSOLA>"+nuevo.toString());
+            Principal.jTextArea1.setText(Principal.jTextArea1.getText()+"\n CONSOLA>"+nuevo.toString());
         }else{
             System.out.println("ERROR SEMANTICO: IMPRIMIR NO ENCONTRO EL VALOR");
         }

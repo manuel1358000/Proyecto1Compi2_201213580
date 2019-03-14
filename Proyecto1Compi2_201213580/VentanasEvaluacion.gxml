@@ -22,7 +22,6 @@
 			Ingrese la potencia de 5 a la 5:
 		</Texto>
 		<Control tipo = "Numerico" Nombre = "CPotencia" X = 150 Y = 150 Alto = 50 Ancho = 100 Minimo = 0 Maximo = 5000>
-			<defecto>201213580</defecto>
 		</Control>
 		<Boton Nombre = "btnPotencia" X = 300 Y = 150 Alto = 50 Ancho = 100 Accion = {VerPotencia(5,5)}>
 			Ver Respuesta
@@ -32,7 +31,6 @@
 			Ingrese el Factorial de 7:
 		</Texto>
 		<Control tipo = "Numerico" Nombre = "CFactorial" X = 150 Y = 250 Alto = 50 Ancho = 100 Minimo = 0 Maximo = 6000>
-			<defecto>201213580</defecto>
 		</Control>
 		<Boton Nombre = "btnFactorial" X = 300 Y = 250 Alto = 50 Ancho = 100 Accion = {VerFactorial(7)}>
 			Ver Respuesta
@@ -42,7 +40,6 @@
 			Ingrese el numero invertido de 351230347:
 		</Texto>
 		<Control tipo = "Numerico" Nombre = "CInvertido" X = 150 Y = 350 Alto = 50 Ancho = 100 Minimo = 0>
-			<defecto>201213580</defecto>
 		</Control>
 		<Boton Nombre = "btnInvertido" X = 300 Y = 350 Alto = 50 Ancho = 100 Accion = {VerInvertido(351230347)}>
 			Ver Respuesta
@@ -52,7 +49,6 @@
 			Ingrese el mcd de 240,506 con 10:
 		</Texto>
 		<Control tipo = "Numerico" Nombre = "CMCD" X = 150 Y = 450 Alto = 50 Ancho = 100 Minimo = 0>
-			<defecto>2012</defecto>
 		</Control>
 		<Boton Nombre = "btnMCD" X = 300 Y = 450 Alto = 50 Ancho = 100 Accion = {VerMCD(240,506, 10)}>
 			Ver Respuesta
@@ -62,7 +58,6 @@
 			Ingrese el Fibonacci de 19:
 		</Texto>
 		<Control tipo = "Numerico" Nombre = "CFibonacci" X = 150 Y = 550 Alto = 50 Ancho = 100 Minimo = 0 Maximo = 6000>
-			<defecto>201213580</defecto>
 		</Control>
 		<Boton Nombre = "btnFibonacci" X = 300 Y = 550 Alto = 50 Ancho = 100 Accion = {VerFibonacci(19)}>
 			Ver Respuesta
@@ -106,7 +101,7 @@
 		<Multimedia Path = "playa.jpg" tipo = "Imagen" X = 300 Y = 250 Alto = 100 Ancho = 100 Nombre = "MultPlaya">
 		</Multimedia>
 		<Boton Nombre = "btnPlaya" X = 500 Y = 250 Alto = 50 Ancho = 100 Accion = {Paisaje(10)}>
-			Ver Respuesta1
+			Ver Respuesta
 		</Boton>
 		###################### Luna
 		<Texto Nombre = "lblPaisaje2" X = 10 Y = 400>
@@ -124,7 +119,7 @@
 		<Multimedia Path = "luna.jpg" tipo = "Imagen" X = 300 Y = 400 Alto = 100 Ancho = 100 Nombre = "MultLuna">
 		</Multimedia>
 		<Boton Nombre = "btnLuna" X = 500 Y = 400 Alto = 50 Ancho = 100 Accion = {Paisaje(20)}>
-			Ver Respuesta2
+			Ver Respuesta
 		</Boton>
 		###################### Selva
 		<Texto Nombre = "lblPaisaje3" X = 10 Y = 550>
@@ -142,7 +137,7 @@
 		<Multimedia Path = "selva.jpg" tipo = "Imagen" X = 300 Y = 550 Alto = 100 Ancho = 100 Nombre = "MultSelva">
 		</Multimedia>
 		<Boton Nombre = "btnSelva" X = 500 Y = 550 Alto = 50 Ancho = 100 Accion = {Paisaje(30)}>
-			Ver Respuesta3
+			Ver Respuesta
 		</Boton>
 		###################### Desierto
 		<Texto Nombre = "lblPaisaje4" X = 10 Y = 700>
@@ -160,7 +155,7 @@
 		<Multimedia Path = "Desierto.jpg" tipo = "Imagen" X = 300 Y = 700 Alto = 100 Ancho = 100 Nombre = "MultDesierto">
 		</Multimedia>
 		<Boton Nombre = "btnDesierto" X = 500 Y = 700 Alto = 50 Ancho = 100 Accion = {Paisaje(40)}>
-			Ver Respuesta4
+			Ver Respuesta
 		</Boton>
 		###################### Oceano
 		<Texto Nombre = "lblPaisaje5" X = 10 Y = 850>
@@ -178,7 +173,7 @@
 		<Multimedia Path = "oceano.jpg" tipo = "Imagen" X = 300 Y = 850 Alto = 100 Ancho = 100 Nombre = "MultOceano">
 		</Multimedia>
 		<Boton Nombre = "btnOceano" X = 500 Y = 850 Alto = 50 Ancho = 100 Accion = {Paisaje(50)}>
-			Ver Respuesta5
+			Ver Respuesta
 		</Boton>
 	</Contenedor>
 	<Contenedor id = "ContEnviarHistoria" x = 10 Y = 1010 Alto = 100 Ancho = 200>
@@ -288,7 +283,6 @@
 			Ingrese si 27 es par o impar
 		</Texto>
 		<Control tipo = "texto" Nombre = "CTImpar" X = 150 Y = 650 Alto = 50 Ancho = 100>
-			<defecto>hola</defecto>
 		</Control>
 		<Boton Nombre = "btnImpar" X = 300 Y = 650 Alto = 50 Ancho = 100 Accion = {VerImpar(27)}>
 			Ver Respuesta
@@ -300,16 +294,3 @@
 		</Enviar>
 	</Contenedor>
 </Ventana>
-
-
-
-
-
-
-
-
-
-
-
-
-

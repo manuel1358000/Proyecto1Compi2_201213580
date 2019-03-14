@@ -33,15 +33,23 @@ import ArbolAST.Expresiones.AccesoArreglo;
 import ArbolAST.Instrucciones.Componente_Funcion_Arreglo;
 import ArbolAST.Instrucciones.Funciones_Arreglos;
 import ArbolAST.Instrucciones.Declaracion_UI;
+import ArbolAST.Instrucciones.Eventos_Botones;
+import Auxiliares.Errores;
+import ArbolAST.Instrucciones.Eventos_Ventanas;
 parser code
 {:
     public AST root;
     public static int index=0;
     public void syntax_error(Symbol s){
         System.out.println("Error sintactico en la linea "+(s.left+1)+" Columna "+s.right+". Identificador "+s.value+" no reconocido"); 
+        //id,archivo,tipo,descripcion,acciones,linea,columna,aux
+         Errores errores=new Errores(s.value.toString(),"sintacticoFS","ERROR SINTACTICO","ELEMENTO"+s.value+" NO RECONOCIDO","SE RECUPERO DEL ERROR ",String.valueOf(s.left+1),String.valueOf(s.right+1),"");
+         proyecto1compi2_201213580.Proyecto1Compi2_201213580.errores_sintacticos.add(errores);
     }
     /**Metodo al que se llama en el momento en que ya no es posible una recuperacion de errores.*/
     public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{
+        Errores errores=new Errores(s.value.toString(),"sintacticoFS","ERROR SINTACTICO","ELEMENTO"+s.value+" NO RECONOCIDO","SE RECUPERO DEL ERROR ",String.valueOf(s.left+1),String.valueOf(s.right+1),"");
+        proyecto1compi2_201213580.Proyecto1Compi2_201213580.errores_sintacticos.add(errores);
         javax.swing.JOptionPane.showMessageDialog(null,"Error Sintactico en la linea "+(s.right+1)+"Columna "+s.left+". Identificador"+s.value+" no reconocido.");
     }
 :}
@@ -63,6 +71,7 @@ terminal String valor_numero_decimal,valor_nulo;
 
 //DEFINICION DE PALABRAS RESERVADAS ELEMENTOS_UI
 terminal String crearventana,crearcontenedor,crearboton,creartexto,crearareatexto,crearcajatexto,crearcontrolnumerico,creardesplegable;
+terminal String alclic,alcargar,alcerrar,arraydesdearchivo,crearimagen;
 
 
 //definicion de no terminales
@@ -103,6 +112,7 @@ non terminal LinkedList<Componente_Funcion_Arreglo> FUNCIONES_LENGUAJES;
 
 non terminal Declaracion_UI EXPRESION_UI;
 non terminal String LISTADO_NUEVO,LISTADO_NUEVOS;
+
 
 //DEFINICION DE LA PRECEDENCIA DE LOS OPERADORES
 precedence left signoi;
@@ -401,32 +411,73 @@ DECLARACION_VARIABLES::= var LISTA_ID:a pyc{:
                                                                                         RESULT=new LinkedList<>();
                                                                                         Declaracion_UI decla=new Declaracion_UI(Type.PrimitiveType.TEXTO,b);
                                                                                         decla.setId_padre(a.toString());
+                                                                                        decla.setId("texto");
                                                                                         RESULT.add(decla);
                                                                                        :}
                        | valor_id:a pto crearareatexto parena LISTA_PARAMETROS:b parenc pyc{:
                                                                                             RESULT=new LinkedList<>();
                                                                                             Declaracion_UI decla=new Declaracion_UI(Type.PrimitiveType.AREATEXTO,b);
                                                                                             decla.setId_padre(a.toString());
+                                                                                            decla.setId("areatexto");
                                                                                             RESULT.add(decla);
                                                                                            :}
                        | valor_id:a pto crearcajatexto parena LISTA_PARAMETROS:b parenc pyc{:
                                                                                             RESULT=new LinkedList<>();
                                                                                             Declaracion_UI decla=new Declaracion_UI(Type.PrimitiveType.CAJATEXTO,b);
                                                                                             decla.setId_padre(a.toString());
+                                                                                            decla.setId("cajatexto");
                                                                                             RESULT.add(decla);
                                                                                            :}
                        | valor_id:a pto crearcontrolnumerico parena LISTA_PARAMETROS:b parenc pyc{:
                                                                                                     RESULT=new LinkedList<>();
                                                                                                     Declaracion_UI decla=new Declaracion_UI(Type.PrimitiveType.NUMERICO,b);
                                                                                                     decla.setId_padre(a.toString());
+                                                                                                    decla.setId("numerico");
                                                                                                     RESULT.add(decla);
                                                                                                  :}
                        | valor_id:a pto creardesplegable parena LISTA_PARAMETROS:b parenc pyc{:
                                                                                                     RESULT=new LinkedList<>();
                                                                                                     Declaracion_UI decla=new Declaracion_UI(Type.PrimitiveType.DESPLEGABLE,b);
                                                                                                     decla.setId_padre(a.toString());
+                                                                                                    decla.setId("desplegable");
                                                                                                     RESULT.add(decla);
-                                                                                                 :}; 
+                                                                                                 :}
+                       | valor_id:a pto crearimagen parena LISTA_PARAMETROS:b parenc pyc{:
+                                                                                        RESULT=new LinkedList<>();
+                                                                                        Declaracion_UI decla=new Declaracion_UI(Type.PrimitiveType.IMAGEN,b);
+                                                                                        decla.setId_padre(a.toString());
+                                                                                        RESULT.add(decla);
+                                                                                    :}
+                       | valor_id:a pto alclic parena LLAMADA_FUNCION:b parenc pyc{:
+                                                                                    RESULT=new LinkedList<>();
+                                                                                    Eventos_Botones eventos=new Eventos_Botones(a.toString(),b);
+                                                                                    RESULT.add(eventos);
+                                                                                  :}
+                       | valor_id:a pto alcargar parena LLAMADA_FUNCION:b parenc pyc{:
+                                                                                        RESULT=new LinkedList<>();
+                                                                                        Eventos_Ventanas eventos=new Eventos_Ventanas(a.toString(),b,"cargar");
+                                                                                        RESULT.add(eventos);
+                                                                                    :}
+                       | valor_id:a pto alcargar parena parenc pyc{:
+                                                                    RESULT=new LinkedList<>();
+                                                                    Eventos_Ventanas eventos=new Eventos_Ventanas(a.toString(),null,"cargar");
+                                                                    RESULT.add(eventos);
+                                                                  :}
+                       | valor_id:a pto alcerrar parena LLAMADA_FUNCION:b parenc pyc{:
+                                                                                        RESULT=new LinkedList<>();
+                                                                                        Eventos_Ventanas eventos=new Eventos_Ventanas(a.toString(),b,"cerrar");
+                                                                                        RESULT.add(eventos);
+                                                                                    :}
+                       | valor_id:a pto alcerrar parena parenc pyc{:
+                                                                    RESULT=new LinkedList<>();
+                                                                    Eventos_Ventanas eventos=new Eventos_Ventanas(a.toString(),null,"cerrar");
+                                                                    RESULT.add(eventos);
+                                                                  :}
+                       | valor_id:a pto arraydesdearchivo parena parenc pyc{:
+                                                                            RESULT=new LinkedList<>();
+                                                                            Eventos_Botones eventos=new Eventos_Botones(a.toString(),"crear");
+                                                                            RESULT.add(eventos);
+                                                                         :}; 
 
 
 
@@ -569,7 +620,7 @@ EXPRESION::= menos EXPRESION:a{:
            | LLAMADA_FUNCION:a{:RESULT=a;:}
            | TERNARIO:a{:RESULT=a;:}
            | valor_nulo:a{:
-                            RESULT=new Aritmetica(a.toString().toLowerCase(),Type.PrimitiveType.NULL);
+                            RESULT=new Aritmetica(a.toString().toLowerCase(),Type.PrimitiveType.NULO);
                          :}
            | LLAMADA_ARREGLO:a{:RESULT=a;:}
            | EXPRESION:a decremental{:

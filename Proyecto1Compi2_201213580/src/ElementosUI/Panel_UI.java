@@ -6,7 +6,6 @@
 package ElementosUI;
 
 import ArbolAST.NodoAST;
-import static ElementosUI.Ventana_UI.id;
 import java.awt.Color;
 import java.awt.Component;
 import java.util.LinkedList;
@@ -22,7 +21,7 @@ import javax.swing.border.TitledBorder;
  * @author anton
  */
 public class Panel_UI extends JPanel implements NodoAST {
-    public static LinkedList<Component>lista_componentes;
+    public LinkedList<Component>lista_componentes;
     public String id;
     public String x;
     public String y;
@@ -69,12 +68,12 @@ public class Panel_UI extends JPanel implements NodoAST {
         }
     }
 
-    public static LinkedList<Component> getLista_componentes() {
+    public LinkedList<Component> getLista_componentes() {
         return lista_componentes;
     }
 
-    public static void setLista_componentes(LinkedList<Component> lista_componentes) {
-        Panel_UI.lista_componentes = lista_componentes;
+    public void setLista_componentes(LinkedList<Component> lista_componentes) {
+        this.lista_componentes = lista_componentes;
     }
 
     public String getId() {

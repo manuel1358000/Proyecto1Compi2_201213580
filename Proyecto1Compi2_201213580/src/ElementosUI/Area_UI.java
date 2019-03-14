@@ -26,6 +26,7 @@ public class Area_UI extends JTextArea {
     String cursiva;
     String defecto;
     String nombre;
+    String id_padre;
     public Area_UI(String alto,String ancho,String fuente,String tam,String color,String x,String y,String negrita,String cursiva,String defecto,String nombre){
         this.alto=alto;
         this.ancho=ancho;
@@ -38,8 +39,18 @@ public class Area_UI extends JTextArea {
         this.cursiva=cursiva;
         this.defecto=defecto;
         this.nombre=nombre;
+        this.id_padre="";
         asignarValores();
     }
+
+    public String getId_padre() {
+        return id_padre;
+    }
+
+    public void setId_padre(String id_padre) {
+        this.id_padre = id_padre;
+    }
+    
     public void asignarValores(){
         try{
             setName(this.nombre);

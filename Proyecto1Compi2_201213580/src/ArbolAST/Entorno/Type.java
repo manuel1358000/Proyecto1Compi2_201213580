@@ -33,7 +33,8 @@ public class Type {
         AUDIO,
         IMAGEN,
         DESPLEGABLE,
-        NUMERICO
+        NUMERICO,
+        NULO
     }    
     public boolean esNumero(){
         return primitive_type==Type.PrimitiveType.INTEGER;

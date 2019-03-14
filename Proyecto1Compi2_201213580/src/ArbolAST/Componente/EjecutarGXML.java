@@ -108,7 +108,7 @@ public class EjecutarGXML {
                 String []valor=raiz.valor.toString().split("\\.");
                 if(valor.length==2){
                     if(valor[1].toLowerCase().equals("fs")){
-                        respuesta+="importar(\""+raiz.valor.toString()+"\")\n";
+                        respuesta+="importar(\""+raiz.valor.toString()+"\");\n";
                     }
                 }
             }catch(Exception e){
@@ -131,12 +131,12 @@ public class EjecutarGXML {
                     elementos+="\"" + color + "\",";
                 }
                 if(alto.equals("vacio")){
-                    elementos+="100,";
+                    elementos+="800,";
                 }else{
                     elementos+=alto+",";
                 }
                 if(ancho.equals("vacio")){
-                    elementos+="100,";
+                    elementos+="800,";
                 }else{
                     elementos+=alto+",";
                 }
@@ -149,9 +149,10 @@ public class EjecutarGXML {
                 }
 
                 if(accioninicial.equals("")){
+                    //respuesta+="ventana_"+id+".alcargar();\n";
                 }else{
                     if(accioninicial.equals("vacio")){
-                        accioninicial="";
+                        accioninicial="ventana_"+id+".alcargar();\n";
                     }
                     respuesta+="\nventana_"+id+".alcargar("+accioninicial+");\n";
                 }
@@ -185,12 +186,12 @@ public class EjecutarGXML {
                     y="10";
                 }
                 if(alto.equals("vacio")){
-                    elementos+="500,";
+                    elementos+="400,";
                 }else{
                     elementos+=alto+",";
                 }
                 if(ancho.equals("vacio")){
-                    elementos+="500,";
+                    elementos+="400,";
                 }else{
                     elementos+=ancho+",";
                 }
@@ -307,12 +308,12 @@ public class EjecutarGXML {
                         pendiente+=arriba+".crearCajaTexto(";
                         //fuente,tama;o,color,x,y,negrita,cursiva,valor
                         if(alto.equals("vacio")){
-                            pendiente+="100,";
+                            pendiente+="200,";
                         }else{
                             pendiente+=alto+",";
                         }
                         if(ancho.equals("vacio")){
-                            pendiente+="100,";
+                            pendiente+="200,";
                         }else{
                             pendiente+=ancho+",";
                         }
@@ -369,12 +370,12 @@ public class EjecutarGXML {
                     case "textoarea":{
                         pendiente+=arriba+".crearAreaTexto(";
                         if(alto.equals("vacio")){
-                            pendiente+="100,";
+                            pendiente+="200,";
                         }else{
                             pendiente+=alto+",";
                         }
                         if(ancho.equals("vacio")){
-                            pendiente+="100,";
+                            pendiente+="200,";
                         }else{
                             pendiente+=ancho+",";
                         }
@@ -431,12 +432,12 @@ public class EjecutarGXML {
                     case "numerico":{
                         pendiente+=arriba+".crearControlNumerico(";
                         if(alto.equals("vacio")){
-                            pendiente+="100,";
+                            pendiente+="200,";
                         }else{
                             pendiente+=alto+",";
                         }
                         if(ancho.equals("vacio")){
-                            pendiente+="100,";
+                            pendiente+="200,";
                         }else{
                             pendiente+=ancho+",";
                         }
@@ -491,12 +492,12 @@ public class EjecutarGXML {
                         }
                         expresion+="]";
                         if(alto.equals("vacio")){
-                            pendiente+="100,";
+                            pendiente+="200,";
                         }else{
                             pendiente+=alto+",";
                         }
                         if(ancho.equals("vacio")){
-                            pendiente+="100,";
+                            pendiente+="200,";
                         }else{
                             pendiente+=ancho+",";
                         }
@@ -586,7 +587,7 @@ public class EjecutarGXML {
                                     pendiente+=auto+",";
                                 }
                                 if(alto.equals("vacio")){
-                                    pendiente+="100,";
+                                    pendiente+="200,";
                                 }else{
                                     pendiente+=alto+",";
                                 }
@@ -628,7 +629,7 @@ public class EjecutarGXML {
                                     pendiente+=auto+",";
                                 }
                                 if(alto.equals("vacio")){
-                                    pendiente+="100,";
+                                    pendiente+="200,";
                                 }else{
                                     pendiente+=alto+",";
                                 }
@@ -663,20 +664,15 @@ public class EjecutarGXML {
                                 }else{
                                     pendiente+=y+",";
                                 }
-                                if(auto.equals("vacio")){
-                                    pendiente+="falso,";
-                                }else{
-                                    pendiente+=auto+",";
-                                }
                                 if(alto.equals("vacio")){
-                                    pendiente+="100,";
+                                    pendiente+="200,";
                                 }else{
                                     pendiente+=alto+",";
                                 }
                                 if(ancho.equals("vacio")){
-                                    pendiente+="200,";
+                                    pendiente+="200";
                                 }else{
-                                    pendiente+=ancho+",";
+                                    pendiente+=ancho+"";
                                 }
                                 pendiente+=");\n";
                                 respuesta+=pendiente;
@@ -719,7 +715,7 @@ public class EjecutarGXML {
                     pendiente+="\""+fuente+"\",";
                 }
                 if(tam.equals("vacio")){
-                    pendiente+="5,";
+                    pendiente+="14,";
                 }else{
                     pendiente+=tam+",";
                 }
@@ -734,7 +730,7 @@ public class EjecutarGXML {
                     pendiente+=x+",";
                 }
                 if(y.equals("vacio")){
-                    pendiente+="100,";
+                    pendiente+="200,";
                 }else{
                     pendiente+=y+",";
                 }
@@ -744,7 +740,7 @@ public class EjecutarGXML {
                     pendiente+="cargar_"+referencia+"(),";
                     fin+=nombre+"_"+arriba+".alclic(cargar_"+referencia+"());\n";
                     fin+="\nfuncion cargar_"+referencia+"(){\n";
-                    fin+="ven_"+referencia+".alcargar();\n";
+                    fin+="ventana_"+referencia+".alcargar();\n";
                     fin+="}\n";
                 }
                 if(valor.equals("vacio")){
@@ -754,12 +750,12 @@ public class EjecutarGXML {
 
                 }
                 if(alto.equals("vacio")){
-                    pendiente+="50,";
+                    pendiente+="75,";
                 }else{
                     pendiente+=alto+",";
                 }
                 if(ancho.equals("vacio")){
-                    pendiente+="50";
+                    pendiente+="150";
                 }else{
                     pendiente+=ancho+"";
                 }
@@ -806,12 +802,12 @@ public class EjecutarGXML {
                     pendiente+="\""+fuente+"\",";
                 }
                 if(tam.equals("vacio")){
-                    pendiente+="5,";
+                    pendiente+="14,";
                 }else{
                     pendiente+=tam+",";
                 }
                 if(color.equals("vacio")){
-                    pendiente+="\"#ffffff\",";
+                    pendiente+="\"#0000FF\",";
                 }else{
                     pendiente+=color+",";
                 }
@@ -832,7 +828,7 @@ public class EjecutarGXML {
                     pendiente+="cargar_"+referencia+"(),";
                     llamada+=nombre+"_"+arriba+".alclic(cargar_"+referencia+"());\n";
                     fin+="\nfuncion cargar_"+referencia+"(){\n";
-                    fin+="ven_"+referencia+".alcargar();\n";
+                    fin+="ventana_"+referencia+".alcargar();\n";
                     fin+="}\n";
                 }
                 if(valor.equals("vacio")){
@@ -842,12 +838,12 @@ public class EjecutarGXML {
 
                 }
                 if(alto.equals("vacio")){
-                    pendiente+="50,";
+                    pendiente+="75,";
                 }else{
                     pendiente+=alto+",";
                 }
                 if(ancho.equals("vacio")){
-                    pendiente+="50";
+                    pendiente+="150";
                 }else{
                     pendiente+=ancho+"";
                 }

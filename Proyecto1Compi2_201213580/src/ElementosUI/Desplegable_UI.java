@@ -22,7 +22,7 @@ public class Desplegable_UI extends JComboBox{
     String y;
     String defecto;
     String nombre;
-
+    String id_padre;
     public Desplegable_UI(String alto, String ancho, String lista, String x, String y, String defecto, String nombre) {
         this.alto = alto;
         this.ancho = ancho;
@@ -31,9 +31,20 @@ public class Desplegable_UI extends JComboBox{
         this.y = y;
         this.defecto = defecto;
         this.nombre = nombre;
+        this.id_padre="";
         asignarValores();
     }
+
+    public String getId_padre() {
+        return id_padre;
+    }
+
+    public void setId_padre(String id_padre) {
+        this.id_padre = id_padre;
+    }
+    
     public void asignarValores(){
+        setName(this.nombre);
         setBounds(Integer.parseInt(this.x),Integer.parseInt(this.y),Integer.parseInt(this.ancho),Integer.parseInt(this.alto));
         addItem(this.defecto);
         String []listado=this.lista.split(",");
