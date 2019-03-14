@@ -46,11 +46,11 @@ funcion VerMasculino(){
     hofstaderMasculino(10);
 }
 
-funcion VerPar(num a){
+funcion VerPar(var a){
     imprimir("El numero " + a + " es: " + (par(a) == 1 ? "Par" : "Impar"));
 }
 
-funcion VerImpar(num b){
+funcion VerImpar(var b){
     imprimir("El numero " + b + " es: " + (impar(b) == 0 ? "Par" : "Impar"));
 }
 

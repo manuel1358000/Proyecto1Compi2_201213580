@@ -46,7 +46,6 @@ public class Principal extends javax.swing.JFrame {
     public static Pesta nueva;
     public int contador_pesta=0;
     RSyntaxTextArea textArea;
-    public static boolean control_ambientes=false;
     public static ArrayList<JTextArea> listAreas = new ArrayList<JTextArea>();
     /**
      * Creates new form Principal

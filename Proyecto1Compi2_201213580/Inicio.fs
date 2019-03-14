@@ -24,7 +24,9 @@ funcion guardarContenedor1_VentanaPrincipal(){
 ventana_VentanaPrincipal.creararraydesdearchivo();
 }
 btnEnviar_Contenedor1_VentanaPrincipal.alclic(EnviarSinFuncionalidad());
-//importar("/FuncionesEvaluacion.fs");
+
+importar("/FuncionesEvaluacion.fs");
+
 var ventana_VentanaAritmetica=crearVentana("#2E2EFE",1000,740,"VentanaAritmetica");
 var ContenedorAritmeticas_VentanaAritmetica=ventana_VentanaAritmetica.crearContenedor(700,700,"#ffffff",verdadero,10,10);
 ContenedorAritmeticas_VentanaAritmetica.crearTexto("times new roman",18,"#000000",10,0,verdadero,verdadero,"Bienvenido a la prueba de Aritmetica , responda las siguientes preguntas ");
@@ -204,6 +206,60 @@ ventana_VentanaReportes.creararraydesdearchivo();
 }
 btnEnviar_ContenedorReportes_VentanaReportes.alclic(EnviarSinFuncionalidad());
 ventana_ventanaprincipal.alcargar();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

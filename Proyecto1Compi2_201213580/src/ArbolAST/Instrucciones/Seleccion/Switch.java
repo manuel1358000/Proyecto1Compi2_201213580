@@ -37,14 +37,16 @@ public class Switch implements Instruccion{
         proyecto1compi2_201213580.Proyecto1Compi2_201213580.control_break++;
         Object var_control=condicion.getValue(local);
         //recorrido previo para saber si los casos son correctos
+        flag=false;
         for(Caso c:this.lista_casos){
             //aqui se tiene que comparar los tipos
             if(condicion.getType(local)!=c.condicion.getType(local)){
                 System.out.println("Error semantico no son de tipos iguales");
             }
         }
+        
         for(Caso c:this.lista_casos){   
-            if(c.condicion.getValue(local).equals(var_control)||flag){
+            if(c.condicion.getValue(local).equals(var_control.toString())){
                 flag=true;
                 for(NodoAST  node:c.lista_bloques){
                     if(node instanceof Instruccion){

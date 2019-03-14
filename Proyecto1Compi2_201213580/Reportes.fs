@@ -1,5 +1,5 @@
 funcion ReporteAritmetico(){
-	var contenido = CrearArrayDesdeArchivo("VentanaAritmetica.gdato");
+	/*var contenido = CrearArrayDesdeArchivo("VentanaAritmetica.gdato");
 	var TodoCorrecto = contenido.filtrar(RevisionAritmetica).map(nombresAritmeticos);
 	TodoCorrecto.Ascendente();
 	Imprimir("Los estudiantes que ganaron la evaluacion aritmetica son:");
@@ -7,68 +7,86 @@ funcion ReporteAritmetico(){
 	TodoCorrecto.map(ImprimirGanadores);
 	Imprimir("Verificar que esten ordenados alfabeticamente invertido");
 	TodoCorrecto.Invertir();
-	TodoCorrecto.map(ImprimirGanadores);
+	TodoCorrecto.map(ImprimirGanadores);*/
+	imprimir("reporte aritmetica");
+
 }
 
 funcion ReporteHistorico(){
-	var contenido = CrearArrayDesdeArchivo("VentanaHistoria.gdato");	
+	/*var contenido = CrearArrayDesdeArchivo("VentanaHistoria.gdato");	
 	var TodoCorrecto = contenido.filtrar(RevisionHistoria).map(nombresAritmeticos);
 	Imprimir("El primer alumno en contestar todo buen fue ");
 	var primero = contenido.filtrar(RevisionHistoria).Buscar(BuscarHistoria);
 	Imprimir(primero.CTNombre);
     Imprimir("Todos Los estudiantes que ganaron la evaluacion de historia son: (Orden Descendente)");
     TodoCorrecto.Descendente();
-	TodoCorrecto.map(ImprimirGanadores);
+	TodoCorrecto.map(ImprimirGanadores);*/
+	imprimir("reporte historico");
 }
 
 funcion ReporteIngles(){
-	var contenido = CrearArrayDesdeArchivo("VentanaIngles.gdato");
+	/*var contenido = CrearArrayDesdeArchivo("VentanaIngles.gdato");
 	Imprimir("¿Algun estudiante contesto mal el nombre del algoritmo ackermanm? " + contenido.Alguno(NombreAckerman));
-	Imprimir("¿Todos los estudiantes contestaron correctamente Ackermann(3,11)? " + contenido.Todos(CalculoAckerman));
+	Imprimir("¿Todos los estudiantes contestaron correctamente Ackermann(3,11)? " + contenido.Todos(CalculoAckerman));*/
+	imprimir("reporte ingles");
 }
 
 funcion ReporteLogico(){
+/*
 	var contenido = CrearArrayDesdeArchivo("VentanaLogica.gdato");
 	Imprimir("Imprimiendo nombres de los estudiantes que saben par e impar"); 
 	var concatenacion = contenido.map(EstudiantesParidad).Reduce(ObtencionParidad);
+*/
+	imprimir("reporte logico");
 }
 
 funcion RevisionAritmetica(var item){
-	retornar item.CPotencia == 3125 && item.CFactorial == 5040 && item.CInvertido == 743032153 && item.CFibonacci == 4181;
+/*
+	retornar item.CPotencia == 3125 && item.CFactorial == 5040 && item.CInvertido == 743032153 && item.CFibonacci == 4181;*/
+	imprimir("revisionaritmetica");
 }
 
 funcion RevisionHistoria(var item){
-	retornar item.CDPaisaje1 == "Playa" && item.CDPaisaje2 == "Luna" && item.CDPaisaje3 == "Selva" && item.CDPaisaje4 == "Desierto" && item.CDPaisaje5 == "Oceano";
+/*
+	retornar item.CDPaisaje1 == "Playa" && item.CDPaisaje2 == "Luna" && item.CDPaisaje3 == "Selva" && item.CDPaisaje4 == "Desierto" && item.CDPaisaje5 == "Oceano";*/
+	imprimir("reporte historia");
 }
 
 funcion BuscarHistoria(var item){
-	retornar item.CDPaisaje1 == "Playa" && item.CDPaisaje2 == "Luna" && item.CDPaisaje3 == "Selva" && item.CDPaisaje4 == "Desierto" && item.CDPaisaje5 == "Oceano";
+	/*retornar item.CDPaisaje1 == "Playa" && item.CDPaisaje2 == "Luna" && item.CDPaisaje3 == "Selva" && item.CDPaisaje4 == "Desierto" && item.CDPaisaje5 == "Oceano";*/
+	imprimir("reporte buscarhistoria");
 }
 
 funcion ImprimirGanadores(var item){
-	Imprimir(item);
+	/*Imprimir(item);*/
+	imprimir("reporte imprimirganadores");
 }
 
 funcion NombreAckerman(var item){
-	retornar item.CTPregunta != "Ackermann";
+imprimir("reporte nombreackerman");
+	/*retornar item.CTPregunta != "Ackermann";*/
 }
 
 funcion CalculoAckerman(var item){
-	retornar item.CAckerman == 16381;
+	/*retornar item.CAckerman == 16381;*/
+	imprimir("reporte calculoackerman");
 }
 
 funcion EstudiantesParidad(var item){
-	Si(item.CTPar == "Par" && item.CTImpar == "Impar"){
+	/*Si(item.CTPar == "Par" && item.CTImpar == "Impar"){
 		retornar item.CTNombre + "  ";
 	}sino{
 		retornar "";
-	}
+	}*/
+	imprimir("reporte estudiantes paridad");
 }
 
 funcion ObtencionParidad(var concatenado, var item){
-	retornar concatenado + item;
+	/*retornar concatenado + item;*/
+	imprimir("reporte obtencion paridad");
 }
 
 funcion nombresAritmeticos(var item){
-	retornar item.CTNombre;
+	/*retornar item.CTNombre;*/
+	imprimir("reporte nombres aritmeticos");
 }

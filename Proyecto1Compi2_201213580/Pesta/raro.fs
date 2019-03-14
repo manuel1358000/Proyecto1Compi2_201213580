@@ -1,16 +1,16 @@
-var hola=10;
-
-si(hola!=nulo){
-	imprimir("No Es nulo");
-}sino{
-	imprimir("Es nulo");
+var hola=1;
+selecciona(hola){
+	caso 0:{
+		imprimir("cero");
+		detener;
+	}
+	caso 1:{
+		imprimir("uno");	
+		detener;
+	}
+	caso 1:{
+		imprimir("dos");
+	}
+	
 }
-
-
-
-
-
-
-
-
 

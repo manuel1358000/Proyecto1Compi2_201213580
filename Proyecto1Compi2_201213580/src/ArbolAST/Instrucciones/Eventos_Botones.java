@@ -107,7 +107,6 @@ public class Eventos_Botones implements Instruccion {
                         for(Component componente:ventana.getLista_paneles()){
                             if(componente instanceof Panel_UI){
                                 Panel_UI panel=(Panel_UI)componente;
-
                                 for(Component compo:panel.getLista_componentes()){
                                     if(compo instanceof Numerico_UI){
                                         Numerico_UI numerico=(Numerico_UI)compo;

@@ -73,10 +73,8 @@ public class Boton_UI extends JButton implements NodoAST{
             @Override
             public void actionPerformed(ActionEvent e) {
                 for(int i=0;i<lista_alclick.size();i++){
-                    
                     lista_alclick.get(i).getValue(AST.global);
                 }
-                
             }
         });
     }

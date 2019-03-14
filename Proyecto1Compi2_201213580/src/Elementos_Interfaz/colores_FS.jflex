@@ -199,8 +199,28 @@ NUMEROS         = ({DIGITO}+)
     "detener" |
     "retornar" |
     "si" |
-    "funcion" |  
-    "sino"      { addToken(Token.RESERVED_WORD); }   
+    "funcion" |
+    "sino" |
+    "verdadero" |
+    "falso" |
+    "leergxml" |
+    "obtenerporetiqueta" |
+    "obtenerporid" |
+    "obtenerpornombre" |
+    "creartexto" |
+    "crearcajatexto" |
+    "crearareatexto" |
+    "crearcontrolnumerico" |
+    "creardesplegable" |
+    "crearboton" |
+    "crearimagen" |
+    "crearreproductor" |
+    "crearvideo" |
+    "alclic" |
+    "alcargar" |
+    "alcerrar" |
+    "crearcontenedor" |  
+    "crearventana"      { addToken(Token.RESERVED_WORD); }   
    
     {CARACTER}            { addToken(Token.LITERAL_CHAR); }
     {CADENA}            { addToken(Token.LITERAL_STRING_DOUBLE_QUOTE); }   

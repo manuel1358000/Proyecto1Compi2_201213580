@@ -184,6 +184,11 @@ public class Aritmetica extends Operacion implements Expresion{
                             respuesta= Double.valueOf(val1.toString())/Double.valueOf(val2.toString());
                             if(Double.parseDouble(respuesta.toString())==Double.POSITIVE_INFINITY){
                                 respuesta= null;
+                            }else{
+                                if(Double.valueOf(respuesta.toString())%1==0){
+                                    this.type=type.INTEGER;
+                                    respuesta=(Double.valueOf(respuesta.toString())).intValue();
+                                }
                             }
                         }else{
                             //error semantico

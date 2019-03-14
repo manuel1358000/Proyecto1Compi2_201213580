@@ -36,6 +36,7 @@ import ArbolAST.Instrucciones.Declaracion_UI;
 import ArbolAST.Instrucciones.Eventos_Botones;
 import Auxiliares.Errores;
 import ArbolAST.Instrucciones.Eventos_Ventanas;
+import ArbolAST.Instrucciones.Importar;
 parser code
 {:
     public AST root;
@@ -142,7 +143,10 @@ SENTENCIAS_GLOBALES::= SENTENCIAS_GLOBALES:a SENTENCIA_GLOBAL:b{:
 //DECLARACION DE VARIABLES,FUNCIONES, METODOS,OBJETOS,ARREGLOS
 
 SENTENCIA_GLOBAL::= SENTENCIAS_GENERALES:a{:RESULT=a;:}
-                  | importar parena ELEMENTO_PATH parenc pyc
+                  | importar:a parena ELEMENTO_PATH:b parenc pyc{:
+                                                                    RESULT=new LinkedList<>();
+                                                                    RESULT.add(new Importar(a.toString(),b.toString()));
+                                                                :}
                   | DECLARAR_FUNCIONES:a{:RESULT=a;:};
 
 DECLARAR_FUNCIONES::= funcion valor_id:a parena parenc llavea SENTENCIAS_INTERNAS:b llavec{:
@@ -503,26 +507,12 @@ EXPRESION_UI::= crearventana:a parena LISTA_PARAMETRO:b parenc{:
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-ELEMENTO_PATH::= valor_path
-                | valor_path2;
+ELEMENTO_PATH::= valor_path:a{:
+                                RESULT=a.toString();
+                             :}
+                | valor_path2:a{:
+                                RESULT=a.toString();
+                               :};
 
 ELEMENTOS_OBJETO::= ELEMENTOS_OBJETO coma valor_id dospuntos EXPRESION
                   | valor_id dospuntos EXPRESION;

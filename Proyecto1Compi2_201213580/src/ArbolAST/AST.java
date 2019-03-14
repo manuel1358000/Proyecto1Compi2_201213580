@@ -55,8 +55,9 @@ public class AST {
             //SEGUNDA PASADA
             for(NodoAST node:nodes){
                 if(node instanceof Importar){
-                    System.out.println("Importar");
-                }
+                    Importar importar=(Importar)node;
+                    importar.execute(global);
+                }    
             }
             for(NodoAST node: nodes){
                 if(node instanceof Declaracion){
