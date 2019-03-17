@@ -14,7 +14,11 @@ import ArbolAST.Entorno.Type;
 public class NodoArreglo {
     Type.PrimitiveType tipo;
     Object valor;
-    public NodoArreglo(Object valor,Type.PrimitiveType tipo){
+    int linea;
+    int columna;
+    public NodoArreglo(Object valor,Type.PrimitiveType tipo,int linea,int columna){
+        this.linea=linea;
+        this.columna=columna;
         this.valor=valor;
         this.tipo=tipo;
     }

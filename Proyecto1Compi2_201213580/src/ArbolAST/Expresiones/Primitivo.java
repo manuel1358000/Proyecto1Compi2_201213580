@@ -17,11 +17,12 @@ public class Primitivo implements Expresion {
     Object value;
     PrimitiveType primitivo;
     int linea;
-
-    public Primitivo(Object value, PrimitiveType primitivo, int linea) {
+    int columna;
+    public Primitivo(Object value, PrimitiveType primitivo, int linea,int columna) {
         this.value = value;
         this.primitivo = primitivo;
         this.linea = linea;
+        this.columna=columna;
     }
 
     @Override

@@ -16,12 +16,18 @@ import ArbolAST.Expresiones.Llamada_Funcion;
  * @author anton
  */
 public class Retornar implements Expresion{
+    int linea;
+    int columna;
     Expresion retorno;
     Type.PrimitiveType tipo_retorno;
-    public Retornar(Expresion retorno){
+    public Retornar(Expresion retorno,int linea,int columna){
         this.retorno=retorno;
+        this.linea=linea;
+        this.columna=columna;
     }
-    public Retornar(){
+    public Retornar(int linea,int columna){
+        this.linea=linea;
+        this.columna=columna;
     }
     @Override
     public Object getValue(Entorno entorno) {

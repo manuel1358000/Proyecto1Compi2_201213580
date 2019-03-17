@@ -12,6 +12,7 @@ import ArbolAST.Instrucciones.Detener;
 import ArbolAST.Expresiones.operacion.Retornar;
 import ArbolAST.Instrucciones.Instruccion;
 import ArbolAST.NodoAST;
+import Auxiliares.Errores;
 import java.util.LinkedList;
 import proyecto1compi2_201213580.Proyecto1Compi2_201213580;
 
@@ -25,7 +26,11 @@ public class Switch implements Instruccion{
     LinkedList<Caso> lista_casos;
     boolean flag=false;
     Caso def;
-    public Switch(Expresion condicion,LinkedList<Caso>lista_casos,Caso def){
+    int linea;
+    int columna;
+    public Switch(Expresion condicion,LinkedList<Caso>lista_casos,Caso def,int linea,int columna){
+        this.linea=linea;
+        this.columna=columna;
         this.condicion=condicion;
         this.lista_casos=lista_casos;
         this.def=def;
@@ -38,30 +43,73 @@ public class Switch implements Instruccion{
         Object var_control=condicion.getValue(local);
         //recorrido previo para saber si los casos son correctos
         flag=false;
-        for(Caso c:this.lista_casos){
-            //aqui se tiene que comparar los tipos
-            if(condicion.getType(local)!=c.condicion.getType(local)){
-                System.out.println("Error semantico no son de tipos iguales");
+        try{
+            for(Caso c:this.lista_casos){
+                //aqui se tiene que comparar los tipos
+                if(condicion.getType(local)!=c.condicion.getType(local)){
+                    Errores error=new Errores("SEMANTICO","el caso no es del mismo tipo que la condicion",this.linea,this.columna);
+                    Proyecto1Compi2_201213580.errores_fs.add(error);
+                }
             }
+        }catch(Exception e){
+            javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la revision de casos de switch");
         }
-        
-        for(Caso c:this.lista_casos){   
-            if(c.condicion.getValue(local).equals(var_control.toString())){
-                flag=true;
-                for(NodoAST  node:c.lista_bloques){
+        try{
+            for(Caso c:this.lista_casos){   
+                if(c.condicion.getValue(local).equals(var_control.toString())){
+                    flag=true;
+                    for(NodoAST  node:c.lista_bloques){
+                        if(node instanceof Instruccion){
+                            Instruccion instruccion=(Instruccion)node;
+                            if(instruccion instanceof Detener){
+                                if(Proyecto1Compi2_201213580.control_break<=0){
+                                    Errores error=new Errores("SEMANTICO","la sentencia break no deberia de estar aqui",this.linea,this.columna);
+                                    Proyecto1Compi2_201213580.errores_fs.add(error);
+                                }else{
+                                    proyecto1compi2_201213580.Proyecto1Compi2_201213580.control_break--;
+                                    return null;
+                                }
+                            }else{
+                                instruccion.execute(local);
+                            }
+                        }else if(node instanceof Expresion){
+                            if(node instanceof Retornar){
+                                Retornar retorno=(Retornar)node;
+                                this.tipo=retorno.getType(local);
+                                return retorno.getValue(local);
+                            }else {
+                                Expresion expresion=(Expresion)node;
+                                this.tipo=expresion.getType(local);
+                                return expresion.getValue(local);
+                            }
+                        }else{
+                            Errores error=new Errores("SEMANTICO","la sentencia que se quiere evaluar no puede estar dentro de un switch",this.linea,this.columna);
+                            Proyecto1Compi2_201213580.errores_fs.add(error);
+                            return null;
+                        }
+                    }
+
+                }
+            }
+        }catch(Exception e){
+            javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la evaluacion de los casos del switch");
+        }
+        //aqui vamos a ejecutar el default
+        try{
+            if(!flag&&this.def!=null){
+                for(NodoAST  node:def.lista_bloques){
                     if(node instanceof Instruccion){
                         Instruccion instruccion=(Instruccion)node;
                         if(instruccion instanceof Detener){
-                           if(Proyecto1Compi2_201213580.control_break<=0){
-                               System.out.println("ERROR SEMANTICO: LA SENTENCIA BREAK NO DEBERIA DE VENIR AQUI");
-                           }else{
-                               proyecto1compi2_201213580.Proyecto1Compi2_201213580.control_break--;
-                               return null;
-                           }
-                        }else{
-                            instruccion.execute(local);
+                            if(Proyecto1Compi2_201213580.control_break<=0){
+                                Errores error=new Errores("SEMANTICO","la sentencia break no deberia de estar aqui",this.linea,this.columna);
+                                Proyecto1Compi2_201213580.errores_fs.add(error);
+                            }else{
+                                proyecto1compi2_201213580.Proyecto1Compi2_201213580.control_break--;
+                                return null;
+                            }
                         }
-                        
+                        instruccion.execute(local);
                     }else if(node instanceof Expresion){
                         if(node instanceof Retornar){
                             Retornar retorno=(Retornar)node;
@@ -69,45 +117,18 @@ public class Switch implements Instruccion{
                             return retorno.getValue(local);
                         }else {
                             Expresion expresion=(Expresion)node;
-                            this.tipo=expresion.getType(local);
                             return expresion.getValue(local);
                         }
                     }else{
+                        Errores error=new Errores("SEMANTICO","la sentencia que se quiere evaluar no puede estar dentro de un switch",this.linea,this.columna);
+                        Proyecto1Compi2_201213580.errores_fs.add(error);
                         return null;
                     }
-                }
-                
+                }   
             }
+        }catch(Exception e){
+            javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la evaluacion del caso default del switch");
         }
-        //aqui vamos a ejecutar el default
-        if(!flag&&this.def!=null){
-            for(NodoAST  node:def.lista_bloques){
-                if(node instanceof Instruccion){
-                    Instruccion instruccion=(Instruccion)node;
-                    if(instruccion instanceof Detener){
-                        if(Proyecto1Compi2_201213580.control_break<=0){
-                               System.out.println("ERROR SEMANTICO: LA SENTENCIA BREAK NO DEBERIA DE VENIR AQUI");
-                        }else{
-                            proyecto1compi2_201213580.Proyecto1Compi2_201213580.control_break--;
-                            return null;
-                        }
-                    }
-                    instruccion.execute(local);
-                }else if(node instanceof Expresion){
-                    if(node instanceof Retornar){
-                        Retornar retorno=(Retornar)node;
-                        this.tipo=retorno.getType(local);
-                        return retorno.getValue(local);
-                    }else {
-                        Expresion expresion=(Expresion)node;
-                        return expresion.getValue(local);
-                    }
-                }else{
-                    return null;
-                }
-            }   
-        }
-        
         return null;
     }
 

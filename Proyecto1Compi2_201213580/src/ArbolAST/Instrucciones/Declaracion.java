@@ -11,6 +11,8 @@ import ArbolAST.Entorno.Simbolo;
 import ArbolAST.Entorno.Type;
 import ArbolAST.Expresiones.Expresion;
 import ArbolAST.Expresiones.Llamada_Funcion;
+import Auxiliares.Errores;
+import proyecto1compi2_201213580.Proyecto1Compi2_201213580;
 /**
  *
  * @author anton
@@ -20,13 +22,15 @@ public class Declaracion implements Instruccion {
         public Type.PrimitiveType tipo;
         public String id;
         public Expresion intValue;
-        public int line;
+        public int linea;
+        public int columna;
         public boolean inicializado;
-        public Declaracion(Type.PrimitiveType type,String id,Expresion expresion,boolean inicializado,int linea){
+        public Declaracion(Type.PrimitiveType type,String id,Expresion expresion,boolean inicializado,int linea,int columna){
             this.tipo=type;
             this.id=id;
             this.intValue=expresion;
-            this.line=line;
+            this.linea=linea;
+            this.columna=columna;
             this.inicializado=inicializado;
             this.tipo_implicito=Type.PrimitiveType.NULL;
         }           
@@ -43,19 +47,18 @@ public class Declaracion implements Instruccion {
                 }else{
                     tipo_v=intValue.getType(entorno);
                 }
-                
-                
                 if(valor!=null){
                     Simbolo aux=(Simbolo)entorno.Obtener(id);
                     Simbolo simbolo=new Simbolo(false,false, (Type.PrimitiveType) tipo_v,id,null,valor);
-                    
                     if(aux==null){
                         entorno.Agregar(id, simbolo);
                     }else{
-                        System.out.println("ERROR SEMANTICO: YA EXISTE UNA VARIABLE DECLARADA CON EL NOMBRE "+id);
+                        Errores error=new Errores("SEMANTICO","ya existe una variable declarada con el nombre "+this.id,this.linea,this.columna);
+                        Proyecto1Compi2_201213580.errores_fs.add(error);
                     }
                 }else{
-                    System.out.println("Error Semantico: Error de tipos no se puede operar el tipo de la declaracion "+id + " Linea: "+line);
+                    Errores error=new Errores("SEMANTICO","error de tipos no se puede realizar la operacion declaracion",this.linea,this.columna);
+                    Proyecto1Compi2_201213580.errores_fs.add(error);
                 }
             }else{
                 Simbolo simbolo=new Simbolo(false,false,Type.PrimitiveType.NULL,id,null,null);
@@ -63,19 +66,19 @@ public class Declaracion implements Instruccion {
                 if(aux==null){
                     entorno.Agregar(id, simbolo);
                 }else{
-                    System.out.println("ERROR SEMANTICO: YA EXISTE UNA VARIABLE DECLARADA CON EL NOMBRE "+id);
+                    Errores error=new Errores("SEMANTICO","ya existe una variable declarada con el nombre "+this.id,this.linea,this.columna);
+                    Proyecto1Compi2_201213580.errores_fs.add(error);
                 }
             }
-            
         }catch(Exception e){
-            System.out.println("ERROR SEMANTICO: Ocurrio un error en la declaracion");
+            javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la declaracion");
         }
         
         return null;
     }
     @Override
     public int getLine() {
-        return this.line; //To change body of generated methods, choose Tools | Templates.
+        return this.linea; //To change body of generated methods, choose Tools | Templates.
     }   
 
     public  Type.PrimitiveType getTipo() {

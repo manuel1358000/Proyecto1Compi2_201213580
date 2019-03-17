@@ -30,6 +30,7 @@ COMENTARIO_SIMPLE =("//".*\r\n)|("//".*\n)|("//".*\r)
 COMENTARIO_MULTIPLE ="/*""/"*([^*/]|[^*]"/"|"*"[^/])*"*"*"*/"
 PATH=["\""]{LETRA}[":"]["\\"]({ID}|["\\"])*["."]["f"]["s"]["\""]
 PATH2=["\""]((["/"])?({ID}|["\\"])*["."]["f"]["s"])["\""] 
+PATH3=["\""]((["/"])?({ID}|["\\"])*["."]["g"]["x"]["m"]["l"])["\""] 
 CADENA="\""~"\""
 PUNTO=["."]
 %%
@@ -100,6 +101,11 @@ PUNTO=["."]
 <YYINITIAL> "alcargar" { return new Symbol(simbolofs.alcargar, yyline, yycolumn,yytext());}
 <YYINITIAL> "alcerrar" { return new Symbol(simbolofs.alcerrar, yyline, yycolumn,yytext());}
 <YYINITIAL> "creararraydesdearchivo" { return new Symbol(simbolofs.arraydesdearchivo, yyline, yycolumn,yytext());}
+<YYINITIAL> "leergxml" { return new Symbol(simbolofs.leergxml, yyline, yycolumn,yytext());}
+
+<YYINITIAL> "obtenerporid" { return new Symbol(simbolofs.obtenerporid, yyline, yycolumn,yytext());}
+<YYINITIAL> "obtenerpornombre" { return new Symbol(simbolofs.obtenerpornombre, yyline, yycolumn,yytext());}
+<YYINITIAL> "obtenerporetiqueta" { return new Symbol(simbolofs.obtenerporetiqueta, yyline, yycolumn,yytext());}
 
 
 
@@ -112,6 +118,7 @@ PUNTO=["."]
 <YYINITIAL> {ID} { return new Symbol(simbolofs.valor_id, yyline, yycolumn,yytext());}
 <YYINITIAL> {PATH} { return new Symbol(simbolofs.valor_path, yyline, yycolumn,yytext());}
 <YYINITIAL> {PATH2} { return new Symbol(simbolofs.valor_path2, yyline, yycolumn,yytext());}
+<YYINITIAL> {PATH3} { return new Symbol(simbolofs.valor_path3, yyline, yycolumn,yytext());}
 <YYINITIAL> {CADENA} { return new Symbol(simbolofs.valor_cadena, yyline, yycolumn,yytext());}
 <YYINITIAL> {SIMBOLOS} { return new Symbol(simbolofs.valor_simbolo, yyline, yycolumn,yytext());}
 
@@ -126,6 +133,6 @@ PUNTO=["."]
 .   {
         System.out.println("Linea: " + (yyline+1) + " Columna: " + (yycolumn+1) + " - Error Lexico en: " + yytext());
         //id,archivo,tipo,descripcion,acciones,linea,columna,aux
-         Errores errores=new Errores(yytext(),"lexicoFS","ERROR LEXICO","EL SIMBOLO NO PERTENECE AL LENGUAJE","NO SE REALIZARON ACCIONES",String.valueOf(yyline+1),String.valueOf(yycolumn+1),"");
-         proyecto1compi2_201213580.Proyecto1Compi2_201213580.errores_lexicos.add(errores);
+         Errores errores=new Errores("Lexico","Caracter no reconocido "+yytext(),yyline+1,yycolumn+1);
+         proyecto1compi2_201213580.Proyecto1Compi2_201213580.errores_fs.add(errores);
     }

@@ -46,9 +46,9 @@ public class Numerico_UI extends JSpinner{
     }
     
     public void asignarValores(){
-        setBounds(Integer.parseInt(this.x),Integer.parseInt(this.y),Integer.parseInt(this.ancho),Integer.parseInt(this.alto));
-        setName(nombre);
         try{
+            setBounds(Integer.parseInt(this.x),Integer.parseInt(this.y),Integer.parseInt(this.ancho),Integer.parseInt(this.alto));
+            setName(nombre);
             SpinnerModel model=new SpinnerNumberModel(Integer.parseInt(this.defecto),Integer.parseInt(this.minimo),Integer.parseInt(this.maximo),1);
             setModel(model);
         }catch(Exception e){

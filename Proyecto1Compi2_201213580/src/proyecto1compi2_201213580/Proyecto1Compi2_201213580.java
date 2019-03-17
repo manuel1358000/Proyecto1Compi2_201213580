@@ -28,9 +28,8 @@ import javax.swing.JPanel;
 public class Proyecto1Compi2_201213580 {
     public static int control_break=0;
     public static String ruta_proyecto=new File ("").getAbsolutePath();
-    public static LinkedList<Errores>errores_lexicos=new LinkedList<>();
-    public static LinkedList<Errores>errores_sintacticos=new LinkedList<>();
-    public static LinkedList<Errores>errores_semanticos=new LinkedList<>();
+    public static LinkedList<Errores>errores_fs=new LinkedList<>();
+    public static LinkedList<Errores>errores_gxml=new LinkedList<>();
     /**
      * @param args the command line arguments
      */

@@ -6,7 +6,7 @@
 /FuncionesEvaluacion.fs
 </Importar>
 
-<Ventana id = "VentanaPrincipal" Color = "#000000" tipo = "prinCipal">
+<Ventana id = "VentanaPrincipal" Color = "#000000" tipo = "prinCipal" accionfinal={EnviarSinFuncionalidad()}>
 	<Contenedor id = "Contenedor1" X = 10 Y = 10 Alto = 400 Ancho = 400 Borde = verdadero>
 		<Texto Nombre = "lblEvaluacion" X = 10 Y = 10 Negrita = verdadero>
 			Haga clic en el siguiente boton para iniciar la evaluacion 
@@ -27,6 +27,10 @@
 		</Enviar>
 	</Contenedor>
 </Ventana>
+
+
+
+
 
 
 

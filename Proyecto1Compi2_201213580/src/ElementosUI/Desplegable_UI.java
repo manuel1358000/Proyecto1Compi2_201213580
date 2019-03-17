@@ -44,12 +44,16 @@ public class Desplegable_UI extends JComboBox{
     }
     
     public void asignarValores(){
-        setName(this.nombre);
-        setBounds(Integer.parseInt(this.x),Integer.parseInt(this.y),Integer.parseInt(this.ancho),Integer.parseInt(this.alto));
-        addItem(this.defecto);
-        String []listado=this.lista.split(",");
-        for(int i=0;i<listado.length;i++){
-            addItem(listado[i]);
+        try{
+            setName(this.nombre);
+            setBounds(Integer.parseInt(this.x),Integer.parseInt(this.y),Integer.parseInt(this.ancho),Integer.parseInt(this.alto));
+            addItem(this.defecto);
+            String []listado=this.lista.split(",");
+            for(int i=0;i<listado.length;i++){
+                addItem(listado[i]);
+            }
+        }catch(Exception e){
+            System.out.println("ERROR EN ASIGNAR VALORES DE DESPLEGABLE_UI");
         }
     }
 }

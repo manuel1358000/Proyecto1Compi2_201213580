@@ -11,23 +11,56 @@ package Auxiliares;
  */
 public class Errores {
     int index=0;
-    String id;
-    String archivo;
     String tipo;
     String descripcion;
-    String acciones;
-    String linea;
-    String columna;
-    String auxiliar;
+    int fila;
+    int columna;
 
-    public Errores(String id, String archivo, String tipo, String descripcion, String acciones, String linea, String columna, String auxiliar) {
-        this.id = id;
-        this.archivo = archivo;
+    public Errores(String tipo, String descripcion,int fila, int columna) {
         this.tipo = tipo;
         this.descripcion = descripcion;
-        this.acciones = acciones;
-        this.linea = linea;
+        this.fila = fila;
         this.columna = columna;
-        this.auxiliar = auxiliar;
     }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public int getFila() {
+        return fila;
+    }
+
+    public void setFila(int fila) {
+        this.fila = fila;
+    }
+
+    public int getColumna() {
+        return columna;
+    }
+
+    public void setColumna(int columna) {
+        this.columna = columna;
+    }
+    
 }

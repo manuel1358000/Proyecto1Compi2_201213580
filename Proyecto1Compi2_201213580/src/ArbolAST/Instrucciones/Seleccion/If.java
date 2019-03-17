@@ -13,6 +13,7 @@ import ArbolAST.Expresiones.operacion.Retornar;
 import ArbolAST.Instrucciones.Detener;
 import ArbolAST.Instrucciones.Instruccion;
 import ArbolAST.NodoAST;
+import Auxiliares.Errores;
 import java.util.LinkedList;
 import proyecto1compi2_201213580.Proyecto1Compi2_201213580;
 
@@ -28,87 +29,101 @@ public class If implements Instruccion{
     LinkedList<NodoAST> sentencias_if;
     boolean flag=false;
     SubIf def_else;
-    public If(Expresion condicion,LinkedList<NodoAST> sentencias_if,LinkedList<SubIf>lista_if,SubIf def_else){
+    int linea;
+    int columna;
+    public If(Expresion condicion,LinkedList<NodoAST> sentencias_if,LinkedList<SubIf>lista_if,SubIf def_else,int linea,int columna){
         this.condicion=condicion;
         this.lista_if=lista_if;
         this.def_else=def_else;
         this.sentencias_if=sentencias_if;
         this.tipo=Type.PrimitiveType.NULL;
+        this.linea=linea;
+        this.columna=columna;
     }
     @Override
     public Object execute(Entorno entorno) {
         Object respuesta=null;
+        
         Entorno local=new Entorno(entorno);
         Object condi=this.condicion.getValue(local);
         Type.PrimitiveType tipo_verificar=this.condicion.getType(local);
         if(tipo_verificar==Type.PrimitiveType.BOOLEAN){
             Object con=condi.toString();
             if(Boolean.valueOf(con.toString())==true){
-                flag=true;
-                for(NodoAST node:this.sentencias_if){
-                    if(node instanceof Instruccion){
-                        if(node instanceof Detener){
+                try{
+                    flag=true;
+                    for(NodoAST node:this.sentencias_if){
+                        if(node instanceof Instruccion){
+                            if(node instanceof Detener){
+                                respuesta=null;
+                            }else{
+                                Instruccion instruccion=(Instruccion)node;
+                                instruccion.execute(local);
+                            }
+                        }else if(node instanceof Expresion){
+                            if(node instanceof Retornar){
+                                Retornar retorno=(Retornar)node;
+                                respuesta=retorno.getValue(local);
+                                this.tipo=retorno.getType(local);
+                            }else{
+                                Expresion expresion=(Expresion)node;
+                                respuesta=expresion.getValue(local);
+                                this.tipo=expresion.getType(local);
+                            }
+                        }else{
+                            Errores error=new Errores("SEMANTICO","Operacion no permitida dentro de la sentencia if",this.linea,this.columna);
+                            Proyecto1Compi2_201213580.errores_fs.add(error);
                             respuesta=null;
-                        }else{
-                            Instruccion instruccion=(Instruccion)node;
-                            instruccion.execute(local);
                         }
-                    }else if(node instanceof Expresion){
-                        if(node instanceof Retornar){
-                            Retornar retorno=(Retornar)node;
-                            respuesta=retorno.getValue(local);
-                            this.tipo=retorno.getType(local);
-                        }else{
-                            Expresion expresion=(Expresion)node;
-                            respuesta=expresion.getValue(local);
-                            this.tipo=expresion.getType(local);
-                        }
-                    }else{
-                        respuesta=null;
                     }
+                }catch(Exception e){
+                    javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en el primer bloque del if");
                 }
             }else{
                 flag=false;
             }
         }else{
             flag=false;
-            System.out.println("ERROR SEMANTICO: LA SENTENCIA IF EN SU CONDICION SOLO PUEDE VERIFICAR VALORES BOOLEANOS");
         }        
         if(!flag){
-            for(SubIf subif:this.lista_if){
-                Object condi2=subif.condicion.getValue(local);
-                if(subif.condicion.getType(local)==Type.PrimitiveType.BOOLEAN){
-                    if(Boolean.valueOf(condi2.toString())==true){
-                        flag=true;
-                        for(NodoAST node:subif.lista_bloques){
-                            if(node instanceof Instruccion){
-                                if(node instanceof Detener){
-                                    respuesta= null;
+            try{
+                for(SubIf subif:this.lista_if){
+                    Object condi2=subif.condicion.getValue(local);
+                    if(subif.condicion.getType(local)==Type.PrimitiveType.BOOLEAN){
+                        if(Boolean.valueOf(condi2.toString())==true){
+                            flag=true;
+                            for(NodoAST node:subif.lista_bloques){
+                                if(node instanceof Instruccion){
+                                    if(node instanceof Detener){
+                                        respuesta= null;
+                                    }else{
+                                        Instruccion instruccion=(Instruccion)node;
+                                        instruccion.execute(local);
+                                    }
+                                }else if(node instanceof Expresion){
+                                    if(node instanceof Retornar){
+                                        Retornar retorno=(Retornar)node;
+                                        respuesta=retorno.getValue(local);
+                                        this.tipo=retorno.getType(local);
+                                    }else{
+                                        Expresion expresion=(Expresion)node;
+                                        respuesta=expresion.getValue(local);
+                                        this.tipo=expresion.getType(local);
+                                    }
                                 }else{
-                                    Instruccion instruccion=(Instruccion)node;
-                                    instruccion.execute(local);
+                                    Errores error=new Errores("SEMANTICO","Esta sentencia no es permitida dentro de un if",this.linea,this.columna);
+                                    Proyecto1Compi2_201213580.errores_fs.add(error);
+                                    respuesta=null;
                                 }
-                            }else if(node instanceof Expresion){
-                                if(node instanceof Retornar){
-                                    Retornar retorno=(Retornar)node;
-                                    respuesta=retorno.getValue(local);
-                                    this.tipo=retorno.getType(local);
-                                }else if(node instanceof Llamada_Funcion){
-                                    System.out.println("putos");
-                                }else{
-                                    Expresion expresion=(Expresion)node;
-                                    respuesta=expresion.getValue(local);
-                                    this.tipo=expresion.getType(local);
-                                }
-                            }else{
-                                respuesta=null;
                             }
+                            break;
+                        }else{
+                            flag=false;
                         }
-                        break;
-                    }else{
-                        flag=false;
                     }
                 }
+            }catch(Exception e){
+                javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en el bloque else if ");
             }
         }
         
@@ -116,32 +131,39 @@ public class If implements Instruccion{
             //se manda a ejecutar al else
             //tenemos que verificar primero si el else es nulo
             if(def_else!=null){
-                for(NodoAST node:def_else.lista_bloques){
-                    if(node instanceof Instruccion){
-                        if(node instanceof Detener){
-                            if(Proyecto1Compi2_201213580.control_break<=0){
-                                System.out.println("Error Semantico: Se encontro una instruccion break donde no corresponde");
+                try{
+                    for(NodoAST node:def_else.lista_bloques){
+                        if(node instanceof Instruccion){
+                            if(node instanceof Detener){
+                                if(Proyecto1Compi2_201213580.control_break<=0){
+                                    Errores error=new Errores("SEMANTICO","Se encontro una instruccion break donde no corresponde",this.linea,this.columna);
+                                    Proyecto1Compi2_201213580.errores_fs.add(error);
+                                }else{
+                                    Proyecto1Compi2_201213580.control_break--;
+                                }
+                                respuesta=null;
                             }else{
-                                Proyecto1Compi2_201213580.control_break--;
+                                Instruccion instruccion=(Instruccion)node;
+                                instruccion.execute(local);
                             }
+                        }else if(node instanceof Expresion){
+                            if(node instanceof Retornar){
+                                Retornar retorno=(Retornar)node;
+                                respuesta=retorno.getValue(local);
+                                this.tipo=retorno.getType(local);
+                            }else{
+                                Expresion expresion=(Expresion)node;
+                                respuesta=expresion.getValue(local);
+                                this.tipo=expresion.getType(local);
+                            }
+                        }else{
+                            Errores error=new Errores("SEMANTICO","Se detecto una operacion no valida dentro del if",this.linea,this.columna);
+                            Proyecto1Compi2_201213580.errores_fs.add(error);
                             respuesta=null;
-                        }else{
-                            Instruccion instruccion=(Instruccion)node;
-                            instruccion.execute(local);
                         }
-                    }else if(node instanceof Expresion){
-                        if(node instanceof Retornar){
-                            Retornar retorno=(Retornar)node;
-                            respuesta=retorno.getValue(local);
-                            this.tipo=retorno.getType(local);
-                        }else{
-                            Expresion expresion=(Expresion)node;
-                            respuesta=expresion.getValue(local);
-                            this.tipo=expresion.getType(local);
-                        }
-                    }else{
-                        respuesta=null;
                     }
+                }catch(Exception e){
+                    javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en el bloque else");
                 }
             }else{
                 respuesta=null;

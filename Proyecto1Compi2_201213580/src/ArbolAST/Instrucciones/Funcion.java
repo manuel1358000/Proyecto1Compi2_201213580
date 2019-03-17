@@ -16,7 +16,9 @@ import ArbolAST.Expresiones.operacion.Retornar;
 import ArbolAST.Instrucciones.Seleccion.If;
 import ArbolAST.Instrucciones.Seleccion.Switch;
 import ArbolAST.NodoAST;
+import Auxiliares.Errores;
 import java.util.LinkedList;
+import proyecto1compi2_201213580.Proyecto1Compi2_201213580;
 
 /**
  *
@@ -28,21 +30,27 @@ public class Funcion implements Instruccion{
     LinkedList<NodoAST> parametros;
     LinkedList<NodoAST> parametros_entrada;
     LinkedList<NodoAST> lista_bloques;
+    int linea;
+    int columna;
     //si recibe parametros
-    public Funcion(String id,LinkedList<NodoAST>parametros,LinkedList<NodoAST>lista_bloques){
+    public Funcion(String id,LinkedList<NodoAST>parametros,LinkedList<NodoAST>lista_bloques,int linea,int columna){
         this.parametros=parametros;
         this.lista_bloques=lista_bloques;
         this.id=generarNombre(id);
         this.tipo=Type.PrimitiveType.NULL;
         this.parametros_entrada=new LinkedList<>();
+        this.linea=linea;
+        this.columna=columna;
     }
     //no recibe parametros
-    public Funcion(String id,LinkedList<NodoAST>lista_bloques){
+    public Funcion(String id,LinkedList<NodoAST>lista_bloques,int linea,int columna){
         this.parametros=new LinkedList<>();
         this.lista_bloques=lista_bloques;
         this.id=generarNombre(id);
         this.tipo=Type.PrimitiveType.NULL;
         this.parametros_entrada=new LinkedList<>();
+        this.linea=linea;
+        this.columna=columna;
     }
     public String generarNombre(String id){
         String respuesta="";
@@ -65,71 +73,84 @@ public class Funcion implements Instruccion{
         Object respuesta=null;
         Entorno local=new Entorno(entorno);
         if(this.parametros.size()==this.parametros_entrada.size()){
-            for(int i=0;i<this.parametros.size();i++){
-                Declaracion declaracion=(Declaracion)this.parametros.get(i);
-                Expresion expresion=(Expresion)this.parametros_entrada.get(i);
-                declaracion.intValue=expresion;
-                if(declaracion.tipo_implicito==Type.PrimitiveType.NULL){
-                    declaracion.tipo_implicito=expresion.getType(local);
-                }
-                Simbolo sim=new Simbolo(true,true,declaracion.tipo,declaracion.getId(),new LinkedList<>(),declaracion.intValue);
-                sim.setTipo_implicito(declaracion.tipo_implicito);
-                local.AgregarParametro(declaracion.getId(), sim);             
-                
-            }
-            //ya se agregaron los parametros
-            for(NodoAST nodo:this.lista_bloques){
-                if(nodo instanceof Imprimir){
-                    Imprimir imprimir=(Imprimir)nodo;
-                    imprimir.execute(local);
-                }else if(nodo instanceof Llamada_Funcion){
-                    Llamada_Funcion llamada=(Llamada_Funcion)nodo;
-                    respuesta=llamada.getValue(local);
-                }else if(nodo instanceof Declaracion){
-                    if(nodo instanceof Declaracion_Arreglo){
-                        Declaracion_Arreglo declaracion_arreglo=(Declaracion_Arreglo)nodo;
-                        declaracion_arreglo.execute(local);
-                    }else{
-                        Declaracion declaracion=(Declaracion) nodo;
-                        declaracion.execute(local);
+            try{
+                for(int i=0;i<this.parametros.size();i++){
+                    Declaracion declaracion=(Declaracion)this.parametros.get(i);
+                    Expresion expresion=(Expresion)this.parametros_entrada.get(i);
+                    declaracion.intValue=expresion;
+                    if(declaracion.tipo_implicito==Type.PrimitiveType.NULL){
+                        declaracion.tipo_implicito=expresion.getType(local);
                     }
-                }else if(nodo instanceof Asignacion){
-                    Asignacion asignacion=(Asignacion)nodo;
-                    respuesta=asignacion.execute(local);
-                }else if(nodo instanceof If){
-                    If i_if=(If)nodo;
-                    respuesta=i_if.execute(local);
-                    this.tipo=i_if.getTipo();
-                }else if(nodo instanceof Switch){
-                   Switch i_switch =(Switch)nodo;
-                   respuesta=i_switch.execute(local);
-                }else if(nodo instanceof Detener){
-                    Detener detener=(Detener)nodo;
-                    respuesta=detener.execute(local);
-                }else if(nodo instanceof Retornar){
-                    Retornar retornar=(Retornar)nodo;
-                    respuesta= retornar.getValue(local).toString();             
-                    this.tipo=retornar.getType(local);         
-                }else if(nodo instanceof Funciones_Arreglos){
-                    //aqui vamos a hacer la ejecucion de todo
-                    Funciones_Arreglos funciones=(Funciones_Arreglos)nodo;
-                    funciones.getValue(local);
-                }else if(nodo instanceof Declaracion_UI){
-                    Declaracion_UI decla_ui=(Declaracion_UI)nodo;
-                    decla_ui.getValue(local);
-                    decla_ui.getTipo();
-                }else if(nodo instanceof Eventos_Botones){
-                    Eventos_Botones eve_boton=(Eventos_Botones)nodo;
-                    eve_boton.execute(local);
-                }else if(nodo instanceof Eventos_Ventanas){
-                    Eventos_Ventanas eve_ventana=(Eventos_Ventanas)nodo;
-                    eve_ventana.execute(local);
-                }else{
-                    System.out.println("ERROR SEMANTICO: ESTA OPERACION ES INVALIDA DENTRO DE UNA FUNCION");
+                    Simbolo sim=new Simbolo(true,true,declaracion.tipo,declaracion.getId(),new LinkedList<>(),declaracion.intValue);
+                    sim.setTipo_implicito(declaracion.tipo_implicito);
+                    local.AgregarParametro(declaracion.getId(), sim);             
+
                 }
+            }catch(Exception e){
+                javax.swing.JOptionPane.showMessageDialog(null,"Excepcion al momento de inicializar los parametros de la funcion");
+            }
+            try{
+                //ya se agregaron los parametros
+                for(NodoAST nodo:this.lista_bloques){
+                    if(nodo instanceof Imprimir){
+                        Imprimir imprimir=(Imprimir)nodo;
+                        imprimir.execute(local);
+                    }else if(nodo instanceof Llamada_Funcion){
+                        Llamada_Funcion llamada=(Llamada_Funcion)nodo;
+                        respuesta=llamada.getValue(local);
+                    }else if(nodo instanceof Declaracion){
+                        if(nodo instanceof Declaracion_Arreglo){
+                            Declaracion_Arreglo declaracion_arreglo=(Declaracion_Arreglo)nodo;
+                            declaracion_arreglo.execute(local);
+                        }else{
+                            Declaracion declaracion=(Declaracion) nodo;
+                            declaracion.execute(local);
+                        }
+                    }else if(nodo instanceof Asignacion){
+                        Asignacion asignacion=(Asignacion)nodo;
+                        respuesta=asignacion.execute(local);
+                    }else if(nodo instanceof AsignacionArreglo){
+                        AsignacionArreglo asigna=(AsignacionArreglo)nodo;
+                        asigna.execute(local);
+                    }else if(nodo instanceof If){
+                        If i_if=(If)nodo;
+                        respuesta=i_if.execute(local);
+                        this.tipo=i_if.getTipo();
+                    }else if(nodo instanceof Switch){
+                       Switch i_switch =(Switch)nodo;
+                       respuesta=i_switch.execute(local);
+                    }else if(nodo instanceof Detener){
+                        Detener detener=(Detener)nodo;
+                        respuesta=detener.execute(local);
+                    }else if(nodo instanceof Retornar){
+                        Retornar retornar=(Retornar)nodo;
+                        respuesta= retornar.getValue(local).toString();             
+                        this.tipo=retornar.getType(local);         
+                    }else if(nodo instanceof Funciones_Arreglos){
+                        //aqui vamos a hacer la ejecucion de todo
+                        Funciones_Arreglos funciones=(Funciones_Arreglos)nodo;
+                        funciones.getValue(local);
+                    }else if(nodo instanceof Declaracion_UI){
+                        Declaracion_UI decla_ui=(Declaracion_UI)nodo;
+                        decla_ui.getValue(local);
+                        decla_ui.getTipo();
+                    }else if(nodo instanceof Eventos_Botones){
+                        Eventos_Botones eve_boton=(Eventos_Botones)nodo;
+                        eve_boton.execute(local);
+                    }else if(nodo instanceof Eventos_Ventanas){
+                        Eventos_Ventanas eve_ventana=(Eventos_Ventanas)nodo;
+                        eve_ventana.execute(local);
+                    }else{
+                        Errores error=new Errores("SEMANTICO","operacion invalida en una funcion",this.linea,this.columna);
+                        Proyecto1Compi2_201213580.errores_fs.add(error);
+                    }
+                }
+            }catch(Exception e){
+                javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la ejecucion de las instrucciones dentro de la funcion");
             }
         }else{
-            System.out.println("ERROR SEMANTICO: HAY PARAMETROS EXTRAS O HAY PARAMETROS FALTANTES EN LA EJECUCION DE LA FUNCION "+this.getId());
+            Errores error=new Errores("SEMANTICO","Hay parametros extras/faltantes en la ejecucion de la funcion",this.linea,this.columna);
+            Proyecto1Compi2_201213580.errores_fs.add(error);
         }
         return respuesta;
     }

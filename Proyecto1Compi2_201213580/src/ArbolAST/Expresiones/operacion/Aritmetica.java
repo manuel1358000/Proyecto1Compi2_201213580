@@ -14,20 +14,22 @@ import ArbolAST.Expresiones.AccesoArreglo;
 import ArbolAST.Expresiones.Expresion;
 import ArbolAST.Expresiones.Llamada_Funcion;
 import ArbolAST.Instrucciones.Funcion;
+import Auxiliares.Errores;
+import proyecto1compi2_201213580.Proyecto1Compi2_201213580;
 
 /**
  *
  * @author anton
  */
 public class Aritmetica extends Operacion implements Expresion{
-    public Aritmetica(Expresion expresion1, Expresion expresion2, Operador operador) {
-        super(expresion1, expresion2, operador);
+    public Aritmetica(Expresion expresion1, Expresion expresion2, Operador operador,int linea,int columna) {
+        super(expresion1, expresion2, operador,linea,columna);
     }
-    public Aritmetica(Expresion expresion1, boolean valor, Operador operador) {
-        super(expresion1, valor, operador);
+    public Aritmetica(Expresion expresion1, boolean valor, Operador operador,int linea,int columna) {
+        super(expresion1, valor, operador,linea,columna);
     }
-    public Aritmetica(Object valor,Type.PrimitiveType type) {
-        super(valor,type);
+    public Aritmetica(Object valor,Type.PrimitiveType type,int linea,int columna) {
+        super(valor,type,linea,columna);
     }
     
     @Override
@@ -84,6 +86,9 @@ public class Aritmetica extends Operacion implements Expresion{
                                 respuesta=Double.parseDouble(valor_arreglo.toString())-1;
                             }
                         }
+                    }else{
+                        Errores error=new Errores("SEMANTICO","La operacion unaria no encontro un elemento valido",this.linea,this.columna);
+                        Proyecto1Compi2_201213580.errores_fs.add(error);
                     }
                 }else{
                     if(this.type==Type.PrimitiveType.ID){
@@ -91,7 +96,8 @@ public class Aritmetica extends Operacion implements Expresion{
                         if(referencia!=null){
                             respuesta=referencia.valor;
                         }else{
-                            System.out.println("ERROR SEMANTICO: No existe el id " + this.valor.toString());
+                            Errores error=new Errores("SEMANTICO","EN LA OPERACION UNARIA NO EXISTE EL ID"+this.valor.toString(),this.linea,this.columna);
+                            Proyecto1Compi2_201213580.errores_fs.add(error);
                             respuesta=null;
                         }
                     }else{
@@ -99,7 +105,7 @@ public class Aritmetica extends Operacion implements Expresion{
                     }
                 }
             }catch(Exception e){
-                System.out.println("OCURRIO UN ERROR EN LA OPERACION UNARIA");
+                javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la operacion unaria");
             }
         }else{
             if(this.expresion1!=null&&this.expresion2!=null){
@@ -120,7 +126,6 @@ public class Aritmetica extends Operacion implements Expresion{
                     Llamada_Funcion llamada=(Llamada_Funcion)this.expresion2;
                     val2=llamada.getValue(entorno);
                     valor4=llamada.getTipo_respuesta();
-                    System.out.println("");
                 }else{
                     val2=this.expresion2.getValue(entorno).toString().replaceAll("\"","");
                     valor4=this.expresion2.getType(entorno);
@@ -135,7 +140,8 @@ public class Aritmetica extends Operacion implements Expresion{
                         }else if(tipo==Type.PrimitiveType.BOOLEAN){
                             respuesta= null;
                         }else if(tipo==Type.PrimitiveType.NULL){
-                            System.out.println("EL TIPO ES NULO");
+                            Errores error=new Errores("SEMANTICO","Error de tipos en la operacion suma",this.linea,this.columna);
+                            Proyecto1Compi2_201213580.errores_fs.add(error);
                             respuesta=null;
                         }else if(tipo==Type.PrimitiveType.INTEGER){
                             this.type=tipo;
@@ -145,7 +151,7 @@ public class Aritmetica extends Operacion implements Expresion{
                             respuesta=Double.valueOf(val1.toString())+Double.valueOf(val2.toString());
                         }
                     }catch(Exception e){
-                        System.out.println("OCURRIO UN ERROR EN LA OPERACION SUMA");
+                        javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la operacion suma");
                     }
                 }else if(this.operador==Operador.RESTA){
                     try{
@@ -156,10 +162,12 @@ public class Aritmetica extends Operacion implements Expresion{
                             this.type=tipo;
                             respuesta= Double.valueOf(val1.toString())-Double.valueOf(val2.toString());
                         }else{
+                            Errores error=new Errores("SEMANTICO","Error de tipos en la resta",this.linea,this.columna);
+                            Proyecto1Compi2_201213580.errores_fs.add(error);
                             respuesta=null;
                         }
                     }catch(Exception e){
-                        System.out.println("OCURRIO UN ERROR EN LA OPERACION RESTA");
+                        javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la operacion resta");
                     }
                 }else if(this.operador==Operador.MULTIPLICACION){
                     try{
@@ -171,11 +179,12 @@ public class Aritmetica extends Operacion implements Expresion{
                             respuesta= Double.valueOf(val1.toString())*Double.valueOf(val2.toString());
                         }else{
                             //error semantico
-                            System.out.println("multiplicacion");
+                            Errores error=new Errores("SEMANTICO","Error de tipos en la multiplicacion",this.linea,this.columna);
+                            Proyecto1Compi2_201213580.errores_fs.add(error);
                             respuesta=null;
                         }
                     }catch(Exception e){
-                        System.out.println("OCURRIO UN ERROR EN LA OPERACION MULTIPLICACION");
+                        javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la operacion multiplicacion");
                     }
                 }else if(this.operador==Operador.DIVISION){
                     try{
@@ -192,11 +201,12 @@ public class Aritmetica extends Operacion implements Expresion{
                             }
                         }else{
                             //error semantico
-                            System.out.println("division rara");
+                            Errores error=new Errores("SEMANTICO","Error de tipos en la operacion division",this.linea,this.columna);
+                            Proyecto1Compi2_201213580.errores_fs.add(error);
                             respuesta=null;
                         }
                     }catch(Exception e){
-                        System.out.println("OCURRIO UN ERROR EN LA OPERACION DIVISION");
+                        javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la operacion division");
                     }
                 }else if(this.operador==Operador.POTENCIA){
                     try{
@@ -207,10 +217,12 @@ public class Aritmetica extends Operacion implements Expresion{
                             this.type=tipo;
                             respuesta= Math.pow(Double.valueOf(val1.toString()),Double.valueOf(val2.toString()));
                         }else{
+                            Errores error=new Errores("SEMANTICO","Error de tipos en la operacion potencia",this.linea,this.columna);
+                            Proyecto1Compi2_201213580.errores_fs.add(error);
                             respuesta=null;
                         }
                     }catch(Exception e){
-                        System.out.println("OCURRIO UN ERROR EN LA OPERACION POTENCIA");
+                        javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la operacion potencia");
                     }
                 }else{
                     respuesta=null;
@@ -222,20 +234,19 @@ public class Aritmetica extends Operacion implements Expresion{
                         if(referencia.valor instanceof Expresion){
                             respuesta=((Expresion)referencia.valor).getValue(entorno);
                         }else{
-                            
                             respuesta=referencia.valor;
                             this.type=referencia.tipo;
-                            
                         }
                     }else{
-                        System.out.println("ERROR SEMANTICO: No existe el id "+this.valor);
+                        Errores error=new Errores("SEMANTICO","No existe el id"+this.valor,this.linea,this.columna);
+                        Proyecto1Compi2_201213580.errores_fs.add(error);;
                         respuesta=null;
                     }
                 }else{
                     try{
                         respuesta=this.valor;
                     }catch(Exception e){
-                        System.out.println("ERROR SEMANTICO: OCURRIO UN ERROR AL MOMENTO DE RETORNAR EL VALOR EN ARITMETICA");
+                        javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en operar el valor en atirmetica");
                     }
                 }
             }
@@ -286,10 +297,12 @@ public class Aritmetica extends Operacion implements Expresion{
                     }
                 }
             }else{
+                Errores error=new Errores("SEMANTICO","Error en operacion de tipos",this.linea,this.columna);
+                Proyecto1Compi2_201213580.errores_fs.add(error);
                 respuesta= Type.PrimitiveType.NULL;
             }
         }catch(Exception e){
-            System.out.println("OCURRIO UN ERROR AL MOMENTO DE GENERAR TIPOS EN ARITMETICA");
+            javax.swing.JOptionPane.showMessageDialog(null,"Exception en la generacion de tipos ARITMETICOS");
         }
         return respuesta;
     }

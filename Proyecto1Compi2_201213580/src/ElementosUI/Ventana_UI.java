@@ -5,9 +5,11 @@
  */
 package ElementosUI;
 
+import ArbolAST.AST;
 import ArbolAST.Entorno.Entorno;
 import ArbolAST.Entorno.Simbolo;
 import ArbolAST.Expresiones.Expresion;
+import ArbolAST.Expresiones.Llamada_Funcion;
 import ArbolAST.NodoAST;
 import java.awt.Color;
 import java.awt.Component;
@@ -44,7 +46,13 @@ public class Ventana_UI extends JFrame implements Expresion{
             @Override
             public void windowClosing(WindowEvent e) {
                 //Hacer lo que yo quiero
-                System.out.println("Estoy cerrando "+lista_cerrar.size());
+                try{
+                    for(int i=0;i<lista_cerrar.size();i++){
+                        lista_cerrar.get(i).getValue(AST.global);
+                    }
+                }catch(Exception f){
+                    System.out.println("ERROR AL MOMENTO DE EJECUTAR METODOS CERRAR VENTANA");
+                }
             }
         });
     }    

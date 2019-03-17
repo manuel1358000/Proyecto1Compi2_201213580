@@ -15,7 +15,12 @@ import ArbolAST.Instrucciones.Instruccion;
  * @author anton
  */
 public class Detener implements Instruccion{
-
+    int linea;
+    int columna;
+    public Detener(int linea,int columna){
+        this.linea=linea;
+        this.columna=columna;
+    }
     @Override
     public int getLine() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

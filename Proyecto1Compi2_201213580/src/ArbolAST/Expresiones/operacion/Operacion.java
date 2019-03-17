@@ -18,28 +18,35 @@ public class Operacion implements Expresion{
     Expresion expresion1;
     Expresion expresion2;
     Operador operador;
-    int line;
+    int linea;
+    int columna;
     boolean unario;
     Type.PrimitiveType type;
     Object valor;
     boolean negacion;
     Type.PrimitiveType tipo_respuesta;
-    public Operacion(Expresion expresion1,Expresion expresion2,Operador operador){
+    public Operacion(Expresion expresion1,Expresion expresion2,Operador operador,int linea,int columna){
         this.expresion1=expresion1;
         this.expresion2=expresion2;
         this.operador=operador;
+        this.linea=linea;
+        this.columna=columna;
     }
     public Operacion(String id,LinkedList<Componente_Funcion_Arreglo>funciones_arreglo){
     }
-    public Operacion(Expresion expresion1,boolean valor,Operador operador){
+    public Operacion(Expresion expresion1,boolean valor,Operador operador,int linea,int columna){
         this.expresion1=expresion1;
         this.unario=valor;
         this.negacion=valor;
         this.operador=operador;
+        this.linea=linea;
+        this.columna=columna;
     }
-    public Operacion(Object valor,Type.PrimitiveType type){
+    public Operacion(Object valor,Type.PrimitiveType type,int linea,int columna){
         this.valor=valor;
         this.type=type;
+        this.linea=linea;
+        this.columna=columna;
     }
     @Override
     public Object getValue(Entorno entorno) {

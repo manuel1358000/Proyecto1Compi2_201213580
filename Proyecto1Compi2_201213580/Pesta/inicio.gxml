@@ -1,4 +1,4 @@
-<Ventana id = "Inicio" tipo = "principal" accioninicial = {hola()} AccionFinal = {MensajeDespedida("Julio" + " Arango")}>
+<Ventana id = "Inicio" accioninicial = {hola()} AccionFinal = {MensajeDespedida("Julio" + " Arango")}>
 	<Contenedor id = "ContBtn" x = 10 Y = 220 Alto = 100 Ancho = 200>
 		<Control tipo = "desplegable" Nombre = "numerico" X = 150 Y = 150 Alto = 150>
 			<listadatos>
@@ -27,6 +27,7 @@
 		</Boton>
 	</Contenedor>
 </Ventana>
+
 
 
 

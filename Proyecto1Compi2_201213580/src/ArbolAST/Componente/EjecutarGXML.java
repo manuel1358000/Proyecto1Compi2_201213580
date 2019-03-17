@@ -7,6 +7,7 @@ package ArbolAST.Componente;
 
 import Analizadores.GramaticaGXML.lexicoGXML;
 import Analizadores.GramaticaGXML.sintacticoGXML;
+import Auxiliares.Errores;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
@@ -24,8 +25,12 @@ import javax.swing.JOptionPane;
 public class EjecutarGXML {
     public static NodoGXML nodoRaiz;
     public boolean bandera=false;
+    public boolean band=false;
     public EjecutarGXML(NodoGXML nodoRaiz){
         this.nodoRaiz=nodoRaiz;
+    }
+    public void setBand(boolean valor){
+        this.band=valor;
     }
     public void Importaciones(NodoGXML raiz){
         if(raiz.nodos!=null){
@@ -50,7 +55,9 @@ public class EjecutarGXML {
                                     }
 
                                 }else{
-                                    JOptionPane.showMessageDialog(null,"ERROR: NO SE ENCONTRO EL ARCHIVO, La ruta general del archivo es "+archivo.getAbsolutePath());
+                                    Errores error=new Errores("SINTACTICO","no se encontro el archivo",0,0);
+                                    Proyecto1Compi2_201213580.errores_gxml.add(error);
+                                    JOptionPane.showMessageDialog(null,"ERROR: NO SE ENCONTRO EL ARCHIVO, La ruta absoluta del archivo es "+archivo.getAbsolutePath());
                                 }
                             }else{
                                 File archivo=new File(Proyecto1Compi2_201213580.ruta_proyecto+raiz.nodos.get(i).valor.toString());
@@ -65,6 +72,8 @@ public class EjecutarGXML {
                                         Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
                                     }
                                 }else{
+                                    Errores error=new Errores("SINTACTICO","no se encontro el archivo",0,0);
+                                    Proyecto1Compi2_201213580.errores_gxml.add(error);
                                     JOptionPane.showMessageDialog(null,"ERROR: NO SE ENCONTRO EL ARCHIVO, La ruta absoluta del archivo es "+archivo.getAbsolutePath());
 
                                 }
@@ -81,6 +90,8 @@ public class EjecutarGXML {
                                         }
                                     }
                                     if(bandera==true){
+                                        Errores error=new Errores("SINTACTICO","LA VENTANA CON ID "+raiz_importacion.nodos.get(f).elemento_id+" YA EXISTE EN EL ENTORNO",0,0);
+                                        Proyecto1Compi2_201213580.errores_gxml.add(error);
                                         JOptionPane.showMessageDialog(null,"LA VENTANA CON ID "+raiz_importacion.nodos.get(f).elemento_id+" YA EXISTE EN EL ENTORNO");
                                     }else{
                                         if(raiz_importacion.nodos.get(f).tipo_etiqueta.equals("importar")){
@@ -155,6 +166,10 @@ public class EjecutarGXML {
                         accioninicial="ventana_"+id+".alcargar();\n";
                     }
                     respuesta+="\nventana_"+id+".alcargar("+accioninicial+");\n";
+                }
+                if(band==true){
+                    respuesta+="ventana_"+id+".alcargar();\n";
+                    band=false;
                 }
                 if(accionfinal.equals("")){
                 }else{
@@ -468,6 +483,8 @@ public class EjecutarGXML {
                                 Integer.parseInt(valor.replaceAll(" ", ""));
                                 pendiente+=valor.replaceAll(" ","")+",";
                             }catch(Exception e){
+                                Errores error=new Errores("SINTACTICO","el valor por defecto no es un numero",0,0);
+                                Proyecto1Compi2_201213580.errores_gxml.add(error);
                                 System.out.println("Error semantico: El valor por defecto no es un numero");
                             }
                         }
@@ -529,6 +546,8 @@ public class EjecutarGXML {
                         break;
                     }
                     default:
+                        Errores error=new Errores("SINTACTICO","el control solo puede tener tipo texto, textoarea, numerico, desplegable. El tipo que se quiere asignar es" +tipo,0,0);
+                        Proyecto1Compi2_201213580.errores_gxml.add(error);
                         System.out.println("ERROR SEMANTICO: el control solo puede tener tipo texto, textoarea, numerico, desplegable. El tipo que se quiere asignar es "+tipo);
                         break;
 
@@ -567,6 +586,8 @@ public class EjecutarGXML {
                         pendiente+=arriba+".crearReproductor(";
                         //ruta x y auto alto ancho
                         if(path.equals("vacio")){
+                            Errores error=new Errores("SINTACTICO","Hace falta el atributo path de la etiqueta "+nombre,0,0);
+                            Proyecto1Compi2_201213580.errores_gxml.add(error);
                             System.out.println("Error: Hace falta el atributo path de la etiqueta "+nombre);
                         }else{
                             if(verificarExtension(path,"musica")){
@@ -599,6 +620,8 @@ public class EjecutarGXML {
                                 pendiente+=");\n";
                                 respuesta+=pendiente;
                             }else{
+                                Errores error=new Errores("SINTACTICO","Error formato no aceptado para audio, el path incorrecto es "+path,0,0);
+                                Proyecto1Compi2_201213580.errores_gxml.add(error);
                                 System.out.println("Error formato no aceptado para audio, el path incorrecto es "+path);
                             }
 
@@ -609,6 +632,8 @@ public class EjecutarGXML {
                         pendiente+=arriba+".crearVideo(";
                         //ruta x y auto alto ancho
                         if(path.equals("vacio")){
+                            Errores error=new Errores("SINTACTICO","Error: Hace falta el atributo path de la etiqueta "+nombre,0,0);
+                            Proyecto1Compi2_201213580.errores_gxml.add(error);
                             System.out.println("Error: Hace falta el atributo path de la etiqueta "+nombre);
                         }else{
                             if(verificarExtension(path,"video")){
@@ -641,6 +666,8 @@ public class EjecutarGXML {
                                 pendiente+=");\n";
                                 respuesta+=pendiente;
                             }else{
+                                Errores error=new Errores("SINTACTICO","Error formato no aceptado para videos, el path incorrecto es "+path,0,0);
+                                Proyecto1Compi2_201213580.errores_gxml.add(error);
                                 System.out.println("Error formato no aceptado para videos, el path incorrecto es "+path);
                             }
                         }
@@ -650,6 +677,8 @@ public class EjecutarGXML {
                         pendiente+=arriba+".crearImagen(";
                         //ruta x y auto alto ancho
                         if(path.equals("vacio")){
+                            Errores error=new Errores("SINTACTICO","Error: Hace falta el atributo path de la etiqueta "+nombre,0,0);
+                            Proyecto1Compi2_201213580.errores_gxml.add(error);
                             System.out.println("Error: Hace falta el atributo path de la etiqueta "+nombre);
                         }else{
                             if(verificarExtension(path,"imagen")){
@@ -677,6 +706,8 @@ public class EjecutarGXML {
                                 pendiente+=");\n";
                                 respuesta+=pendiente;
                             }else{
+                                Errores error=new Errores("SINTACTICO","Error formato no aceptado para imagenes, el path incorrecto es "+path,0,0);
+                                Proyecto1Compi2_201213580.errores_gxml.add(error);
                                 System.out.println("Error formato no aceptado para imagenes, el path incorrecto es "+path);
                             }
                         }
@@ -998,6 +1029,7 @@ public class EjecutarGXML {
                 }
             }
         }catch(Exception e){
+            javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la ejecucion del ast");
             System.out.println("ERROR EN VERIFICAR NOMBRE, EJECUTAR GXML");
         }
         

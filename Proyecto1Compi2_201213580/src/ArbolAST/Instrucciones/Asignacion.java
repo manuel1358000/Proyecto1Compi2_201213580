@@ -11,6 +11,8 @@ import ArbolAST.Expresiones.Expresion;
 import ArbolAST.Expresiones.operacion.Operacion.Operador;
 import ArbolAST.Entorno.Type;
 import ArbolAST.Expresiones.operacion.Operacion;
+import Auxiliares.Errores;
+import proyecto1compi2_201213580.Proyecto1Compi2_201213580;
 
 /**
  *
@@ -37,158 +39,208 @@ public class Asignacion implements Instruccion{
             if(this.operador==Operador.AUMENTO){
                 Simbolo sim=(Simbolo)entorno.Obtener(this.id);
                 if(sim!=null){
-                    if(tipo_asigna==Type.PrimitiveType.INTEGER){
-                        sim.valor=Integer.parseInt(valor.toString())+1;
-                        sim.tipo=tipo_asigna;
-                        entorno.Actualizar(this.id, sim);
-                    }else if(tipo_asigna==Type.PrimitiveType.DOUBLE){
-                        sim.valor=Double.parseDouble(valor.toString())+1;
-                        sim.tipo=tipo_asigna;
-                        entorno.Actualizar(id, sim);
-                    }else{
-                        System.out.println("ERROR SEMANTICO: SOLO SE PUEDEN INCREMENTAR VARIABLES DE TIPO INTEGER Y DOUBLE");
+                    try{
+                        if(tipo_asigna==Type.PrimitiveType.INTEGER){
+                            sim.valor=Integer.parseInt(valor.toString())+1;
+                            sim.tipo=tipo_asigna;
+                            entorno.Actualizar(this.id, sim);
+                        }else if(tipo_asigna==Type.PrimitiveType.DOUBLE){
+                            sim.valor=Double.parseDouble(valor.toString())+1;
+                            sim.tipo=tipo_asigna;
+                            entorno.Actualizar(id, sim);
+                        }else{
+                            Errores error=new Errores("SEMANTICO","error de tipos en la operacion aumento",this.linea,this.columna);
+                            Proyecto1Compi2_201213580.errores_fs.add(error);
+                        }
+                    }catch(Exception e){
+                        javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la operacion aumento");
                     }   
                 }else{
-                    System.out.println("NO EXISTE LA VARIABLE A AUMENTAR");
+                    Errores error=new Errores("SEMANTICO","no existe el id en el entorno para realizar el aumento",this.linea,this.columna);
+                    Proyecto1Compi2_201213580.errores_fs.add(error);
                 }
             }else if(this.operador==Operador.DECREMENTO){
                 Simbolo sim=(Simbolo)entorno.Obtener(this.id);
                 if(sim!=null){
-                    if(tipo_asigna==Type.PrimitiveType.INTEGER){
-                        sim.valor=Integer.parseInt(valor.toString())-1;
-                        sim.tipo=tipo_asigna;
-                        entorno.Actualizar(this.id, sim);
-                    }else if(tipo_asigna==Type.PrimitiveType.DOUBLE){
-                        sim.valor=Double.parseDouble(valor.toString())-1;
-                        sim.tipo=tipo_asigna;
-                        entorno.Actualizar(id, sim);
-                    }else{
-                        System.out.println("ERROR SEMANTICO: SOLO SE PUEDEN INCREMENTAR VARIABLES DE TIPO INTEGER Y DOUBLE");
+                    try{
+                        if(tipo_asigna==Type.PrimitiveType.INTEGER){
+                            sim.valor=Integer.parseInt(valor.toString())-1;
+                            sim.tipo=tipo_asigna;
+                            entorno.Actualizar(this.id, sim);
+                        }else if(tipo_asigna==Type.PrimitiveType.DOUBLE){
+                            sim.valor=Double.parseDouble(valor.toString())-1;
+                            sim.tipo=tipo_asigna;
+                            entorno.Actualizar(id, sim);
+                        }else{
+                            Errores error=new Errores("SEMANTICO","error de tipos para la operacion decremento",this.linea,this.columna);
+                            Proyecto1Compi2_201213580.errores_fs.add(error);
+                        }
+                    }catch(Exception e){
+                        javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la operacion decremento");
                     }   
                 }else{
-                    System.out.println("NO EXISTE LA VARIABLE A AUMENTAR");
+                    Errores error=new Errores("SEMANTICO","no existe el id para realizar la operacion decremento en el entorno",this.linea,this.columna);
+                    Proyecto1Compi2_201213580.errores_fs.add(error);
                 }
             }else if(this.operador==Operador.IGUAL){
                 Simbolo sim=(Simbolo)entorno.Obtener(this.id);
                 if(sim!=null){
-                    sim.valor=valor;
-                    sim.tipo=tipo_asigna;
-                    entorno.Actualizar(this.id, sim);
+                    try{
+                        sim.valor=valor;
+                        sim.tipo=tipo_asigna;
+                        entorno.Actualizar(this.id, sim);
+                    }catch(Exception e){
+                        javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la operacion asignar");
+                    }
                 }else{
-                    System.out.println("No existe la variable a asignar");
+                    Errores error=new Errores("SEMANTICO","no existe el id en el entorno para poder realizar la asignacion",this.linea,this.columna);
+                    Proyecto1Compi2_201213580.errores_fs.add(error);
                 }
             }else if(this.operador==Operador.A_SUMA){
                 Simbolo sim=(Simbolo)entorno.Obtener(this.id);
                 if(sim!=null){
-                    Type.PrimitiveType resultante=GenerarTipo(tipo_asigna,sim.tipo,Operador.SUMA);
-                    if(resultante==Type.PrimitiveType.NULL){
-                        System.out.println("ERROR SEMANTICO: LOS TIPOS NO SE PUEDEN OPERARAR PARA UNA SUMA");
-                    }else{
-                        if(resultante==Type.PrimitiveType.INTEGER){
-                            sim.valor=Integer.parseInt(sim.valor.toString())+Integer.parseInt(valor.toString());
-                            sim.tipo=resultante;
-                            entorno.Actualizar(this.id, sim);
-                        }else if(resultante==Type.PrimitiveType.DOUBLE){
-                            sim.valor=Double.parseDouble(sim.valor.toString())+Double.parseDouble(valor.toString());
-                            sim.tipo=resultante;
-                            entorno.Actualizar(this.id, sim);
-                        }else if(resultante==Type.PrimitiveType.STRING){
-                            sim.valor="\""+String.valueOf(sim.valor.toString().replaceAll("\"",""))+String.valueOf(valor.toString().replaceAll("\"",""))+"\"";
-                            sim.tipo=resultante;
-                            entorno.Actualizar(this.id, sim);
+                    try{
+                        Type.PrimitiveType resultante=GenerarTipo(tipo_asigna,sim.tipo,Operador.SUMA);
+                        if(resultante==Type.PrimitiveType.NULL){
+                            Errores error=new Errores("SEMANTICO","error de tipos en la operacion suma y asignacion",this.linea,this.columna);
+                            Proyecto1Compi2_201213580.errores_fs.add(error);
                         }else{
-                            System.out.println("ERROR SEMANTICO: TIPOS DIFERENTES EN LA OPERACION +=");
+                            if(resultante==Type.PrimitiveType.INTEGER){
+                                sim.valor=Integer.parseInt(sim.valor.toString())+Integer.parseInt(valor.toString());
+                                sim.tipo=resultante;
+                                entorno.Actualizar(this.id, sim);
+                            }else if(resultante==Type.PrimitiveType.DOUBLE){
+                                sim.valor=Double.parseDouble(sim.valor.toString())+Double.parseDouble(valor.toString());
+                                sim.tipo=resultante;
+                                entorno.Actualizar(this.id, sim);
+                            }else if(resultante==Type.PrimitiveType.STRING){
+                                sim.valor="\""+String.valueOf(sim.valor.toString().replaceAll("\"",""))+String.valueOf(valor.toString().replaceAll("\"",""))+"\"";
+                                sim.tipo=resultante;
+                                entorno.Actualizar(this.id, sim);
+                            }else{
+                                Errores error=new Errores("SEMANTICO","error de tipos para la operacion suma igual",this.linea,this.columna);
+                                Proyecto1Compi2_201213580.errores_fs.add(error);
+                            }
                         }
+                    }catch(Exception e){
+                        javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la operacion suma igual");
+                        System.out.println("");
                     }
                 }else{
-                    System.out.println("No existe la variable a asignar");
+                    Errores error=new Errores("SEMANTICO","no existe la variable en el entorno para realizar la operacion suma igual",this.linea,this.columna);
+                    Proyecto1Compi2_201213580.errores_fs.add(error);
                 }
             }else if(this.operador==Operador.A_RESTA){
                 Simbolo sim=(Simbolo)entorno.Obtener(this.id);
                 if(sim!=null){
-                    Type.PrimitiveType resultante=GenerarTipo(tipo_asigna,sim.tipo,Operador.RESTA);
-                    if(resultante==Type.PrimitiveType.NULL){
-                        System.out.println("ERROR SEMANTICO: LOS TIPOS NO SE PUEDEN OPERARAR PARA UNA SUMA");
-                    }else{
-                        if(resultante==Type.PrimitiveType.INTEGER){
-                            sim.valor=Integer.parseInt(sim.valor.toString())-Integer.parseInt(valor.toString());
-                            sim.tipo=resultante;
-                            entorno.Actualizar(this.id, sim);
-                        }else if(resultante==Type.PrimitiveType.DOUBLE){
-                            sim.valor=Double.parseDouble(sim.valor.toString())-Double.parseDouble(valor.toString());
-                            sim.tipo=resultante;
-                            entorno.Actualizar(this.id, sim);
+                    try{
+                        Type.PrimitiveType resultante=GenerarTipo(tipo_asigna,sim.tipo,Operador.RESTA);
+                        if(resultante==Type.PrimitiveType.NULL){
+                            Errores error=new Errores("SEMANTICO","error de tipos para la resta igual",this.linea,this.columna);
+                            Proyecto1Compi2_201213580.errores_fs.add(error);
                         }else{
-                            System.out.println("ERROR SEMANTICO: TIPOS DIFERENTES EN LA OPERACION -=");
+                            if(resultante==Type.PrimitiveType.INTEGER){
+                                sim.valor=Integer.parseInt(sim.valor.toString())-Integer.parseInt(valor.toString());
+                                sim.tipo=resultante;
+                                entorno.Actualizar(this.id, sim);
+                            }else if(resultante==Type.PrimitiveType.DOUBLE){
+                                sim.valor=Double.parseDouble(sim.valor.toString())-Double.parseDouble(valor.toString());
+                                sim.tipo=resultante;
+                                entorno.Actualizar(this.id, sim);
+                            }else{
+                                Errores error=new Errores("SEMANTICO","error de tipos para la operacion resta igual",this.linea,this.columna);
+                                Proyecto1Compi2_201213580.errores_fs.add(error);
+                            }
+
                         }
-                        
+                    }catch(Exception e){
+                        javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la operacion resta igual");
+                        System.out.println("ERROR ASIGNACION RESTA");
                     }
                 }else{
-                    System.out.println("No existe la variable a asignar");
+                    Errores error=new Errores("SEMANTICO","no se encuentra el id en el entorno para la operacion resta igual",this.linea,this.columna);
+                    Proyecto1Compi2_201213580.errores_fs.add(error);
                 }
             }else if(this.operador==Operador.A_MULT){
                 Simbolo sim=(Simbolo)entorno.Obtener(this.id);
                 if(sim!=null){
-                    Type.PrimitiveType resultante=GenerarTipo(tipo_asigna,sim.tipo,Operador.MULTIPLICACION);
-                    if(resultante==Type.PrimitiveType.NULL){
-                        System.out.println("ERROR SEMANTICO: LOS TIPOS NO SE PUEDEN OPERARAR PARA UNA SUMA");
-                    }else{
-                        if(resultante==Type.PrimitiveType.INTEGER){
-                            sim.valor=Integer.parseInt(sim.valor.toString())*Integer.parseInt(valor.toString());
-                            sim.tipo=resultante;
-                            entorno.Actualizar(this.id, sim);
-                        }else if(resultante==Type.PrimitiveType.DOUBLE){
-                            sim.valor=Double.parseDouble(sim.valor.toString())*Double.parseDouble(valor.toString());
-                            sim.tipo=resultante;
-                            entorno.Actualizar(this.id, sim);
+                    try{
+                        Type.PrimitiveType resultante=GenerarTipo(tipo_asigna,sim.tipo,Operador.MULTIPLICACION);
+                        if(resultante==Type.PrimitiveType.NULL){
+                            Errores error=new Errores("SEMANTICO","error de tipos para la operacion multiplicacion igual",this.linea,this.columna);
+                            Proyecto1Compi2_201213580.errores_fs.add(error);
                         }else{
-                            System.out.println("ERROR SEMANTICO: TIPOS DIFERENTES EN LA OPERACION *=");
+                            if(resultante==Type.PrimitiveType.INTEGER){
+                                sim.valor=Integer.parseInt(sim.valor.toString())*Integer.parseInt(valor.toString());
+                                sim.tipo=resultante;
+                                entorno.Actualizar(this.id, sim);
+                            }else if(resultante==Type.PrimitiveType.DOUBLE){
+                                sim.valor=Double.parseDouble(sim.valor.toString())*Double.parseDouble(valor.toString());
+                                sim.tipo=resultante;
+                                entorno.Actualizar(this.id, sim);
+                            }else{
+                                Errores error=new Errores("SEMANTICO","error de tipos para la operacion multiplicacion igual",this.linea,this.columna);
+                                Proyecto1Compi2_201213580.errores_fs.add(error);
+                            }
+
                         }
-                        
+                    }catch(Exception e){
+                        javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la operacion multiplicacion igual");
                     }
                 }else{
-                    System.out.println("No existe la variable a asignar");
+                    Errores error=new Errores("SEMANTICO","no existe la variable a asignar en la operacion multiplicacion igual",this.linea,this.columna);
+                    Proyecto1Compi2_201213580.errores_fs.add(error);
                 }
             }else if(this.operador==Operador.A_DIV){
                 Simbolo sim=(Simbolo)entorno.Obtener(this.id);
                 if(sim!=null){
-                    Type.PrimitiveType resultante=GenerarTipo(tipo_asigna,sim.tipo,Operador.DIVISION);
-                    if(resultante==Type.PrimitiveType.NULL){
-                        System.out.println("ERROR SEMANTICO: LOS TIPOS NO SE PUEDEN OPERARAR PARA UNA SUMA");
-                    }else{
-                        if(resultante==Type.PrimitiveType.INTEGER){
-                            int val=Integer.parseInt(sim.valor.toString())/Integer.parseInt(valor.toString());
-                            if(val==Integer.MAX_VALUE){
-                                System.out.println("ERROR: RESULTADO INFINITO DIVISION POR CERO");
-                            }else{
-                                sim.valor=val;
-                                sim.tipo=resultante;
-                                entorno.Actualizar(this.id, sim);
-                            }
-                        }else if(resultante==Type.PrimitiveType.DOUBLE){
-                            double val=Double.parseDouble(sim.valor.toString())/Double.parseDouble(valor.toString());
-                            if(val==Double.POSITIVE_INFINITY||val==Double.NEGATIVE_INFINITY){
-                                System.out.println("ERROR DIVISION POR CERO, RESULTADO INFINITO \n NO SE REALIZARA LA OPERACION");
-                            }else{
-                                sim.valor=val;
-                                sim.tipo=resultante;
-                                entorno.Actualizar(this.id, sim);
-                            }
-                            
+                    try{
+                        Type.PrimitiveType resultante=GenerarTipo(tipo_asigna,sim.tipo,Operador.DIVISION);
+                        if(resultante==Type.PrimitiveType.NULL){
+                            Errores error=new Errores("SEMANTICO","error de tipos para la operacion division igual",this.linea,this.columna);
+                            Proyecto1Compi2_201213580.errores_fs.add(error);
                         }else{
-                            System.out.println("ERROR SEMANTICO: TIPOS DIFERENTES EN LA OPERACION /=");
+                            if(resultante==Type.PrimitiveType.INTEGER){
+                                int val=Integer.parseInt(sim.valor.toString())/Integer.parseInt(valor.toString());
+                                if(val==Integer.MAX_VALUE){
+                                    Errores error=new Errores("SEMANTICO","error division por cero",this.linea,this.columna);
+                                    Proyecto1Compi2_201213580.errores_fs.add(error);
+                                }else{
+                                    sim.valor=val;
+                                    sim.tipo=resultante;
+                                    entorno.Actualizar(this.id, sim);
+                                }
+                            }else if(resultante==Type.PrimitiveType.DOUBLE){
+                                double val=Double.parseDouble(sim.valor.toString())/Double.parseDouble(valor.toString());
+                                if(val==Double.POSITIVE_INFINITY||val==Double.NEGATIVE_INFINITY){
+                                    Errores error=new Errores("SEMANTICO","error division por cero",this.linea,this.columna);
+                                    Proyecto1Compi2_201213580.errores_fs.add(error);
+                                }else{
+                                    sim.valor=val;
+                                    sim.tipo=resultante;
+                                    entorno.Actualizar(this.id, sim);
+                                }
+                            }else{
+                                Errores error=new Errores("SEMANTICO","error de tipos en la operacion division igual",this.linea,this.columna);
+                                Proyecto1Compi2_201213580.errores_fs.add(error);
+                            }
                         }
-                        
+                    }catch(Exception e){
+                        javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la operacion division igual");
                     }
                 }else{
-                    System.out.println("No existe la variable a asignar");
+                    Errores error=new Errores("SEMANTICO","no se encontro el id en el entorno para realizar la operacion division igual",this.linea,this.columna);
+                    Proyecto1Compi2_201213580.errores_fs.add(error);
                 }
             }else{
-                System.out.println("ERROR SEMANTICO: OPERADOR NO ENCONTRADO, ASIGNACION LINEA:"+this.linea+" Columna:"+this.columna);
+                Errores error=new Errores("SEMANTICO","no se encontro el operador para la asignacion",this.linea,this.columna);
+                Proyecto1Compi2_201213580.errores_fs.add(error);
             }
         }else{
-            System.out.println("ERROR SEMANTICO: LA EXPRESION QUE DESEA ASIGNAR NO EXISTE O ES NULA");
-        }return null;
+            Errores error=new Errores("SEMANTICO","la expresion que se desea asignar no existe en el entorno o es nula",this.linea,this.columna);
+            Proyecto1Compi2_201213580.errores_fs.add(error);
+        }
+        return null;
     }
     
     public Type.PrimitiveType GenerarTipo(Type.PrimitiveType primero,Type.PrimitiveType segundo,Operacion.Operador operador){
@@ -220,10 +272,12 @@ public class Asignacion implements Instruccion{
                     }
                 }
             }else{
+                Errores error=new Errores("SEMANTICO","error de tipos para la operacion",this.linea,this.columna);
+                Proyecto1Compi2_201213580.errores_fs.add(error);
                 respuesta= Type.PrimitiveType.NULL;
             }
         }catch(Exception e){
-            System.out.println("OCURRIO UN ERROR AL MOMENTO DE GENERAR TIPOS EN ARITMETICA");
+            javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la generacion de tipos para asignacion");
         }
         return respuesta;
     }

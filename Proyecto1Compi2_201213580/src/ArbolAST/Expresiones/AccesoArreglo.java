@@ -9,18 +9,24 @@ import ArbolAST.Entorno.Entorno;
 import ArbolAST.Entorno.Simbolo;
 import ArbolAST.Entorno.Type;
 import ArbolAST.Expresiones.Expresion;
+import Auxiliares.Errores;
 import java.util.LinkedList;
+import proyecto1compi2_201213580.Proyecto1Compi2_201213580;
 
 /**
  *
  * @author anton
  */
 public class AccesoArreglo implements Expresion{
+    int linea;
+    int columna;
     String id;
     Expresion posicion;
     Type.PrimitiveType tipo;
     Type.PrimitiveType tipo_respuesta;
-    public AccesoArreglo(String id,Expresion posicion){
+    public AccesoArreglo(String id,Expresion posicion,int linea,int columna){
+        this.linea=linea;
+        this.columna=columna;
         this.id=id;
         this.posicion=posicion;
         this.tipo=Type.PrimitiveType.ARREGLO;
@@ -33,16 +39,21 @@ public class AccesoArreglo implements Expresion{
         int pos=Integer.parseInt(posicion.getValue(entorno).toString());
         Simbolo sim=(Simbolo)entorno.Obtener(this.id);
         if(sim!=null){
-            LinkedList<Expresion> aux=(LinkedList)sim.valor;
-            if(pos<aux.size()){
-                respuesta=aux.get(pos).getValue(entorno).toString();
-                this.tipo_respuesta=aux.get(pos).getType(entorno);
-            }else{
-                System.out.println("ERROR SEMANTICO: LA POSICION QUE QUIERE ACCEDER AL ID "+this.id+" ESTA FUERA DE RANGO");
+            try{
+                LinkedList<Expresion> aux=(LinkedList)sim.valor;
+                if(pos<aux.size()){
+                    respuesta=aux.get(pos).getValue(entorno).toString();
+                    this.tipo_respuesta=aux.get(pos).getType(entorno);
+                }else{
+                    Errores error=new Errores("SEMANTICO","La posicion que quiere acceder al id esta fuera de rango",this.linea,this.columna);
+                    Proyecto1Compi2_201213580.errores_fs.add(error);
+                }
+            }catch(Exception e){
+                javax.swing.JOptionPane.showMessageDialog(null,"Excepcion al momento de acceder al arreglo");
             }
-            
         }else{
-            System.out.println("ERROR SEMANTICO: NO EXISTE EL ID "+this.id+" EN ESTE ENTORNO");
+            Errores error=new Errores("SEMANTICO","No existe el id en el entorno",this.linea,this.columna);
+            Proyecto1Compi2_201213580.errores_fs.add(error);
         }
         return respuesta;
     }

@@ -12,16 +12,18 @@ import ArbolAST.Entorno.Type;
 import ArbolAST.Expresiones.AccesoArreglo;
 import ArbolAST.Expresiones.Expresion;
 import ArbolAST.Expresiones.Llamada_Funcion;
+import Auxiliares.Errores;
+import proyecto1compi2_201213580.Proyecto1Compi2_201213580;
 /**
  *
  * @author anton
  */
 public class Relacional extends Operacion implements Expresion{
-    public Relacional(Expresion expresion1, Expresion expresion2, Operacion.Operador operador) {
-        super(expresion1, expresion2, operador);
+    public Relacional(Expresion expresion1, Expresion expresion2, Operacion.Operador operador,int linea,int columna) {
+        super(expresion1, expresion2, operador,linea,columna);
     }
-    public Relacional(Expresion expresion1, boolean valor, Operador operador) {
-        super(expresion1, valor, operador);
+    public Relacional(Expresion expresion1, boolean valor, Operador operador,int linea,int columna) {
+        super(expresion1, valor, operador,linea,columna);
     }
     @Override
     public Object getValue(Entorno entorno) {
@@ -61,7 +63,7 @@ public class Relacional extends Operacion implements Expresion{
                             respuesta=false;
                         }
                     }catch(Exception e){
-                        System.out.println("ERROR SEMANTICOS AL OPERAR MAYORQ CON EL TIPO STRING");
+                        javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la operacion mayorq con el tipo string");
                     }
                     
                 }else if(tipo==Type.PrimitiveType.INTEGER){
@@ -69,17 +71,19 @@ public class Relacional extends Operacion implements Expresion{
                         this.type=Type.PrimitiveType.BOOLEAN;
                         respuesta=Integer.parseInt(val1.toString())>Integer.parseInt(val2.toString());
                     }catch(Exception e){
-                        System.out.println("ERROR SEMANTICOS AL OPERAR MAYORQ CON EL TIPO INTEGER");
+                        javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la operacion mayorque con el tipo integer");
                     }
                 }else if(tipo==Type.PrimitiveType.DOUBLE){
                     try{
                         this.type=Type.PrimitiveType.BOOLEAN;
                         respuesta=Double.parseDouble(val1.toString())>Double.parseDouble(val2.toString());
                     }catch(Exception e){
-                        System.out.println("ERROR SEMANTICOS AL OPERAR MAYORQ CON EL TIPO DOUBLE");
+                        javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la operacion mayorque con el tipo double");
                     }
                 }else{
                     respuesta=null;
+                    Errores error=new Errores("SEMANTICO","error de tipos en operacion mayorq",this.linea,this.columna);
+                    Proyecto1Compi2_201213580.errores_fs.add(error);
                 }
             }else if(this.operador==Operador.MENORQ){
                 if(tipo==Type.PrimitiveType.STRING){
@@ -92,23 +96,25 @@ public class Relacional extends Operacion implements Expresion{
                             respuesta=false;
                         }
                     }catch(Exception e){
-                        System.out.println("ERROR SEMANTICOS AL OPERAR MENORQ CON EL TIPO STRING");
+                        javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la operacion menorque con el tipo string");
                     }
                 }else if(tipo==Type.PrimitiveType.INTEGER){
                     try{
                         this.type=Type.PrimitiveType.BOOLEAN;
                         respuesta=Integer.parseInt(val1.toString())<Integer.parseInt(val2.toString());
                     }catch(Exception e){
-                        System.out.println("ERROR SEMANTICOS AL OPERAR MENORQ CON EL TIPO INTEGER");
+                        javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la operacion menor que con el tipo integer");
                     }
                 }else if(tipo==Type.PrimitiveType.DOUBLE){
                     try{
                         this.type=Type.PrimitiveType.BOOLEAN;
                         respuesta=Double.parseDouble(val1.toString())<Double.parseDouble(val2.toString());
                     }catch(Exception e){
-                        System.out.println("ERROR SEMANTICOS AL OPERAR MENORQ CON EL TIPO DOUBLE");
+                        javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la operacion menor que con el tipo double");
                     }
                 }else{
+                    Errores error=new Errores("SEMANTICO","error de tipos menorq",this.linea,this.columna);
+                    Proyecto1Compi2_201213580.errores_fs.add(error);
                     respuesta=null;
                 }
             }else if(this.operador==Operador.MAYORIGUALQ){
@@ -122,23 +128,25 @@ public class Relacional extends Operacion implements Expresion{
                             respuesta=false;
                         }
                     }catch(Exception e){
-                        System.out.println("ERROR SEMANTICOS AL OPERAR MAYORIGUALQ CON EL TIPO STRING");
+                        javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la operacion mayorigual q con el tipo string");
                     }
                 }else if(tipo==Type.PrimitiveType.INTEGER){
                     try{
                         this.type=Type.PrimitiveType.BOOLEAN;
                         respuesta=Integer.parseInt(val2.toString())>=Integer.parseInt(val2.toString());
                     }catch(Exception e){
-                        System.out.println("ERROR SEMANTICOS AL OPERAR MAYORIGUALQ CON EL TIPO INTEGER");
+                        javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la operacion mayorigualq con el tipo integer");
                     }
                 }else if(tipo==Type.PrimitiveType.DOUBLE){
                     try{
                         this.type=Type.PrimitiveType.BOOLEAN;
                         respuesta=Double.parseDouble(val1.toString())>=Double.parseDouble(val2.toString());
                     }catch(Exception e){
-                        System.out.println("ERROR SEMANTICOS AL OPERAR MAYORIGUALQ CON EL TIPO DOUBLE");
+                        javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la operacion mayorigualq con el tipo double");
                     }
                 }else{
+                    Errores error=new Errores("SEMANTICO","error de tipos en operacion mayorigualq",this.linea,this.columna);
+                    Proyecto1Compi2_201213580.errores_fs.add(error);
                     respuesta=null;
                 }
             }else if(this.operador==Operador.MENORIGUALQ){
@@ -152,23 +160,25 @@ public class Relacional extends Operacion implements Expresion{
                             respuesta=false;
                         }
                     }catch(Exception e){
-                        System.out.println("ERROR SEMANTICOS AL OPERAR MENORIGUALQ CON EL TIPO STRING");
+                        javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la operacion menorigualq con el tipo string");
                     }
                 }else if(tipo==Type.PrimitiveType.INTEGER){
                     try{
                         this.type=Type.PrimitiveType.BOOLEAN;
                         respuesta=Integer.parseInt(val1.toString())<=Integer.parseInt(val2.toString());
                     }catch(Exception e){
-                        System.out.println("ERROR SEMANTICOS AL OPERAR MENORIGUALQ CON EL TIPO INTEGER");
+                        javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la operacion menorigualq con el tipo integer");
                     }
                 }else if(tipo==Type.PrimitiveType.DOUBLE){
                     try{
                         this.type=Type.PrimitiveType.BOOLEAN;
                         respuesta=Double.parseDouble(val1.toString())<=Double.parseDouble(val2.toString());
                     }catch(Exception e){
-                        System.out.println("ERROR SEMANTICOS AL OPERAR MENORIGUALQ CON EL TIPO DOUBLE");
+                        javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la operacion menorigualq con el tipo double");
                     }
                 }else{
+                    Errores error=new Errores("SEMANTICO","error de tipos en operacion menorigualq",this.linea,this.columna);
+                    Proyecto1Compi2_201213580.errores_fs.add(error);
                     respuesta=null;
                 }
             }else if(this.operador==Operador.DIFERENTE){
@@ -182,21 +192,21 @@ public class Relacional extends Operacion implements Expresion{
                             respuesta=false;
                         }
                     }catch(Exception e){
-                        System.out.println("ERROR SEMANTICOS AL OPERAR DIFERENTE CON EL TIPO STRING");
+                        javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la operacion diferente con el tipo string");
                     }
                 }else if(tipo==Type.PrimitiveType.INTEGER){
                     try{
                         this.type=Type.PrimitiveType.BOOLEAN;
                         respuesta=Integer.parseInt(val1.toString())!=Integer.parseInt(val2.toString());
                     }catch(Exception e){
-                        System.out.println("ERROR SEMANTICOS AL OPERAR DIFERENTE CON EL TIPO INTEGER");
+                        javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la operacion diferente con el tipo integer");
                     }
                 }else if(tipo==Type.PrimitiveType.DOUBLE){
                     try{
                         this.type=Type.PrimitiveType.BOOLEAN;
                         respuesta=Double.parseDouble(val1.toString())!=Double.parseDouble(val2.toString());
                     }catch(Exception e){
-                        System.out.println("ERROR SEMANTICOS AL OPERAR DIFERENTE CON EL TIPO DOUBLE");
+                        javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la operacion diferente con el tipo double");
                     }
                 }else if(tipo==Type.PrimitiveType.BOOLEAN){
                     try{
@@ -227,9 +237,11 @@ public class Relacional extends Operacion implements Expresion{
                             respuesta=va1!=va2;
                         }
                     }catch(Exception e){
-                        System.out.println("ERROR SEMANTICOS AL OPERAR IGUALIGUAL CON EL TIPO BOOLEAN");
+                        javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la operacion igualigual con el tipo boolean");
                     }
                 }else{
+                    Errores error=new Errores("SEMANTICO","error de tipos en operacion diferente",this.linea,this.columna);
+                    Proyecto1Compi2_201213580.errores_fs.add(error);
                     respuesta=null;
                 }
             }else if(this.operador==Operador.IGUALIGUAL){
@@ -243,21 +255,21 @@ public class Relacional extends Operacion implements Expresion{
                             respuesta=false;
                         }
                     }catch(Exception e){
-                        System.out.println("ERROR SEMANTICOS AL OPERAR IGUALIGUAL CON EL TIPO STRING");
+                        javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la operacion igual igual con el tipo string");
                     }
                 }else if(tipo==Type.PrimitiveType.INTEGER){
                     try{
                         this.type=Type.PrimitiveType.BOOLEAN;
                         respuesta=Integer.parseInt(val1.toString())==Integer.parseInt(val2.toString());
                     }catch(Exception e){
-                        System.out.println("ERROR SEMANTICOS AL OPERAR IGUALIGUAL CON EL TIPO INTEGER");
+                        javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la operacion igualigual con el tipo integer");
                     }
                 }else if(tipo==Type.PrimitiveType.DOUBLE){
                     try{
                         this.type=Type.PrimitiveType.BOOLEAN;
                         respuesta=Double.parseDouble(val1.toString())==Double.parseDouble(val2.toString());
                     }catch(Exception e){
-                        System.out.println("ERROR SEMANTICOS AL OPERAR IGUALIGUAL CON EL TIPO DOUBLE");
+                        javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la operacion igual igual con el tipo double");
                     }
                 }else if(tipo==Type.PrimitiveType.BOOLEAN){
                     try{
@@ -288,36 +300,43 @@ public class Relacional extends Operacion implements Expresion{
                             respuesta=va1==va2;
                         }
                     }catch(Exception e){
-                        System.out.println("ERROR SEMANTICOS AL OPERAR IGUALIGUAL CON EL TIPO BOOLEAN");
+                        javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la operacion igual igual con el tipo boolean");
                     }
                 }else{
+                    Errores error=new Errores("SEMANTICO","error de tipos en operacion igualigual",this.linea,this.columna);
+                    Proyecto1Compi2_201213580.errores_fs.add(error);
                     respuesta=null;
                 }
             }else {
-                System.out.println("ERROR SEMANTICO: EL TIPO DE OPERACION " + this.operador+"NO PERTENECE A LAS RELACIONALES");
+                Errores error=new Errores("SEMANTICO","La operacion no pertenece a las relacionales",this.linea,this.columna);
+                Proyecto1Compi2_201213580.errores_fs.add(error);
                 respuesta=null;
             }
         }else{
             if(this.type==Type.PrimitiveType.ID){
-                Simbolo referencia=entorno.Obtener(this.valor.toString());
-                if(referencia!=null){
-                    if(referencia.valor instanceof Expresion){
-                        respuesta=((Expresion)referencia.valor).getValue(entorno);
+                try{
+                    Simbolo referencia=entorno.Obtener(this.valor.toString());
+                    if(referencia!=null){
+                        if(referencia.valor instanceof Expresion){
+                            respuesta=((Expresion)referencia.valor).getValue(entorno);
+                        }else{
+                            this.type=referencia.tipo;
+                            respuesta=referencia.valor;
+                        }
                     }else{
-                        this.type=referencia.tipo;
-                        respuesta=referencia.valor;
+                        Errores error=new Errores("SEMANTICO","no existe el id "+this.valor,this.linea,this.columna);
+                        Proyecto1Compi2_201213580.errores_fs.add(error);
+                        respuesta=null;
                     }
-                }else{
-                    System.out.println("No existe el id " + this.valor.toString());
-                    respuesta=null;
+                }catch(Exception e){
+                    javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en el momento de traer el valor del id en relacional");
                 }
             }else{
                 try{
                     respuesta=this.valor;
                 }catch(Exception e){
-                    System.out.println("ERROR SEMANTICO: ERROR AL MOMENTO DE OBTENER EL VALOR");
+                    javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en obtener valor del id relacional");
                 }
-                
             }
         }
         return respuesta;
@@ -347,9 +366,8 @@ public class Relacional extends Operacion implements Expresion{
                 respuesta=null;
             }
         }catch(Exception e){
-            System.out.println("ERROR SEMANTICO: OCURRIO UN ERROR AL MOMENTO DE GENERAR EL TIPO EN RELACIONALES");
+            javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en obtener el tipo de relacional");
         }
-        
         return respuesta;
     }
 

@@ -60,23 +60,30 @@ public class Boton_UI extends JButton implements NodoAST{
         this.lista_alclick.add(alclic);
     }
     public void asignarElementos(){
-        //this.lista_alclick.add(this.referencia);
-        setNombre(this.id);
-        setBounds(Integer.parseInt(this.x),Integer.parseInt(this.y),Integer.parseInt(this.ancho),Integer.parseInt(this.alto));
-        setText(this.valor);
-        Font font=new Font(this.fuente, Font.PLAIN,Integer.parseInt(this.tam));
-        setFont(font);
-        Color col=Color.decode(this.color.toString().replaceAll("\"",""));
-        this.setBackground(col);
-            
-        this.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                for(int i=0;i<lista_alclick.size();i++){
-                    lista_alclick.get(i).getValue(AST.global);
+        try{
+            setNombre(this.id);
+            setBounds(Integer.parseInt(this.x),Integer.parseInt(this.y),Integer.parseInt(this.ancho),Integer.parseInt(this.alto));
+            setText(this.valor);
+            Font font=new Font(this.fuente, Font.PLAIN,Integer.parseInt(this.tam));
+            setFont(font);
+            Color col=Color.decode(this.color.toString().replaceAll("\"",""));
+            this.setBackground(col);
+            this.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try{
+                        for(int i=0;i<lista_alclick.size();i++){
+                            lista_alclick.get(i).getValue(AST.global);
+                        }
+                    }catch(Exception t){
+                        System.out.println("ERROR AL MOMENTO DE EJECUTAR ALCLIC BOTON_UI");
+                    }
                 }
-            }
-        });
+            });
+        }catch(Exception e){
+            System.out.println("ERROR AL MOMENTO DE ASIGNAR ELEMENTOS DE BOTON_UI");
+        }
+        
     }
     public void agregarComponente(Component componente){
         try{

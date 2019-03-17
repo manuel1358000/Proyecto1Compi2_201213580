@@ -9,6 +9,7 @@ import ArbolAST.Entorno.Entorno;
 import ArbolAST.Entorno.Simbolo;
 import ArbolAST.Expresiones.Expresion;
 import ArbolAST.Expresiones.Llamada_Funcion;
+import Auxiliares.Errores;
 import ElementosUI.Area_UI;
 import ElementosUI.Boton_UI;
 import ElementosUI.Caja_UI;
@@ -24,6 +25,7 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.LinkedList;
 import proyecto1compi2_201213580.Principal;
+import proyecto1compi2_201213580.Proyecto1Compi2_201213580;
 
 /**
  *
@@ -33,15 +35,21 @@ public class Eventos_Botones implements Instruccion {
     String id;
     Expresion llamada;
     String tipo;
-    public Eventos_Botones(String id,Expresion llamada){
+    int linea;
+    int columna;
+    public Eventos_Botones(String id,Expresion llamada,int linea,int columna){
         this.id=id;
         this.llamada=llamada;
         this.tipo="";
+        this.linea=linea;
+        this.columna=columna;
     }
-    public Eventos_Botones(String id,String tipo){
+    public Eventos_Botones(String id,String tipo,int linea,int columna){
         this.id=id;
         this.llamada=null;
         this.tipo=tipo;
+        this.linea=linea;
+        this.columna=columna;
     }
     public void EscribirArchivo(String nombre, String contenido){
         FileWriter fichero = null;
@@ -78,6 +86,7 @@ public class Eventos_Botones implements Instruccion {
             }
             
         }catch(Exception e){
+            javax.swing.JOptionPane.showMessageDialog(null,"Excepcion al momento de leer gdato");
             e.printStackTrace();
         }finally{
             try{                    
@@ -145,10 +154,12 @@ public class Eventos_Botones implements Instruccion {
                     entorno.Actualizar(id, sim);
                 }
             }else{
-                System.out.println("ERROR SEMANTICO: EL COMPONENTE AL QUE SE LE QUIERE AGREGAR LA ACCION ALCLIC NO EXISTE EN EL ENTORNO");
+                Errores error=new Errores("SEMANTICO","el componente al que se le quiere agregar la accion alclic no existe en el entorno",this.linea,this.columna);
+                Proyecto1Compi2_201213580.errores_fs.add(error);
             }
         }catch(Exception e){
-            System.out.println("ERROR EN CARGAR LOS EVENTOS DE LOS BOTONES");
+            
+            javax.swing.JOptionPane.showMessageDialog(null,"Excepcion al cargar los eventos de los botones");
         }
         return null;
     }

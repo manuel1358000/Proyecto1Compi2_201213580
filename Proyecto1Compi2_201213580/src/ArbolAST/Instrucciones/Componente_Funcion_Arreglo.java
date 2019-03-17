@@ -14,14 +14,19 @@ import ArbolAST.Expresiones.Expresion;
 public class Componente_Funcion_Arreglo {
     String id;
     String parametro;
-
-    public Componente_Funcion_Arreglo(String id, String parametro) {
+    int linea;
+    int columna;
+    public Componente_Funcion_Arreglo(String id, String parametro,int linea,int columna) {
         this.id = id;
         this.parametro = parametro;
+        this.linea=linea;
+        this.columna=columna;
     }
     
-    public Componente_Funcion_Arreglo(String id){
+    public Componente_Funcion_Arreglo(String id,int linea,int columna){
         this.id=id;
         this.parametro=null;
+        this.linea=linea;
+        this.columna=columna;
     }
 }

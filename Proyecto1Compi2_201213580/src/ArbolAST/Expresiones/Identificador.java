@@ -15,7 +15,7 @@ import ArbolAST.Entorno.Type;
 public class Identificador implements Expresion{
     String id;
     int linea;
-
+    int columna;
     @Override
     public Object getValue(Entorno entorno) {
         //ir a buscar al entorno si existe

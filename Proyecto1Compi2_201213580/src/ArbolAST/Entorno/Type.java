@@ -34,7 +34,11 @@ public class Type {
         IMAGEN,
         DESPLEGABLE,
         NUMERICO,
-        NULO
+        NULO,
+        GXML,
+        PORID,
+        PORETIQUETA,
+        PORNOMBRE
     }    
     public boolean esNumero(){
         return primitive_type==Type.PrimitiveType.INTEGER;

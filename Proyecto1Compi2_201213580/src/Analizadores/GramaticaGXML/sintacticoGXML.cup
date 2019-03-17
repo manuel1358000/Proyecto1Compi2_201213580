@@ -8,16 +8,20 @@ import java.util.LinkedList;
 import ArbolAST.Componente.NodoElemento;
 import ArbolAST.Componente.NodoGXML;
 import java.awt.Color;
+import Auxiliares.Errores;
+import proyecto1compi2_201213580.Proyecto1Compi2_201213580;
 parser code
 {:
     public NodoGXML root;
     public static int index=0;
     public void syntax_error(Symbol s){
-        System.out.println("Error en la linea "+(s.right+1)+" Columna "+s.left+". Identificador "+s.value+" no reconocido"); 
+        Errores error=new Errores("SINTACTICO","Identificador "+s.value+" no reconocido",s.left+1,s.right+1);
+        Proyecto1Compi2_201213580.errores_gxml.add(error);
     }
     /**Metodo al que se llama en el momento en que ya no es posible una recuperacion de errores.*/
     public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{
-        javax.swing.JOptionPane.showMessageDialog(null,"Error Sintactico en la linea "+(s.right+1)+"Columna "+s.left+". Identificador"+s.value+" no reconocido.");
+        Errores error=new Errores("SINTACTICO","Identificador"+s.value+" no reconocido.",s.left+1,s.right+1);
+        Proyecto1Compi2_201213580.errores_gxml.add(error);
     }
 :}
 action code

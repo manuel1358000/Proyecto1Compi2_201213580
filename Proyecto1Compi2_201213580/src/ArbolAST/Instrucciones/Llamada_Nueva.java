@@ -16,6 +16,12 @@ import ArbolAST.Expresiones.Expresion;
  */
 public class Llamada_Nueva implements Expresion{
     String id;
+    int linea;
+    int columna;
+    public Llamada_Nueva(int linea,int columna){
+        this.linea=linea;
+        this.columna=columna;
+    }
     @Override
     public Object getValue(Entorno entorno) {
         Simbolo sim=(Simbolo)entorno.Obtener(id);

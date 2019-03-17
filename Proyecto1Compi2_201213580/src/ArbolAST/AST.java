@@ -25,7 +25,9 @@ import ArbolAST.Instrucciones.Importar;
 import ArbolAST.Instrucciones.Imprimir;
 import ArbolAST.Instrucciones.Seleccion.If;
 import ArbolAST.Instrucciones.Seleccion.Switch;
+import Auxiliares.Errores;
 import java.util.LinkedList;
+import proyecto1compi2_201213580.Proyecto1Compi2_201213580;
 /**
  *
  * @author anton
@@ -48,7 +50,8 @@ public class AST {
                     if(verificar==null){
                         global.Agregar(funcion.getId(), sim);
                     }else{
-                        System.out.println("ERROR SEMANTICO: YA EXISTE UNA FUNCION " + funcion.getId() + " DECLARADA CON EL MISMO NOMBRE E IGUAL NUMERO DE PARAMETROS");
+                        Errores error=new Errores("SEMANTICO","ya existe una funcion "+funcion.getId()+" declarada con el mismo nombre e igual numero de parametros",0,0);
+                        Proyecto1Compi2_201213580.errores_fs.add(error);
                     }
                 }
             }
@@ -109,24 +112,29 @@ public class AST {
                     Eventos_Ventanas eve_ventana=(Eventos_Ventanas)node;
                     eve_ventana.execute(global);
                 }else{
-                    System.out.println("INSTRUCCION RARA");
+                    javax.swing.JOptionPane.showMessageDialog(null,"Excepcion es una instruccion rara en ast");
                 }
             }
         }catch(Exception e){
-            System.out.println("ERROR EN LA EJECUCION DE AST");
+            javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la ejecucion del ast");
         }
         
     }
     public String generarNombre(String id,LinkedList<NodoAST>parametros){
         String respuesta="";
-        respuesta+=id;
-        for(NodoAST nodo:parametros){
-            if(nodo instanceof Declaracion){
-                Declaracion declaracion=(Declaracion)nodo;
-                respuesta+=declaracion.tipo.toString();
-            }else{
-                //ver que otros tipos puede ingresar aqui un objeto, un array ver que es lo que lleva
+        try{
+            respuesta+=id;
+            for(NodoAST nodo:parametros){
+                if(nodo instanceof Declaracion){
+                    Declaracion declaracion=(Declaracion)nodo;
+                    respuesta+=declaracion.tipo.toString();
+                }else{
+                    //ver que otros tipos puede ingresar aqui un objeto, un array ver que es lo que lleva
+                }
             }
+        }catch(Exception e){
+            
+            System.out.println("ERROR EN METODO GENERAR NOMBRE AST");
         }
         return respuesta;
     }

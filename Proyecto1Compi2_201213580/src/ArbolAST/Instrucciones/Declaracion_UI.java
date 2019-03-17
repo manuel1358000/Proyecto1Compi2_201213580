@@ -12,6 +12,7 @@ import ArbolAST.Expresiones.Expresion;
 import ArbolAST.Expresiones.Llamada_Funcion;
 import ArbolAST.Expresiones.operacion.Aritmetica;
 import ArbolAST.NodoAST;
+import Auxiliares.Errores;
 import ElementosUI.Area_UI;
 import ElementosUI.Boton_UI;
 import ElementosUI.Caja_UI;
@@ -30,6 +31,7 @@ import java.util.LinkedList;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import proyecto1compi2_201213580.Proyecto1Compi2_201213580;
 
 /**
  *
@@ -40,17 +42,23 @@ public class Declaracion_UI implements Expresion{
     String id_padre;
     Type.PrimitiveType tipo;
     LinkedList<NodoAST>lista_parametros;
-    public Declaracion_UI(String id,String id_padre,Type.PrimitiveType tipo,LinkedList<NodoAST> lista_parametros){
+    int linea;
+    int columna;
+    public Declaracion_UI(String id,String id_padre,Type.PrimitiveType tipo,LinkedList<NodoAST> lista_parametros,int linea,int columna){
+        this.linea=linea;
+        this.columna=columna;
         this.id=id;
         this.id_padre=id_padre;
         this.tipo=tipo;
         this.lista_parametros=lista_parametros;
     }
-    public Declaracion_UI(Type.PrimitiveType tipo,LinkedList<NodoAST>lista_parametros){
+    public Declaracion_UI(Type.PrimitiveType tipo,LinkedList<NodoAST>lista_parametros,int linea,int columna){
         this.tipo=tipo;
         this.lista_parametros=lista_parametros;
         this.id="";
         this.id_padre="";
+        this.linea=linea;
+        this.columna=columna;
     }
     public String getId() {
         return id;
@@ -99,31 +107,34 @@ public class Declaracion_UI implements Expresion{
                     if(this.lista_parametros.size()==2){
                         Simbolo aux_padre=(Simbolo)entorno.Obtener(this.id_padre.toLowerCase());
                         if(aux_padre!=null){
-
-
+                         //hace falta agregar los parametros de video
                         }else{
-                            System.out.println("ERROR SEMANTICO: NO EXISTE EL CONTENEDOR ASOCIADO A LA CAJA DE TEXTO");
+                            Errores error=new Errores("SEMANTICO","no existe el contenedor asociado al video"+this.id,this.linea,this.columna);
+                            Proyecto1Compi2_201213580.errores_fs.add(error);
                         }
                     }else{
-                        System.out.println("ERROR SEMANTICO: HACEN FALTA ELEMENTOS EN LA DEFINICION CAJA TEXTO");
+                        Errores error=new Errores("SEMANTICO","hacen falta elementos en la definicion de video",this.linea,this.columna);
+                        Proyecto1Compi2_201213580.errores_fs.add(error);
                     }
                 }catch(Exception e){
-                    System.out.println("OCURRIO UN ERROR EN LA CREACION DE UN VIDEO");
+                    javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la creacion de video");
                 }
-
             }else if(tipo==Type.PrimitiveType.AUDIO){
                 try{
                     if(this.lista_parametros.size()==2){
                         Simbolo aux_padre=(Simbolo)entorno.Obtener(this.id_padre.toLowerCase());
                         if(aux_padre!=null){
+                            //hace falta agregar los parametros del audio
                         }else{
-                            System.out.println("ERROR SEMANTICO: NO EXISTE EL CONTENEDOR ASOCIADO A LA CAJA DE TEXTO");
+                            Errores error=new Errores("SEMANTICO","no existe el contenedor asociadio al audio",this.linea,this.columna);
+                            Proyecto1Compi2_201213580.errores_fs.add(error);
                         }
                     }else{
-                        System.out.println("ERROR SEMANTICO: HACEN FALTA ELEMENTOS EN LA DEFINICION CAJA TEXTO");
+                        Errores error=new Errores("SEMANTICO","hacen falta elementos en la definicion audio",this.linea,this.columna);
+                        Proyecto1Compi2_201213580.errores_fs.add(error);
                     }
                 }catch(Exception e){
-                    System.out.println("OCURRIO UN ERROR EN LA CREACION DE UN AUDIO");
+                    javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la creacion de audio");
                 }
             }else if(tipo==Type.PrimitiveType.IMAGEN){
                 try{
@@ -146,16 +157,19 @@ public class Declaracion_UI implements Expresion{
                                 aux_padre.valor=aux_conte;
                                 entorno.Actualizar(aux_padre.getId(),aux_padre);
                             }else{
-                                System.out.println("ERROR SEMANTICO: EL COMPONENTE AREATEXTO NO PUEDE ESTAR FUERA DE UN CONTENEDOR");
+                                Errores error=new Errores("SEMANTICO","el componenete imagen no puede estar fuera de un contenedor",this.linea,this.columna);
+                                Proyecto1Compi2_201213580.errores_fs.add(error);
                             }
                         }else{
-                            System.out.println("ERROR SEMANTICO: NO EXISTE EL CONTENEDOR ASOCIADO A LA CAJA DE TEXTO");
+                            Errores error=new Errores("SEMANTICO","no existe el contenedor asociado a la imagen",this.linea,this.columna);
+                            Proyecto1Compi2_201213580.errores_fs.add(error);
                         }
                     }else{
-                        System.out.println("ERROR SEMANTICO: HACEN FALTA ELEMENTOS EN LA DEFINICION CAJA TEXTO");
+                        Errores error=new Errores("SEMANTICO","hacen falta elementos en la definicion de imagen",this.linea,this.columna);
+                        Proyecto1Compi2_201213580.errores_fs.add(error);
                     }
                 }catch(Exception e){
-                    System.out.println("OCURRIO UN ERROR EN LA CREACION DE UNA IMAGEN");
+                    javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la creacion de la imagen");
                 }
 
             }
@@ -177,13 +191,14 @@ public class Declaracion_UI implements Expresion{
                                 entorno.Agregar(this.id.toLowerCase(), simbol);
                                 respuesta=ventana;
                             }catch(Exception e){
-                                System.out.println("ERROR SEMANTICO: EN LA CREACION DE LA VENTANA");
+                                javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la creacion de la ventana");
                             }
                         }else{
-                            System.out.println("ERROR SEMANTICO: HACEN FALTA ELEMENTOS EN LA DEFINICION CREARVENTANA");
+                            Errores error=new Errores("SEMANTICO","hacen falta elementos en la definicion crearventana"+this.id,this.linea,this.columna);
+                            Proyecto1Compi2_201213580.errores_fs.add(error);
                         }
                     }catch(Exception e){
-                        System.out.println("OCURRIO UN ERROR EN LA CREACION DE UNA VENTANA");
+                        javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la creacion de la ventana");
                     }
                 }else if(tipo==Type.PrimitiveType.CONTENEDOR){
                     try{
@@ -210,16 +225,18 @@ public class Declaracion_UI implements Expresion{
                                     ven_sim.valor=aux_ven;
                                     entorno.Actualizar(ven_sim.getId(),ven_sim);
                                 }else{
-                                    System.out.println("NO EXISTE LA VENTANA "+this.id_padre+" QUE VA A CREAR EL CONTENEDOR "+this.id);
+                                    Errores error=new Errores("SEMANTICO","no existe la ventana que va a almacenar al contenedor",this.linea,this.columna);
+                                    Proyecto1Compi2_201213580.errores_fs.add(error);
                                 }
                             }catch(Exception e){
-                                System.out.println("ERROR SEMANTICO: EN LA CREACION DEL CONTENEDOR");
+                                javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la creacion del contenedor");
                             }
                         }else{
-                            System.out.println("ERROR SEMANTICO: HACEN FALTA ELEMENTOS EN LA DEFINICION CREARCONTENEDOR");
+                            Errores error=new Errores("SEMANTICO","hacen falta elementos en la definicion crearcontenedor",this.linea,this.columna);
+                            Proyecto1Compi2_201213580.errores_fs.add(error);
                         }
                     }catch(Exception e){
-                        System.out.println("OCURRIO UN ERROR EN LA CREACION DE UN CONTENEDOR");
+                        javax.swing.JOptionPane.showMessageDialog(null,"Excepcion ocurrio un error en la creacion de un contenedor");
                     }
                 }else if(tipo==Type.PrimitiveType.BOTON){
                     try{
@@ -248,13 +265,15 @@ public class Declaracion_UI implements Expresion{
                                 conte_sim.valor=aux_conte;
                                 entorno.Actualizar(conte_sim.getId(),conte_sim);
                             }else{
-                                System.out.println("ERROR SEMANTICO: EL CONTENEDOR "+this.id_padre+" QUE HACE REFERENCIA NO EXISTE");
+                                Errores error=new Errores("SEMANTICO","el contenedor al que hace referencia no existe",this.linea,this.columna);
+                                Proyecto1Compi2_201213580.errores_fs.add(error);
                             }
                         }else{
-                            System.out.println("ERROR SEMANTICO: HACEN FALTA ELEMENTOS EN LA DEFINICION CREARCONTENEDOR");
+                            Errores error=new Errores("SEMANTICO","hacen falta elementos en la definicion crearcontenedor",this.linea,this.columna);
+                            Proyecto1Compi2_201213580.errores_fs.add(error);
                         }
                     }catch(Exception e){
-                        System.out.println("OCURRIO UN ERROR EN LA CREACION DE UNA BOTON");
+            javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la creacion de un boton");
                     }
                 }else if(tipo==Type.PrimitiveType.TEXTO){
                     try{
@@ -286,13 +305,15 @@ public class Declaracion_UI implements Expresion{
                                     entorno.Actualizar(aux_padre.getId(),aux_padre);
                                 }
                             }else{
-                                System.out.println("ERROR SEMANTICO: NO EXISTE EL CONTENEDOR/BOTON ASOCIADO AL TEXTO");
+                                Errores error=new Errores("SEMANTICO","no existe el contenedor/boton asociado al texto",this.linea,this.columna);
+                                Proyecto1Compi2_201213580.errores_fs.add(error);
                             }
                         }else{
-                            System.out.println("ERROR SEMANTICO: HACEN FALTA ELEMENTOS EN LA DEFINICION CREARTEXTO");
+                            Errores error=new Errores("SEMANTICO","hacen falta elemetnos en la definicion creartexto",this.linea,this.columna);
+                            Proyecto1Compi2_201213580.errores_fs.add(error);
                         }
                     }catch(Exception e){
-                        System.out.println("OCURRIO UN ERROR EN LA CREACION DE UN TEXTO");
+                        javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la creacion de creartexto");
                     }
                 }else if(tipo==Type.PrimitiveType.AREATEXTO){
                     try{
@@ -321,17 +342,19 @@ public class Declaracion_UI implements Expresion{
                                     aux_padre.valor=aux_conte;
                                     entorno.Actualizar(aux_padre.getId(),aux_padre);
                                 }else{
-                                    System.out.println("ERROR SEMANTICO: EL COMPONENTE AREATEXTO NO PUEDE ESTAR FUERA DE UN CONTENEDOR");
+                                    Errores error=new Errores("SEMANTICO","el componente area texto no puede estar fuera de un contenedor",this.linea,this.columna);
+                                    Proyecto1Compi2_201213580.errores_fs.add(error);
                                 }
-
                             }else{
-                                System.out.println("ERROR SEMANTICO: NO EXISTE EL CONTENEDOR ASOCIADO AL AREA DE TEXTO");
+                                Errores error=new Errores("SEMANTICO","no existe el contenedor asociado al area de texto",this.linea,this.columna);
+                                Proyecto1Compi2_201213580.errores_fs.add(error);
                             }
                         }else{
-                            System.out.println("ERROR SEMANTICO: HACE FALTAN ELEMENTOS EN LA DEFINICION AREA TEXTO");
+                            Errores error=new Errores("SEMANTICO","hacen falta elementos en la definicion areatexto",this.linea,this.columna);
+                            Proyecto1Compi2_201213580.errores_fs.add(error);
                         }
                     }catch(Exception e){
-                        System.out.println("OCURRIO UN ERROR EN LA CREACION DE UNA AREA TEXTO");
+                        javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la creacion del areatexto");
                     }
                 }else if(tipo==Type.PrimitiveType.CAJATEXTO){
                     try{
@@ -360,17 +383,19 @@ public class Declaracion_UI implements Expresion{
                                     aux_padre.valor=aux_conte;
                                     entorno.Actualizar(aux_padre.getId(),aux_padre);
                                 }else{
-                                    System.out.println("ERROR SEMANTICO: EL COMPONENTE AREATEXTO NO PUEDE ESTAR FUERA DE UN CONTENEDOR");
+                                    Errores error=new Errores("SEMANTICO","el componente areatexto no puede estar fuera de un contenedor",this.linea,this.columna);
+                                    Proyecto1Compi2_201213580.errores_fs.add(error);
                                 }
-
-
                             }else{
-                                System.out.println("ERROR SEMANTICO: NO EXISTE EL CONTENEDOR ASOCIADO A LA CAJA DE TEXTO");
+                                Errores error=new Errores("SEMANTICO","no existe el contenedor asociado a la cajatexto",this.linea,this.columna);
+                                Proyecto1Compi2_201213580.errores_fs.add(error);
                             }
                         }else{
-                            System.out.println("ERROR SEMANTICO: HACEN FALTA ELEMENTOS EN LA DEFINICION CAJA TEXTO");
+                            Errores error=new Errores("SEMANTICO","hacen falta elementos en la definicion caja texto",this.linea,this.columna);
+                            Proyecto1Compi2_201213580.errores_fs.add(error);
                         }
                     }catch(Exception e){
+                        javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la declaracion del arreglo");
                         System.out.println("OCURRIO UN ERROR EN LA CREACION DE UNA CAJA TEXTO");
                     }
                 }else if(tipo==Type.PrimitiveType.NUMERICO){
@@ -397,16 +422,19 @@ public class Declaracion_UI implements Expresion{
                                     aux_padre.valor=aux_conte;
                                     entorno.Actualizar(aux_padre.getId(),aux_padre);
                                 }else{
-                                    System.out.println("ERROR SEMANTICO: EL COMPONENTE AREATEXTO NO PUEDE ESTAR FUERA DE UN CONTENEDOR");
+                                    Errores error=new Errores("SEMANTICO","el componente numerico no puede estar fuera de un contenedor",this.linea,this.columna);
+                                    Proyecto1Compi2_201213580.errores_fs.add(error);
                                 }
-
                             }else{
-                                System.out.println("ERROR SEMANTICO: NO EXISTE EL CONTENEDOR ASOCIADO A LA CAJA DE TEXTO");
+                                Errores error=new Errores("SEMANTICO","no existe el contenedor asociado al numerico",this.linea,this.columna);
+                                Proyecto1Compi2_201213580.errores_fs.add(error);
                             }
                         }else{
-                            System.out.println("ERROR SEMANTICO: HACEN FALTA ELEMENTOS EN LA DEFINICION CAJA TEXTO");
+                            Errores error=new Errores("SEMANTICO","Hacen falta elementos en la definicion numerico",this.linea,this.columna);
+                            Proyecto1Compi2_201213580.errores_fs.add(error);
                         }
                     }catch(Exception e){
+                        javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la creacion de un numerico");
                         System.out.println("OCURRIO UN ERROR EN LA CREACION DE UN NUMERICO");
                     }
                 }else if(tipo==Type.PrimitiveType.DESPLEGABLE){
@@ -432,24 +460,28 @@ public class Declaracion_UI implements Expresion{
                                     aux_padre.valor=aux_conte;
                                     entorno.Actualizar(aux_padre.getId(),aux_padre);
                                 }else{
-                                    System.out.println("ERROR SEMANTICO: EL COMPONENTE AREATEXTO NO PUEDE ESTAR FUERA DE UN CONTENEDOR");
+                                    Errores error=new Errores("SEMANTICO","el componente areatexto no puede estar fuera de un contenedor",this.linea,this.columna);
+                                    Proyecto1Compi2_201213580.errores_fs.add(error);
                                 }
                             }else{
-                                System.out.println("ERROR SEMANTICO: NO EXISTE EL CONTENEDOR ASOCIADO A LA CAJA DE TEXTO");
+                                Errores error=new Errores("SEMANTICO","no existe un contenedor asociado al desplegable",this.linea,this.columna);
+                                Proyecto1Compi2_201213580.errores_fs.add(error);
                             }
                         }else{
-                            System.out.println("ERROR SEMANTICO: HACEN FALTA ELEMENTOS EN LA DEFINICION CAJA TEXTO");
+                            Errores error=new Errores("SEMANTICO","faltan elementos en la definicion de desplegable",this.linea,this.columna);
+                            Proyecto1Compi2_201213580.errores_fs.add(error);
                         }
                     }catch(Exception e){
-                        System.out.println("OCURRIO UN ERROR EN LA CREACION DE UN DESPLEGABLE");
+                        javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la creacion de un componente desplegable");
                     }
 
                 }else{
-                    System.out.println("COMPONENTE NO ESPECIFICADO");
+                Errores error=new Errores("SEMANTICO","componente no especificado",this.linea,this.columna);
+                Proyecto1Compi2_201213580.errores_fs.add(error);
                 }
             }else{
-                System.out.println("ERROR SEMANTICO: YA EXISTE UNA VARIABLE CON EL NOMBRE "+this.id);
-                System.out.println("asdasdjhaskdjhaskjdhaskjdhaskd putos"+this.tipo);
+                Errores error=new Errores("SEMANTICO","ya existe una variable declarada con el nombre "+this.id,this.linea,this.columna);
+                Proyecto1Compi2_201213580.errores_fs.add(error);
             }
         }
         return respuesta;

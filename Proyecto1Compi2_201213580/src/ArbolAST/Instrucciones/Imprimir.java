@@ -5,13 +5,16 @@
  */
 package ArbolAST.Instrucciones;
 
+import ArbolAST.Componente.NodoGXML;
 import ArbolAST.Entorno.Entorno;
 import ArbolAST.Entorno.Type;
 import ArbolAST.Expresiones.Expresion;
+import Auxiliares.Errores;
 import static com.sun.media.BuildInfo.date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import proyecto1compi2_201213580.Principal;
+import proyecto1compi2_201213580.Proyecto1Compi2_201213580;
 
 
 /**
@@ -21,9 +24,13 @@ import proyecto1compi2_201213580.Principal;
 public class Imprimir implements Instruccion{
     Type.PrimitiveType tipo;
     Expresion expresion;
-    public Imprimir(Expresion expresion){
+    int linea;
+    int columna;
+    public Imprimir(Expresion expresion,int linea,int columna){
         this.expresion=expresion;
         this.tipo=Type.PrimitiveType.NULL;
+        this.linea=linea;
+        this.columna=columna;
     }
     public Imprimir(){
     
@@ -47,12 +54,23 @@ public class Imprimir implements Instruccion{
     
     @Override
     public Object execute(Entorno entorno) {
-        Object nuevo=expresion.getValue(entorno);
-        if(nuevo!=null){
-            Principal.jTextArea1.setText(Principal.jTextArea1.getText()+"\n CONSOLA>"+nuevo.toString());
-        }else{
-            System.out.println("ERROR SEMANTICO: IMPRIMIR NO ENCONTRO EL VALOR");
+        try{
+            Object nuevo=expresion.getValue(entorno);
+            if(nuevo!=null){
+                if(nuevo instanceof NodoGXML){
+                    Errores error=new Errores("SINTACTICO","La variable que quiere imprimir es una instancia de leergxml",this.linea,this.columna);
+                    Proyecto1Compi2_201213580.errores_fs.add(error);
+                }else{
+                    Principal.jTextArea1.setText(Principal.jTextArea1.getText()+"\n CONSOLA>"+nuevo.toString());
+                }
+            }else{
+                Errores error=new Errores("SEMANTICO","imprimir no encontro el valor",this.linea,this.columna);
+                Proyecto1Compi2_201213580.errores_fs.add(error);
+            }
+        }catch(Exception e){
+            javax.swing.JOptionPane.showMessageDialog(null,"Excepcion al imprimir un valor");
         }
+        
         return null;
     }
 
