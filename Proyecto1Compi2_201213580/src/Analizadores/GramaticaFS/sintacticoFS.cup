@@ -39,6 +39,8 @@ import ArbolAST.Instrucciones.Eventos_Ventanas;
 import ArbolAST.Instrucciones.Importar;
 import ArbolAST.Expresiones.LeerGXML;
 import ArbolAST.Expresiones.operacion.Obtener;
+import ArbolAST.Expresiones.AccesoObjetos;
+import ArbolAST.Expresiones.arrayDesde;
 parser code
 {:
     public AST root;
@@ -69,7 +71,7 @@ terminal String buscar,map,reduce,todos,alguno,imprimir,importar,si,sino,caso,de
 terminal String defecto;
 
 //DEFINICION VALORES IMPLICITOS LENGUAJE FS
-terminal String valor_id,valor_numero_completo,valor_path,valor_path2,valor_path3,valor_cadena,valor_verdadero,valor_falso,valor_simbolo;
+terminal String valor_id,valor_numero_completo,valor_path,valor_path2,valor_path3,valor_path4,valor_path5,valor_cadena,valor_verdadero,valor_falso,valor_simbolo;
 terminal String valor_numero_decimal,valor_nulo;
 
 //DEFINICION DE PALABRAS RESERVADAS ELEMENTOS_UI
@@ -116,6 +118,7 @@ non terminal LinkedList<Componente_Funcion_Arreglo> FUNCIONES_LENGUAJES;
 non terminal Declaracion_UI EXPRESION_UI;
 non terminal String LISTADO_NUEVO,LISTADO_NUEVOS;
 non terminal Expresion SENTENCIAS_OBTENER;
+non terminal Expresion SENTENCIAS_ARRAYDESDE;
 
 //DEFINICION DE LA PRECEDENCIA DE LOS OPERADORES
 precedence left signoi;
@@ -388,7 +391,7 @@ SENTENCIA_SINOSI::= SENTENCIA_SINOSI:a sino si parena EXPRESION:b parenc llavea 
 DECLARACION_VARIABLES::= var LISTA_ID:a pyc{:
                                             RESULT=a;
                                            :}
-                       | var LISTA_ID:a igual leergxml parena valor_path3:b parenc pyc{:
+                       /*| var LISTA_ID:a igual leergxml parena valor_path3:b parenc pyc{:
                                                                                         LeerGXML leer=new LeerGXML(b.toString(),bleft+1,bright+1);
                                                                                         int indice=a.size()-1;
                                                                                         Declaracion ultima=(Declaracion)a.get(indice);
@@ -397,7 +400,7 @@ DECLARACION_VARIABLES::= var LISTA_ID:a pyc{:
                                                                                         ultima.setInicializado(true);
                                                                                         a.add(ultima);
                                                                                         RESULT=a;
-                                                                                      :}
+                                                                                      :}*/
                        | var LISTA_ID:a igual EXPRESION:b pyc{:
                                                                 int indice=a.size()-1;
                                                                 Declaracion ultima=(Declaracion)a.get(indice);
@@ -608,7 +611,7 @@ EXPRESION::= menos EXPRESION:a{:
                                     RESULT=new Aritmetica(a.toString().toLowerCase(),Type.PrimitiveType.DOUBLE,aleft+1,aright+1);
                                    :}
            | valor_cadena:a{:
-                            RESULT=new Aritmetica(a.toString().toLowerCase(),Type.PrimitiveType.STRING,aleft+1,aright+1);
+                            RESULT=new Aritmetica(a.toString().toLowerCase().replaceAll("\"",""),Type.PrimitiveType.STRING,aleft+1,aright+1);
                            :}
            | valor_verdadero:a{:
                                 RESULT=new Aritmetica("true",Type.PrimitiveType.BOOLEAN,aleft+1,aright+1);
@@ -629,7 +632,23 @@ EXPRESION::= menos EXPRESION:a{:
                                     :}
            | EXPRESION:a incremental{:
                                         RESULT=new Aritmetica(a,true,Operador.AUMENTO,aleft+1,aright+1);
-                                    :};
+                                    :}
+           | valor_id:a pto valor_id:b{:
+                                        RESULT=new AccesoObjetos(a.toLowerCase(),b.toLowerCase(),aleft+1,aright+1);
+                                      :}
+           | SENTENCIAS_ARRAYDESDE:a{:RESULT=a;:};
+
+SENTENCIAS_ARRAYDESDE::= arraydesdearchivo:a parena valor_path4:b parenc{:
+                                                                            RESULT=new arrayDesde(b,Type.PrimitiveType.GDATO,aleft,aright);
+                                                                        :}
+                       | arraydesdearchivo:a parena valor_path5:b parenc{:
+                                                                            RESULT=new arrayDesde(b,Type.PrimitiveType.GDATO,aleft,aright);
+                                                                        :}
+                       | leergxml parena valor_path3:b parenc{:
+                                                                RESULT=new LeerGXML(b.toString(),bleft+1,bright+1);
+                                                             :};
+
+
 SENTENCIAS_OBTENER::= valor_id:a pto obtenerporid parena EXPRESION:b parenc{:
                                                                             RESULT=new Obtener(a,Type.PrimitiveType.PORID,b);
                                                                            :}

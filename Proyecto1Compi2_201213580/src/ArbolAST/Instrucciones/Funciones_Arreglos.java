@@ -87,7 +87,7 @@ public class Funciones_Arreglos implements Expresion{
         LinkedList<Aritmetica> respuesta=new LinkedList<Aritmetica>();
         try{
             for(int i=0;i<entrada.size();i++){
-                respuesta.add(new Aritmetica(entrada.get(i),Type.PrimitiveType.INTEGER,this.linea,this.columna));
+                respuesta.add(new Aritmetica(entrada.get(i),Type.PrimitiveType.STRING,this.linea,this.columna));
             }
         }catch(Exception e){
             javax.swing.JOptionPane.showMessageDialog(null,"Excepcion inversaString");
@@ -133,7 +133,7 @@ public class Funciones_Arreglos implements Expresion{
     @Override
     public Object getValue(Entorno entorno) {
         Object respuesta=null;
-        Simbolo sim=(Simbolo)entorno.Obtener(this.id);
+        Simbolo sim=(Simbolo)entorno.Obtener(this.id.toLowerCase());
         boolean recursiva=false;
         if(sim!=null){
             if(sim.tipo==sim.tipo.ARREGLO){
@@ -566,6 +566,414 @@ public class Funciones_Arreglos implements Expresion{
                         Proyecto1Compi2_201213580.errores_fs.add(error);
                     }
                     entorno.Actualizar(this.id,sim);
+                }
+                ///////////////////////////////////////////////////////////////////////////////////////////////////////
+            }else if(sim.tipo==Type.PrimitiveType.GDATO){
+                System.out.println("ES UN ARREGLO GDATO "+this.id);
+                for(Componente_Funcion_Arreglo componente:this.funciones_arreglo){
+                    LinkedList<Aritmetica> lista=(LinkedList)sim.valor;
+                    if(respuesta!=null){
+                        if(respuesta instanceof LinkedList){
+                            lista=(LinkedList)respuesta;
+                            recursiva=true;
+                        }else{
+                            recursiva=false;
+                        }
+                    }
+                    Type.PrimitiveType homogeneo=verificarHomogeneo(lista, entorno);
+                    if(componente.id.equals("ascendente")){
+                        if(homogeneo==Type.PrimitiveType.STRING){
+                            try{
+                                LinkedList<String> simplificada=simplificarString(lista, entorno);
+                                Collections.sort(simplificada,Collections.reverseOrder());
+                                LinkedList<Aritmetica> regreso=inversaString(simplificada);
+                                if(recursiva){
+                                    respuesta=regreso;
+                                }else{
+                                    sim.valor=regreso;
+                                    entorno.Actualizar(id, sim);
+                                }
+                            }catch(Exception e){
+                                javax.swing.JOptionPane.showMessageDialog(null,"Excepcion funcion ascendente string");
+                            }
+                        }else if(homogeneo==Type.PrimitiveType.INTEGER){
+                            try{
+                                LinkedList<Integer> simplificada=simplificarInteger(lista, entorno);
+                                Collections.sort(simplificada,Collections.reverseOrder());
+                                LinkedList<Aritmetica> regreso=inversaInteger(simplificada);
+                                if(recursiva){
+                                    respuesta=regreso;
+                                }else{
+                                    sim.valor=regreso;
+                                    entorno.Actualizar(id, sim);
+                                }
+                            }catch(Exception e){
+                                javax.swing.JOptionPane.showMessageDialog(null,"Excepcion funcion ascendente integer");
+                            }
+                        }else if(homogeneo==Type.PrimitiveType.DOUBLE){
+                            try{
+                                LinkedList<Double> simplificada=simplificarDouble(lista, entorno);
+                                Collections.sort(simplificada,Collections.reverseOrder());
+                                LinkedList<Aritmetica> regreso=inversaDouble(simplificada);
+                                if(recursiva){
+                                    respuesta=regreso;
+                                }else{
+                                    sim.valor=regreso;
+                                    entorno.Actualizar(id, sim);
+                                }
+                            }catch(Exception e){
+                                javax.swing.JOptionPane.showMessageDialog(null,"Excepcion funcion ascendente double");
+                            }
+                        }else{
+                            Errores error=new Errores("SEMANTICO","no se puede realizar la operacion ascendente en un arreglo de objetos",this.linea,this.columna);
+                            Proyecto1Compi2_201213580.errores_fs.add(error);
+                        }
+                    }else if(componente.id.equals("descendente")){
+                        if(homogeneo==Type.PrimitiveType.STRING){
+                            try{
+                                LinkedList<String> simplificada=simplificarString(lista, entorno);
+                                Collections.sort(simplificada);
+                                LinkedList<Aritmetica> regreso=inversaString(simplificada);
+                                if(recursiva){
+                                    respuesta=regreso;
+                                }else{
+                                    sim.valor=regreso;
+                                    entorno.Actualizar(id, sim);
+                                }
+                            }catch(Exception e){
+                                javax.swing.JOptionPane.showMessageDialog(null,"Excepcion funcion descendente string");
+                            }
+                        }else if(homogeneo==Type.PrimitiveType.INTEGER){
+                            try{
+                                LinkedList<Integer> simplificada=simplificarInteger(lista, entorno);
+                                Collections.sort(simplificada);
+                                LinkedList<Aritmetica> regreso=inversaInteger(simplificada);
+                                if(recursiva){
+                                    respuesta=regreso;
+                                }else{
+                                    sim.valor=regreso;
+                                    entorno.Actualizar(id, sim);
+                                }
+                            }catch(Exception e){
+                                javax.swing.JOptionPane.showMessageDialog(null,"Excepcion funcion descendente integer");
+                            }
+                        }else if(homogeneo==Type.PrimitiveType.DOUBLE){
+                            try{
+                                LinkedList<Double> simplificada=simplificarDouble(lista, entorno);
+                                Collections.sort(simplificada);
+                                LinkedList<Aritmetica> regreso=inversaDouble(simplificada);
+                                if(recursiva){
+                                    respuesta=regreso;
+                                }else{
+                                    sim.valor=regreso;
+                                    entorno.Actualizar(id, sim);
+                                }
+                            }catch(Exception e){
+                                javax.swing.JOptionPane.showMessageDialog(null,"Excepcion funcion descendente double");
+                            }
+                        }else{
+                            Errores error=new Errores("SEMANTICO","no se puede realizar la operacion descendente en arreglo",this.linea,this.columna);
+                            Proyecto1Compi2_201213580.errores_fs.add(error);
+                        }
+                    }else if(componente.id.equals("invertir")){
+                         //NO NECESITA SER HOMOGENEO
+                        if(homogeneo==Type.PrimitiveType.STRING){
+                            try{
+                                LinkedList<String> simplificada=simplificarString(lista, entorno);
+                                Collections.reverse(simplificada);
+                                LinkedList<Aritmetica> regreso=inversaString(simplificada);
+                                if(recursiva){
+                                    respuesta=regreso;
+                                }else{
+                                    sim.valor=regreso;
+                                    entorno.Actualizar(id, sim);
+                                }
+                            }catch(Exception e){
+                                javax.swing.JOptionPane.showMessageDialog(null,"Excepcion invertir string");
+                            }
+                        }else if(homogeneo==Type.PrimitiveType.INTEGER){
+                            try{
+                                LinkedList<Integer> simplificada=simplificarInteger(lista, entorno);
+                                Collections.reverse(simplificada);
+                                LinkedList<Aritmetica> regreso=inversaInteger(simplificada);
+                                if(recursiva){
+                                    respuesta=regreso;
+                                }else{
+                                    sim.valor=regreso;
+                                    entorno.Actualizar(id, sim);
+                                }
+                            }catch(Exception e){
+                                javax.swing.JOptionPane.showMessageDialog(null,"Excepcion funcion invertir integer");
+                            }
+                        }else if(homogeneo==Type.PrimitiveType.DOUBLE){
+                            try{
+                                LinkedList<Double> simplificada=simplificarDouble(lista, entorno);
+                                Collections.reverse(simplificada);
+                                LinkedList<Aritmetica> regreso=inversaDouble(simplificada);
+                                if(recursiva){
+                                    respuesta=regreso;
+                                }else{
+                                    sim.valor=regreso;
+                                    entorno.Actualizar(id, sim);
+                                }
+                            }catch(Exception e){
+                                javax.swing.JOptionPane.showMessageDialog(null,"Excepcion funcion invertir duoble");
+                            }
+                        }else{
+                            Errores error=new Errores("SEMANTICO","no se puede realizar la operacion invertir en arreglo",this.linea,this.columna);
+                            Proyecto1Compi2_201213580.errores_fs.add(error);
+                        }
+                    }else if(componente.id.equals("maximo")){
+                        if(homogeneo==Type.PrimitiveType.STRING){
+                            try{
+                                LinkedList<String> simplificada=simplificarString(lista, entorno);
+                                respuesta=Collections.max(simplificada);
+                                this.tipo=homogeneo;
+                                this.tipo_respuesta=homogeneo;
+                            }catch(Exception e){
+                                javax.swing.JOptionPane.showMessageDialog(null,"Excepcion funcion maximo string");
+                            }
+                        }else if(homogeneo==Type.PrimitiveType.INTEGER){
+                            try{
+                                LinkedList<Integer> simplificada=simplificarInteger(lista, entorno);
+                                respuesta=Collections.max(simplificada);
+                                this.tipo=homogeneo;
+                                this.tipo_respuesta=homogeneo;
+                            }catch(Exception e){
+                                javax.swing.JOptionPane.showMessageDialog(null,"Excepcion funcion maximo integer");
+                            }
+                        }else if(homogeneo==Type.PrimitiveType.DOUBLE){
+                            try{
+                                LinkedList<Double> simplificada=simplificarDouble(lista, entorno);
+                                respuesta=Collections.max(simplificada);
+                                this.tipo=homogeneo;
+                                this.tipo_respuesta=homogeneo;
+                            }catch(Exception e){
+                                javax.swing.JOptionPane.showMessageDialog(null,"Excepcion funcion maximo double");
+                            }
+                        }else{
+                            Errores error=new Errores("SEMANTICO","no se puede realizar la funcion descendente en arreglo",this.linea,this.columna);
+                            Proyecto1Compi2_201213580.errores_fs.add(error);
+                        }
+                    }else if(componente.id.equals("minimo")){
+                        //NECESITA SER HOMOGENEO
+                        if(homogeneo==Type.PrimitiveType.STRING){
+                            try{
+                                LinkedList<String> simplificada=simplificarString(lista, entorno);
+                                respuesta=Collections.min(simplificada);
+                                this.tipo=homogeneo;
+                                this.tipo_respuesta=homogeneo;
+                            }catch(Exception e){
+                                javax.swing.JOptionPane.showMessageDialog(null,"Excepcion funcion minimo string");
+                            }
+                        }else if(homogeneo==Type.PrimitiveType.INTEGER){
+                            try{
+                                LinkedList<Integer> simplificada=simplificarInteger(lista, entorno);
+                                respuesta=Collections.min(simplificada);
+                                this.tipo=homogeneo;
+                                this.tipo_respuesta=homogeneo;
+                            }catch(Exception e){
+                                javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la funcion minimo integer");
+                            }
+                        }else if(homogeneo==Type.PrimitiveType.DOUBLE){
+                            try{
+                                LinkedList<Double> simplificada=simplificarDouble(lista, entorno);
+                                respuesta=Collections.min(simplificada);
+                                this.tipo=homogeneo;
+                                this.tipo_respuesta=homogeneo;
+                            }catch(Exception e){
+                                javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la funcion minimo double");
+                            }
+                        }else{
+                            Errores error=new Errores("SEMANTICO","no se puede realizar la operacion descendente en arreglo",this.linea,this.columna);
+                            Proyecto1Compi2_201213580.errores_fs.add(error);
+                        }
+                    }else if(componente.id.equals("filtrar")){
+                        //si opera objetos
+                        Simbolo fun=(Simbolo)entorno.Obtener(componente.parametro.toString().toLowerCase()+"_"+1);
+                        if(fun!=null){
+                            try{
+                                LinkedList<Aritmetica> aux_respuesta=new LinkedList<Aritmetica>();
+                                for(Aritmetica aux_arit:lista){
+                                    LinkedList<NodoAST> lista_parametros=new LinkedList<>();
+                                    lista_parametros.add(aux_arit);
+                                    Llamada_Funcion llamada=new Llamada_Funcion(Type.PrimitiveType.ARREGLO,componente.parametro,lista_parametros,this.linea,this.columna);
+                                    Object valor=llamada.getValue(entorno);
+                                    if(llamada.getTipo_respuesta()==Type.PrimitiveType.BOOLEAN){
+                                        if(Boolean.valueOf(valor.toString())){
+                                            aux_respuesta.add(new Aritmetica(aux_arit.getValue(entorno),aux_arit.getType(entorno),this.linea,this.columna));
+                                        }
+                                    }else{
+                                        Errores error=new Errores("SEMANTICO","la funcion filtrar solo puede llamar a funciones que devuelvan un booleano",this.linea,this.columna);
+                                        Proyecto1Compi2_201213580.errores_fs.add(error);
+                                    }
+                                }
+                                respuesta=aux_respuesta;
+                                this.tipo=Type.PrimitiveType.GDATO;
+                                this.tipo_respuesta=Type.PrimitiveType.GDATO;
+                                System.out.println("aqui");
+                            }catch(Exception e){
+                                javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la funcion filtrar");
+                            }
+                        }
+                    }else if(componente.id.equals("buscar")){
+                        //si opera objetos
+                        Simbolo fun=(Simbolo)entorno.Obtener(componente.parametro.toLowerCase()+"_"+1);
+                            if(fun!=null){
+                                try{
+                                    for(Aritmetica aux_arit:lista){
+                                        LinkedList<NodoAST>lista_parametros=new LinkedList<>();
+                                        lista_parametros.add(aux_arit);
+                                        Llamada_Funcion llamada=new Llamada_Funcion(Type.PrimitiveType.ARREGLO,componente.parametro, lista_parametros,this.linea,this.columna);
+                                        Object valor=llamada.getValue(entorno);
+                                        if(llamada.getTipo_respuesta()==Type.PrimitiveType.BOOLEAN){
+                                            if(Boolean.valueOf(valor.toString())){
+                                                respuesta=new Aritmetica(aux_arit.getValue(entorno),aux_arit.getType(entorno),this.linea,this.columna);
+                                                this.tipo=aux_arit.getTipo_Respuesta();
+                                                this.tipo_respuesta=aux_arit.getTipo_Respuesta();
+                                                recursiva=false;
+                                                break;
+                                            }
+                                        }else{
+                                            Errores error=new Errores("SEMANTICO","la funcion buscar solo puede mandar a llamar funciones que devuelvan un booleano",this.linea,this.columna);
+                                            Proyecto1Compi2_201213580.errores_fs.add(error);
+                                        }
+                                    }
+                                }catch(Exception e){
+                                    javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la funcion buscar");
+                                }
+                            }else{
+                                Errores error=new Errores("SEMANTICO","buscar no encontro la funcion",this.linea,this.columna);
+                                Proyecto1Compi2_201213580.errores_fs.add(error);
+                            }
+                    }else if(componente.id.equals("map")){
+                        //si opera objetos
+                        Simbolo fun=(Simbolo)entorno.Obtener(componente.parametro.toLowerCase()+"_"+1);
+                        if(fun!=null){
+                            try{
+                                LinkedList<Aritmetica> aux_respuesta=new LinkedList<Aritmetica>();
+                                for(Aritmetica aux_ari:lista){
+                                    LinkedList<NodoAST>lista_parametros=new LinkedList<>();
+                                    lista_parametros.add(aux_ari);
+                                    Llamada_Funcion llamada=new Llamada_Funcion(Type.PrimitiveType.ARREGLO,componente.parametro,lista_parametros,this.linea,this.columna);
+                                    Object valor=llamada.getValue(entorno);
+                                    Type.PrimitiveType aux_tipo=llamada.getTipo_respuesta();
+                                    aux_respuesta.add(new Aritmetica(valor,aux_tipo,this.linea,this.columna));
+                                }
+                                respuesta=aux_respuesta;
+                                this.tipo=Type.PrimitiveType.ARREGLO;
+                                this.tipo_respuesta=Type.PrimitiveType.ARREGLO;
+                            }catch(Exception e){
+                                javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en funcion map");
+                            }
+                        }else{
+                            Errores error=new Errores("SEMANTICO","map no encontro la funcion",this.linea,this.columna);
+                            Proyecto1Compi2_201213580.errores_fs.add(error);
+                        }
+                    }else if(componente.id.equals("reduce")){
+                        //si opera objetos
+                        Simbolo fun=(Simbolo)entorno.Obtener(componente.parametro.toLowerCase()+"_"+2);
+                        if(fun!=null){
+                            try{
+                                Aritmetica acumulador=null;
+                                LinkedList<NodoAST>lista_parametros=new LinkedList<>();
+                                if(homogeneo!=Type.PrimitiveType.NULL){
+                                    for(Aritmetica aux_ari:lista){
+                                        if(acumulador==null){
+                                            acumulador=aux_ari;
+                                        }else{
+                                            lista_parametros.add(acumulador);
+                                            lista_parametros.add(aux_ari);
+                                            Llamada_Funcion llamada=new Llamada_Funcion(Type.PrimitiveType.ARREGLO,componente.parametro,lista_parametros,this.linea,this.columna);
+                                            Object valor=llamada.getValue(entorno);
+                                            Type.PrimitiveType aux_tipo=llamada.getTipo_respuesta();
+                                            acumulador=new Aritmetica(valor,aux_tipo,this.linea,this.columna);
+                                            lista_parametros.clear();
+                                        }
+                                        respuesta=acumulador;
+                                        this.tipo=acumulador.getTipo_Respuesta();
+                                        this.tipo_respuesta=acumulador.getTipo_Respuesta();
+                                        recursiva=false;
+                                    }
+                                }else{
+                                    Errores error=new Errores("SEMANTICO","no se puede realizar la operacion reduce el arreglo no es homogeneo",this.linea,this.columna);
+                                    Proyecto1Compi2_201213580.errores_fs.add(error);
+                                }
+                            }catch(Exception e){
+                                javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en el metodo reduce");
+                                System.out.println("ERROR EN REDUCE");
+                            }
+                        }else{
+                            Errores error=new Errores("SEMANTICO","reduce no encontro la funcion",this.linea,this.columna);
+                            Proyecto1Compi2_201213580.errores_fs.add(error);
+                        }
+                    }else if(componente.id.equals("todos")){
+                        //si opera objetos
+                        Simbolo fun=(Simbolo)entorno.Obtener(componente.parametro.toLowerCase()+"_"+1);
+                            if(fun!=null){
+                                try{
+                                    boolean control=false;
+                                    for(Aritmetica aux_arit:lista){
+                                        LinkedList<NodoAST> lista_parametros=new LinkedList<>();
+                                        lista_parametros.add(aux_arit);
+                                        Llamada_Funcion llamada=new Llamada_Funcion(Type.PrimitiveType.ARREGLO,componente.parametro,lista_parametros,this.linea,this.columna);
+                                        Object valor=llamada.getValue(entorno);
+                                        if(llamada.getTipo_respuesta()==Type.PrimitiveType.BOOLEAN){
+                                            if(Boolean.valueOf(valor.toString())){
+                                                control=true;
+                                            }else{
+                                                control=false;
+                                            }
+                                        }else{
+                                            Errores error=new Errores("SEMANTICO","la funcion filtrar solo puede mandar a llamar funciones que devuelvan un booleano",this.linea,this.columna);
+                                            Proyecto1Compi2_201213580.errores_fs.add(error);
+                                        }
+                                    }
+                                    respuesta=control;
+                                    this.tipo=Type.PrimitiveType.BOOLEAN;
+                                    this.tipo_respuesta=Type.PrimitiveType.BOOLEAN;
+                                }catch(Exception e){
+                                    javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en la funcion todos");
+                                }
+                            }else{
+                                Errores error=new Errores("SEMANTICO","todos no encontro la funcion, puede que no exista o que no tenga la cantidad de parametros necesarios",this.linea,this.columna);
+                                Proyecto1Compi2_201213580.errores_fs.add(error);
+                            }
+                    }else if(componente.id.equals("alguno")){
+                        //si opera objetos
+                        Simbolo fun=(Simbolo)entorno.Obtener(componente.parametro.toLowerCase()+"_"+1);
+                            if(fun!=null){
+                                try{
+                                    boolean control=false;
+                                    for(Aritmetica aux_arit:lista){
+                                        LinkedList<NodoAST> lista_parametros=new LinkedList<>();
+                                        lista_parametros.add(aux_arit);
+                                        Llamada_Funcion llamada=new Llamada_Funcion(Type.PrimitiveType.ARREGLO,componente.parametro,lista_parametros,this.linea,this.columna);
+                                        Object valor=llamada.getValue(entorno);
+                                        if(llamada.getTipo_respuesta()==Type.PrimitiveType.BOOLEAN){
+                                            if(Boolean.valueOf(valor.toString())){
+                                                control=true;
+                                                break;
+                                            }
+                                        }else{
+                                            Errores error=new Errores("SEMANTICO","la funcion filtrar solo puede mandar a llamadar funciones que devuelvan un booleano",this.linea,this.columna);
+                                            Proyecto1Compi2_201213580.errores_fs.add(error);
+                                        }
+                                    }
+                                    respuesta=control;
+                                    this.tipo=Type.PrimitiveType.BOOLEAN;
+                                    this.tipo_respuesta=Type.PrimitiveType.BOOLEAN;
+                                }catch(Exception e){
+                                    javax.swing.JOptionPane.showMessageDialog(null,"Excepcion en el metodo alguno");
+                                }
+                            }else{
+                                Errores error=new Errores("SEMANTICO","alguno no se encontro la funcion, hacen falta =/sobran parametros",this.linea,this.columna);
+                                Proyecto1Compi2_201213580.errores_fs.add(error);
+                            }
+                    }else{
+                        Errores error=new Errores("SEMANTICO","la operacion no se puede realizar para un arreglo",this.linea,this.columna);
+                        Proyecto1Compi2_201213580.errores_fs.add(error);
+                    }
                 }
             }else{
                 

@@ -31,6 +31,8 @@ COMENTARIO_MULTIPLE ="/*""/"*([^*/]|[^*]"/"|"*"[^/])*"*"*"*/"
 PATH=["\""]{LETRA}[":"]["\\"]({ID}|["\\"])*["."]["f"]["s"]["\""]
 PATH2=["\""]((["/"])?({ID}|["\\"])*["."]["f"]["s"])["\""] 
 PATH3=["\""]((["/"])?({ID}|["\\"])*["."]["g"]["x"]["m"]["l"])["\""] 
+PATH4=["\""]((["/"])?({ID}|["\\"])*["."]["g"]["d"]["a"]["t"]["o"])["\""] 
+PATH5=["\""]{LETRA}[":"]["\\"]({ID}|["\\"])*["."]["g"]["d"]["a"]["t"]["o"]["\""]
 CADENA="\""~"\""
 PUNTO=["."]
 %%
@@ -119,6 +121,8 @@ PUNTO=["."]
 <YYINITIAL> {PATH} { return new Symbol(simbolofs.valor_path, yyline, yycolumn,yytext());}
 <YYINITIAL> {PATH2} { return new Symbol(simbolofs.valor_path2, yyline, yycolumn,yytext());}
 <YYINITIAL> {PATH3} { return new Symbol(simbolofs.valor_path3, yyline, yycolumn,yytext());}
+<YYINITIAL> {PATH4} { return new Symbol(simbolofs.valor_path4, yyline, yycolumn,yytext());}
+<YYINITIAL> {PATH5} { return new Symbol(simbolofs.valor_path5, yyline, yycolumn,yytext());}
 <YYINITIAL> {CADENA} { return new Symbol(simbolofs.valor_cadena, yyline, yycolumn,yytext());}
 <YYINITIAL> {SIMBOLOS} { return new Symbol(simbolofs.valor_simbolo, yyline, yycolumn,yytext());}
 

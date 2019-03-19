@@ -1,7 +1,7 @@
 <lista>
     <principal>
          <CTNombre>"Julio Arango"</CTNombre>
-         <CPotencia>3125</CPotencia>
+         <CPotencia>3126</CPotencia>
          <CFactorial>5040</CFactorial>
          <CInvertido>743032153</CInvertido>
          <CMCD>2</CMCD>
@@ -17,7 +17,7 @@
     </principal>
     <principal>
          <CTNombre>"Alba Chinchilla"</CTNombre>
-         <CPotencia>3125</CPotencia>
+         <CPotencia>3124</CPotencia>
          <CFactorial>5040</CFactorial>
          <CInvertido>743032153</CInvertido>
          <CMCD>2</CMCD>

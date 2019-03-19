@@ -30,6 +30,7 @@ public class Proyecto1Compi2_201213580 {
     public static String ruta_proyecto=new File ("").getAbsolutePath();
     public static LinkedList<Errores>errores_fs=new LinkedList<>();
     public static LinkedList<Errores>errores_gxml=new LinkedList<>();
+    public static LinkedList<Errores>errores_gdato=new LinkedList<>();
     /**
      * @param args the command line arguments
      */

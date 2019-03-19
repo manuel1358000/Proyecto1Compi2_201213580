@@ -38,7 +38,10 @@ public class Type {
         GXML,
         PORID,
         PORETIQUETA,
-        PORNOMBRE
+        PORNOMBRE,
+        CONTROL,
+        MULTIMEDIA,
+        GDATO
     }    
     public boolean esNumero(){
         return primitive_type==Type.PrimitiveType.INTEGER;

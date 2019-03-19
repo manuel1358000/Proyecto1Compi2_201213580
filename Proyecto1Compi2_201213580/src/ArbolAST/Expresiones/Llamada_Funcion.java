@@ -73,6 +73,8 @@ public class Llamada_Funcion implements Expresion{
                         Type.PrimitiveType tipo_v=llamada.getTipo_respuesta();
                         Aritmetica entrada=new Aritmetica(valor_v,tipo_v,this.linea,this.columna);
                         lista_nueva.add(entrada);
+                    }else{
+                        System.out.println("operacion rara");
                     }
                 }
                 funcion.setParametros_entrada(lista_nueva);

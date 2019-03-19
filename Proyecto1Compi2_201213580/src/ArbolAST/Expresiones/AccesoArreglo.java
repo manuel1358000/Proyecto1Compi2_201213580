@@ -5,6 +5,7 @@
  */
 package ArbolAST.Expresiones;
 
+import ArbolAST.Componente.NodoGXML;
 import ArbolAST.Entorno.Entorno;
 import ArbolAST.Entorno.Simbolo;
 import ArbolAST.Entorno.Type;
@@ -42,8 +43,16 @@ public class AccesoArreglo implements Expresion{
             try{
                 LinkedList<Expresion> aux=(LinkedList)sim.valor;
                 if(pos<aux.size()){
-                    respuesta=aux.get(pos).getValue(entorno).toString();
-                    this.tipo_respuesta=aux.get(pos).getType(entorno);
+                    Object aux_venta=aux.get(pos).getValue(entorno);
+                    if(aux_venta instanceof NodoGXML){
+                        System.out.println("que hay aqui");
+                        respuesta=aux_venta;
+                        this.tipo_respuesta=aux.get(pos).getType(entorno);
+                    }else{
+                        respuesta=aux_venta.toString();
+                        this.tipo_respuesta=aux.get(pos).getType(entorno);
+                    }
+                    
                 }else{
                     Errores error=new Errores("SEMANTICO","La posicion que quiere acceder al id esta fuera de rango",this.linea,this.columna);
                     Proyecto1Compi2_201213580.errores_fs.add(error);

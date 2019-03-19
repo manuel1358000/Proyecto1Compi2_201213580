@@ -10,6 +10,7 @@ import ArbolAST.Entorno.Entorno;
 import ArbolAST.Entorno.Simbolo;
 import ArbolAST.Entorno.Type;
 import ArbolAST.Expresiones.AccesoArreglo;
+import ArbolAST.Expresiones.AccesoObjetos;
 import ArbolAST.Expresiones.Expresion;
 import ArbolAST.Expresiones.Llamada_Funcion;
 import Auxiliares.Errores;
@@ -33,10 +34,19 @@ public class Relacional extends Operacion implements Expresion{
             Object val2=this.expresion2.getValue(entorno);
             Type.PrimitiveType tipo1=this.expresion1.getType(entorno);
             Type.PrimitiveType tipo2=this.expresion2.getType(entorno);
+            if(this.expresion1 instanceof AccesoObjetos){
+                AccesoObjetos acceso=(AccesoObjetos)this.expresion1;
+                tipo1=acceso.getType(entorno);
+            }
+            if(this.expresion2 instanceof AccesoObjetos){
+                AccesoObjetos acceso=(AccesoObjetos)this.expresion2;
+                tipo1=acceso.getType(entorno);
+            }
             if(this.expresion1 instanceof AccesoArreglo){
                 AccesoArreglo acceso=(AccesoArreglo)this.expresion1;
                 tipo1=acceso.getTipo_Respuesta();
             }
+            
             if(this.expresion2 instanceof AccesoArreglo){
                 AccesoArreglo acceso=(AccesoArreglo)this.expresion2;
                 tipo2=acceso.getTipo_Respuesta();
