@@ -83,6 +83,12 @@ public class AccesoObjetos implements Expresion{
                             if(nodog.getEtiqueta().toLowerCase().equals(this.atributo.toLowerCase())){
                                 respuesta=nodog.getValor();
                                 this.tipo=nodog.getTipo_dato();
+                                if(respuesta instanceof Aritmetica){
+                                    Aritmetica ari_aux=(Aritmetica)respuesta;
+                                    respuesta=ari_aux.getValue(entorno);
+                                    this.tipo=ari_aux.getType(entorno);
+                                }
+                                
                             }
                         }
                     }

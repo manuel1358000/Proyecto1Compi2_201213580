@@ -99,6 +99,8 @@ PUNTO=["."]
 <YYINITIAL> "crearcontrolnumerico" { return new Symbol(simbolofs.crearcontrolnumerico, yyline, yycolumn,yytext());}
 <YYINITIAL> "creardesplegable" { return new Symbol(simbolofs.creardesplegable, yyline, yycolumn,yytext());}
 <YYINITIAL> "crearimagen" { return new Symbol(simbolofs.crearimagen, yyline, yycolumn,yytext());}
+<YYINITIAL> "crearreproductor" { return new Symbol(simbolofs.crearreproductor, yyline, yycolumn,yytext());}
+<YYINITIAL> "crearvideo" { return new Symbol(simbolofs.crearvideo, yyline, yycolumn,yytext());}
 <YYINITIAL> "alclic" { return new Symbol(simbolofs.alclic, yyline, yycolumn,yytext());}
 <YYINITIAL> "alcargar" { return new Symbol(simbolofs.alcargar, yyline, yycolumn,yytext());}
 <YYINITIAL> "alcerrar" { return new Symbol(simbolofs.alcerrar, yyline, yycolumn,yytext());}
