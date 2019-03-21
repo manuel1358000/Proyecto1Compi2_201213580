@@ -1,4 +1,4 @@
-var ventana_VentanaPrincipal=crearVentana("#000000",800,800,"VentanaPrincipal");
+var ventana_VentanaPrincipal=crearVentana("#000000",800,vacio,"VentanaPrincipal");
 var Contenedor1_VentanaPrincipal=ventana_VentanaPrincipal.crearContenedor(400,400,"#ffffff",verdadero,10,10);
 Contenedor1_VentanaPrincipal.crearTexto("Arial",14,"#000000",10,10,verdadero,falso,"Haga clic en el siguiente boton para iniciar la evaluacion ");
 var btnEvaluacion_Contenedor1_VentanaPrincipal=Contenedor1_VentanaPrincipal.crearboton("ARIAL",14,"#ffffff",60,40,cargar_VentanaAritmetica(),"",75,150);
@@ -119,7 +119,7 @@ var ContenedorIngles_VentanaIngles=ventana_VentanaIngles.crearContenedor(1000,10
 ContenedorIngles_VentanaIngles.crearTexto("times new roman",18,"#000000",450,20,verdadero,verdadero,"Bienvenido a la prueba de Ingles , responda las siguientes preguntas ");
 ContenedorIngles_VentanaIngles.crearTexto("Arial",14,"#000000",10,20,falso,falso,"Ingrese su Nombre : ");
 ContenedorIngles_VentanaIngles.crearCajaTexto(10,100,"Arial",14,"#ffffff",100,20,falso,falso,"Ingrese aqui su nombre ","CTNombre");
-ContenedorIngles_VentanaIngles.crearReproductor("Ackermann.mp3",450,50,falso,50,100,);
+ContenedorIngles_VentanaIngles.crearReproductor("Ackermann.mp3",450,50,falso,50,100);
 ContenedorIngles_VentanaIngles.crearTexto("Arial",14,"#000000",10,250,falso,falso,"What algorithm is the audio talking about ? ");
 ContenedorIngles_VentanaIngles.crearCajaTexto(50,150,"Arial",14,"#ffffff",100,250,falso,falso,"Ingrese aqui su respuesta ","CTPregunta");
 var btnPregunta_ContenedorIngles_VentanaIngles=ContenedorIngles_VentanaIngles.crearboton("ARIAL",14,"#ffffff",300,250,"","Ver Respuesta ",50,100);

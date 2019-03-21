@@ -15,3 +15,8 @@ funcion BienvenidoReporte(){
 funcion EnviarSinFuncionalidad(){
 	Imprimir("Este boton no guarda nada en su gdato, ya que no hay controles");
 }
+
+
+
+
+

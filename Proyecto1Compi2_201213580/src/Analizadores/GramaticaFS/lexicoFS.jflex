@@ -26,6 +26,7 @@ NUMERO_COMPLETO=({NUMERO})({NUMERO})*
 NUMERO_DECIMAL=({NUMERO})({NUMERO})*["."]({NUMERO})({NUMERO})*
 LETRA=[a-zA-Z]
 ID=({LETRA}|["_"])({LETRA}|{NUMERO}|["_"])*
+CADENA="\""~"\""
 COMENTARIO_SIMPLE =("//".*\r\n)|("//".*\n)|("//".*\r)
 COMENTARIO_MULTIPLE ="/*""/"*([^*/]|[^*]"/"|"*"[^/])*"*"*"*/"
 PATH=["\""]{LETRA}[":"]["\\"]({ID}|["\\"])*["."]["f"]["s"]["\""]
@@ -33,7 +34,6 @@ PATH2=["\""]((["/"])?({ID}|["\\"])*["."]["f"]["s"])["\""]
 PATH3=["\""]((["/"])?({ID}|["\\"])*["."]["g"]["x"]["m"]["l"])["\""] 
 PATH4=["\""]((["/"])?({ID}|["\\"])*["."]["g"]["d"]["a"]["t"]["o"])["\""] 
 PATH5=["\""]{LETRA}[":"]["\\"]({ID}|["\\"])*["."]["g"]["d"]["a"]["t"]["o"]["\""]
-CADENA="\""~"\""
 PUNTO=["."]
 %%
 //definicion de simbolos del lenguaje

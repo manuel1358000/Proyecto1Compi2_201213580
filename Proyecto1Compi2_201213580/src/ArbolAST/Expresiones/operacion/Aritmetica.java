@@ -197,6 +197,7 @@ public class Aritmetica extends Operacion implements Expresion{
                                 if(Double.valueOf(respuesta.toString())%1==0){
                                     this.type=type.INTEGER;
                                     respuesta=(Double.valueOf(respuesta.toString())).intValue();
+                                    System.out.println("respuesta");
                                 }
                             }
                         }else{

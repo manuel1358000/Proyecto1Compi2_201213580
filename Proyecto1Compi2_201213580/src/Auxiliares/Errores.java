@@ -5,11 +5,15 @@
  */
 package Auxiliares;
 
+import ArbolAST.Entorno.Entorno;
+import ArbolAST.Entorno.Type;
+import ArbolAST.Expresiones.Expresion;
+
 /**
  *
  * @author anton
  */
-public class Errores {
+public class Errores implements Expresion{
     int index=0;
     String tipo;
     String descripcion;
@@ -61,6 +65,21 @@ public class Errores {
 
     public void setColumna(int columna) {
         this.columna = columna;
+    }
+
+    @Override
+    public Object getValue(Entorno entorno) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Type.PrimitiveType getType(Entorno entorno) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int getLine() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

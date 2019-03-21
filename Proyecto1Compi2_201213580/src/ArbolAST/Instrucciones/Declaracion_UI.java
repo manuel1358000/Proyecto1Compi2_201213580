@@ -14,6 +14,7 @@ import ArbolAST.Expresiones.operacion.Aritmetica;
 import ArbolAST.NodoAST;
 import Auxiliares.Errores;
 import ElementosUI.Area_UI;
+import ElementosUI.Audio_UI;
 import ElementosUI.Boton_UI;
 import ElementosUI.Caja_UI;
 import ElementosUI.Desplegable_UI;
@@ -121,10 +122,31 @@ public class Declaracion_UI implements Expresion{
                 }
             }else if(tipo==Type.PrimitiveType.AUDIO){
                 try{
-                    if(this.lista_parametros.size()==2){
+                    if(this.lista_parametros.size()==6){
                         Simbolo aux_padre=(Simbolo)entorno.Obtener(this.id_padre.toLowerCase());
                         if(aux_padre!=null){
                             //hace falta agregar los parametros del audio
+                            String ruta=((Aritmetica)this.lista_parametros.get(0)).getValue(entorno).toString().replaceAll("\"","");
+                            String x=((Aritmetica)this.lista_parametros.get(1)).getValue(entorno).toString().replaceAll("\"","");
+                            String y=((Aritmetica)this.lista_parametros.get(2)).getValue(entorno).toString().replaceAll("\"","");
+                            String auto=((Aritmetica)this.lista_parametros.get(3)).getValue(entorno).toString().replaceAll("\"","");
+                            String alto=((Aritmetica)this.lista_parametros.get(4)).getValue(entorno).toString().replaceAll("\"","");
+                            String ancho=((Aritmetica)this.lista_parametros.get(5)).getValue(entorno).toString().replaceAll("\"","");
+                            Audio_UI audio=new Audio_UI(this.id,ruta,x,y,auto,alto,ancho);
+                            Simbolo simbol=new Simbolo(false,false,this.tipo,this.id,new LinkedList<>(),audio);
+                            entorno.Agregar(this.id, simbol);
+                            NodoAST nodd=(NodoAST)aux_padre.valor;
+                            if(nodd instanceof Panel_UI){
+                                Panel_UI aux_conte=(Panel_UI)aux_padre.valor;
+                                aux_conte.Agregar_Componente(audio);
+                                aux_padre.valor=aux_conte;
+                                entorno.Actualizar(aux_padre.getId(),aux_padre);
+                            }else{
+                                Errores error=new Errores("SEMANTICO","el componenete imagen no puede estar fuera de un contenedor",this.linea,this.columna);
+                                Proyecto1Compi2_201213580.errores_fs.add(error);
+                            }
+                            
+                            
                         }else{
                             Errores error=new Errores("SEMANTICO","no existe el contenedor asociadio al audio",this.linea,this.columna);
                             Proyecto1Compi2_201213580.errores_fs.add(error);

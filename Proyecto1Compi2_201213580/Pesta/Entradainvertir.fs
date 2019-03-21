@@ -11,5 +11,13 @@ funcion VerInvertido(var num){
 funcion modulo(var n, var p){
     retornar n < p ? n : modulo( n - p, p);
 }
-imprimir(invertido(13));
+
+
+verinvertido(20);
+
+
+
+
+
+
 

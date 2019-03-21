@@ -152,7 +152,8 @@ public class Funciones_Arreglos implements Expresion{
                         if(homogeneo==Type.PrimitiveType.STRING){
                             try{
                                 LinkedList<String> simplificada=simplificarString(lista, entorno);
-                                Collections.sort(simplificada);
+                                Collections.sort(simplificada,Collections.reverseOrder());
+                                
                                 LinkedList<Aritmetica> regreso=inversaString(simplificada);
                                 if(recursiva){
                                     respuesta=regreso;
@@ -166,7 +167,7 @@ public class Funciones_Arreglos implements Expresion{
                         }else if(homogeneo==Type.PrimitiveType.INTEGER){
                             try{
                                 LinkedList<Integer> simplificada=simplificarInteger(lista, entorno);
-                                Collections.sort(simplificada);
+                                Collections.sort(simplificada,Collections.reverseOrder());
                                 LinkedList<Aritmetica> regreso=inversaInteger(simplificada);
                                 if(recursiva){
                                     respuesta=regreso;
@@ -180,7 +181,7 @@ public class Funciones_Arreglos implements Expresion{
                         }else if(homogeneo==Type.PrimitiveType.DOUBLE){
                             try{
                                 LinkedList<Double> simplificada=simplificarDouble(lista, entorno);
-                                Collections.sort(simplificada);
+                                Collections.sort(simplificada,Collections.reverseOrder());
                                 LinkedList<Aritmetica> regreso=inversaDouble(simplificada);
                                 if(recursiva){
                                     respuesta=regreso;
@@ -199,7 +200,7 @@ public class Funciones_Arreglos implements Expresion{
                         if(homogeneo==Type.PrimitiveType.STRING){
                             try{
                                 LinkedList<String> simplificada=simplificarString(lista, entorno);
-                                Collections.sort(simplificada,Collections.reverseOrder());
+                                Collections.sort(simplificada);
                                 LinkedList<Aritmetica> regreso=inversaString(simplificada);
                                 if(recursiva){
                                     respuesta=regreso;
@@ -213,7 +214,7 @@ public class Funciones_Arreglos implements Expresion{
                         }else if(homogeneo==Type.PrimitiveType.INTEGER){
                             try{
                                 LinkedList<Integer> simplificada=simplificarInteger(lista, entorno);
-                                Collections.sort(simplificada,Collections.reverseOrder());
+                                Collections.sort(simplificada);
                                 LinkedList<Aritmetica> regreso=inversaInteger(simplificada);
                                 if(recursiva){
                                     respuesta=regreso;
@@ -227,7 +228,7 @@ public class Funciones_Arreglos implements Expresion{
                         }else if(homogeneo==Type.PrimitiveType.DOUBLE){
                             try{
                                 LinkedList<Double> simplificada=simplificarDouble(lista, entorno);
-                                Collections.sort(simplificada,Collections.reverseOrder());
+                                Collections.sort(simplificada);
                                 LinkedList<Aritmetica> regreso=inversaDouble(simplificada);
                                 if(recursiva){
                                     respuesta=regreso;
@@ -585,7 +586,7 @@ public class Funciones_Arreglos implements Expresion{
                         if(homogeneo==Type.PrimitiveType.STRING){
                             try{
                                 LinkedList<String> simplificada=simplificarString(lista, entorno);
-                                Collections.sort(simplificada,Collections.reverseOrder());
+                                Collections.sort(simplificada);
                                 LinkedList<Aritmetica> regreso=inversaString(simplificada);
                                 if(recursiva){
                                     respuesta=regreso;
@@ -599,7 +600,7 @@ public class Funciones_Arreglos implements Expresion{
                         }else if(homogeneo==Type.PrimitiveType.INTEGER){
                             try{
                                 LinkedList<Integer> simplificada=simplificarInteger(lista, entorno);
-                                Collections.sort(simplificada,Collections.reverseOrder());
+                                Collections.sort(simplificada);
                                 LinkedList<Aritmetica> regreso=inversaInteger(simplificada);
                                 if(recursiva){
                                     respuesta=regreso;
@@ -613,7 +614,7 @@ public class Funciones_Arreglos implements Expresion{
                         }else if(homogeneo==Type.PrimitiveType.DOUBLE){
                             try{
                                 LinkedList<Double> simplificada=simplificarDouble(lista, entorno);
-                                Collections.sort(simplificada,Collections.reverseOrder());
+                                Collections.sort(simplificada);
                                 LinkedList<Aritmetica> regreso=inversaDouble(simplificada);
                                 if(recursiva){
                                     respuesta=regreso;
@@ -632,7 +633,7 @@ public class Funciones_Arreglos implements Expresion{
                         if(homogeneo==Type.PrimitiveType.STRING){
                             try{
                                 LinkedList<String> simplificada=simplificarString(lista, entorno);
-                                Collections.sort(simplificada);
+                                Collections.sort(simplificada,Collections.reverseOrder());
                                 LinkedList<Aritmetica> regreso=inversaString(simplificada);
                                 if(recursiva){
                                     respuesta=regreso;
@@ -646,7 +647,7 @@ public class Funciones_Arreglos implements Expresion{
                         }else if(homogeneo==Type.PrimitiveType.INTEGER){
                             try{
                                 LinkedList<Integer> simplificada=simplificarInteger(lista, entorno);
-                                Collections.sort(simplificada);
+                                Collections.sort(simplificada,Collections.reverseOrder());
                                 LinkedList<Aritmetica> regreso=inversaInteger(simplificada);
                                 if(recursiva){
                                     respuesta=regreso;
@@ -660,7 +661,7 @@ public class Funciones_Arreglos implements Expresion{
                         }else if(homogeneo==Type.PrimitiveType.DOUBLE){
                             try{
                                 LinkedList<Double> simplificada=simplificarDouble(lista, entorno);
-                                Collections.sort(simplificada);
+                                Collections.sort(simplificada,Collections.reverseOrder());
                                 LinkedList<Aritmetica> regreso=inversaDouble(simplificada);
                                 if(recursiva){
                                     respuesta=regreso;

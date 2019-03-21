@@ -82,6 +82,7 @@ public class Principal extends javax.swing.JFrame {
         jMenuItem6 = new javax.swing.JMenuItem();
         jMenuItem7 = new javax.swing.JMenuItem();
         jMenuItem8 = new javax.swing.JMenuItem();
+        jMenuItem9 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -183,6 +184,14 @@ public class Principal extends javax.swing.JFrame {
         });
         jMenu4.add(jMenuItem8);
 
+        jMenuItem9.setText("ERRORES GDATO");
+        jMenuItem9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem9ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItem9);
+
         jMenuBar1.add(jMenu4);
 
         setJMenuBar(jMenuBar1);
@@ -269,15 +278,20 @@ public class Principal extends javax.swing.JFrame {
                                     sintacticoGXML parser=new sintacticoGXML(analizador_lexico);
                                     parser.parse();
                                     EjecutarGXML nodoEjecutar=new EjecutarGXML(parser.root);
-                                    nodoEjecutar.OrdenarPrincipal();
-                                    nodoEjecutar.Importaciones(parser.root);
-                                    nodoEjecutar.setBand(true);
-                                    String respuesta=nodoEjecutar.Ejecutar(parser.root,"");
-                                    //System.out.println("RESPUESTA \n" + respuesta);
-                                    String direc=direccion[0].toString()+".fs";
-                                    Escribir_Archivo(respuesta,direc);
-                                    String mensaje="\nCONSOLA>Finalizo el analisis del archivo GXML,\n se creo el nuevo archivo en "+direc;
-                                    Principal.jTextArea1.setText(Principal.jTextArea1.getText()+mensaje);
+                                    if(nodoEjecutar!=null){
+                                        nodoEjecutar.OrdenarPrincipal();
+                                        nodoEjecutar.Importaciones(parser.root);
+                                        nodoEjecutar.setBand(true);
+                                        String respuesta=nodoEjecutar.Ejecutar(parser.root,"");
+                                        //System.out.println("RESPUESTA \n" + respuesta);
+                                        String direc=direccion[0].toString()+".fs";
+                                        Escribir_Archivo(respuesta,direc);
+                                        String mensaje="\nCONSOLA>Finalizo el analisis del archivo GXML,\n se creo el nuevo archivo en "+direc;
+                                        Principal.jTextArea1.setText(Principal.jTextArea1.getText()+mensaje);
+                                    }else{
+                                        javax.swing.JOptionPane.showMessageDialog(null,"Error sintactico, verifique los errores");
+                                    }
+                                    
                                 } catch (Exception ex) {
                                     Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
                                 }
@@ -459,6 +473,7 @@ public class Principal extends javax.swing.JFrame {
         // TODO add your handling code here:
         Proyecto1Compi2_201213580.errores_fs.clear();
         Proyecto1Compi2_201213580.errores_gxml.clear();
+        Proyecto1Compi2_201213580.errores_gdato.clear();
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
@@ -529,6 +544,37 @@ public class Principal extends javax.swing.JFrame {
         // TODO add your handling code here:
         this.jTextArea1.setText("");
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
+        // TODO add your handling code here:Ç
+        String contenido="<html>";
+        contenido+="<h1> REPORTE DE ERRORES LEXICOS, SINTACTICOS Y SEMANTICOS PARA EL LENGUAJE GDATO</h1><br>";
+        contenido+="<table>\n<tr>";
+        contenido+="<th>TIPO</th>";
+        contenido+="<th>DESCRIPCION</th>";
+        contenido+="<th>FILA</th>";
+        contenido+="<th>COLUMNA</th>\n</tr>";
+        
+        for(int i=0;i<Proyecto1Compi2_201213580.errores_gdato.size();i++){
+            Errores error=(Errores)Proyecto1Compi2_201213580.errores_gdato.get(i);
+            contenido+="<tr>";
+            contenido+="<th>"+error.getTipo()+"</th>";
+            contenido+="<th>"+error.getDescripcion()+"</th>";
+            contenido+="<th>"+error.getFila()+"</th>";
+            contenido+="<th>"+error.getColumna()+"</th>";
+            contenido+="</tr>";
+        }
+        contenido+="</table>";
+        contenido+="</html>";
+        String ruta=Proyecto1Compi2_201213580.ruta_proyecto+"\\reportegdato.html";
+        Escribir_Archivo(contenido,ruta);
+        try {
+            File objetofile = new File (ruta);
+            Desktop.getDesktop().open(objetofile);
+        }catch (Exception ex) {
+            javax.swing.JOptionPane.showMessageDialog(null,"Ocurrio un error abriendo el archivo en la ruta "+ruta);
+        }
+    }//GEN-LAST:event_jMenuItem9ActionPerformed
     public String LeerArchivo(String path){
         String respuesta="";
         File archivo = null;
@@ -681,6 +727,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JMenuItem jMenuItem8;
+    private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     public static javax.swing.JTextArea jTextArea1;

@@ -613,9 +613,9 @@ public class EjecutarGXML {
                                     pendiente+=alto+",";
                                 }
                                 if(ancho.equals("vacio")){
-                                    pendiente+="200,";
+                                    pendiente+="200";
                                 }else{
-                                    pendiente+=ancho+",";
+                                    pendiente+=ancho+"";
                                 }
                                 pendiente+=");\n";
                                 respuesta+=pendiente;
@@ -659,9 +659,9 @@ public class EjecutarGXML {
                                     pendiente+=alto+",";
                                 }
                                 if(ancho.equals("vacio")){
-                                    pendiente+="200,";
+                                    pendiente+="200";
                                 }else{
-                                    pendiente+=ancho+",";
+                                    pendiente+=ancho+"";
                                 }
                                 pendiente+=");\n";
                                 respuesta+=pendiente;

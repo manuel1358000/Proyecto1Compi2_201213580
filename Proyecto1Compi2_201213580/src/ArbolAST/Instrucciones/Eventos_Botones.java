@@ -109,7 +109,7 @@ public class Eventos_Botones implements Instruccion {
             String respuesta="";
             if(sim!=null){
                 if(tipo.equals("crear")){
-                    if(llamada!=null){
+                    if(llamada==null){
                         Ventana_UI ventana=(Ventana_UI)sim.valor;
                         respuesta=LeerArchivo(this.id+".gdato");
                         respuesta+="<principal>\n";

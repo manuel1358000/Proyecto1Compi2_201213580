@@ -111,6 +111,8 @@ public class AST {
                 }else if(node instanceof Eventos_Ventanas){
                     Eventos_Ventanas eve_ventana=(Eventos_Ventanas)node;
                     eve_ventana.execute(global);
+                }else if(node instanceof Errores){
+                    System.out.println("Es un error");
                 }else{
                     javax.swing.JOptionPane.showMessageDialog(null,"Excepcion es una instruccion rara en ast");
                 }

@@ -12,6 +12,8 @@ funcion ReporteAritmetico(){
 
 }
 
+	
+
 funcion ReporteHistorico(){
 	var contenido = CrearArrayDesdeArchivo("VentanaHistoria.gdato");	
 	var TodoCorrecto = contenido.filtrar(RevisionHistoria).map(nombresAritmeticos);
@@ -27,7 +29,7 @@ funcion ReporteHistorico(){
 funcion ReporteIngles(){
 	var contenido = CrearArrayDesdeArchivo("VentanaIngles.gdato");
 	Imprimir("¿Algun estudiante contesto mal el nombre del algoritmo ackermanm? " + contenido.Alguno(NombreAckerman));
-	Imprimir("¿Todos los estudiantes contestaron correctamente Ackermann(3,11)? " + contenido.Todos(CalculoAckerman));*/
+	Imprimir("¿Todos los estudiantes contestaron correctamente Ackermann(3,11)? " + contenido.Todos(CalculoAckerman));
 	imprimir("reporte ingles");
 }
 
@@ -35,37 +37,31 @@ funcion ReporteLogico(){
 	var contenido = CrearArrayDesdeArchivo("VentanaLogica.gdato");
 	Imprimir("Imprimiendo nombres de los estudiantes que saben par e impar"); 
 	var concatenacion = contenido.map(EstudiantesParidad).Reduce(ObtencionParidad);
-	imprimir("reporte logico");
+	imprimir(concatenacion);
 }
 
 funcion RevisionAritmetica(var item){
 	retornar item.CPotencia == 3125 && item.CFactorial == 5040 && item.CInvertido == 743032153 && item.CFibonacci == 4181;
-	imprimir("revisionaritmetica");
 }
 
 funcion RevisionHistoria(var item){
 	retornar item.CDPaisaje1 == "Playa" && item.CDPaisaje2 == "Luna" && item.CDPaisaje3 == "Selva" && item.CDPaisaje4 == "Desierto" && item.CDPaisaje5 == "Oceano";
-	imprimir("reporte historia");
 }
 
 funcion BuscarHistoria(var item){
 	retornar item.CDPaisaje1 == "Playa" && item.CDPaisaje2 == "Luna" && item.CDPaisaje3 == "Selva" && item.CDPaisaje4 == "Desierto" && item.CDPaisaje5 == "Oceano";
-	imprimir("reporte buscarhistoria");
 }
 
 funcion ImprimirGanadores(var item){
 	Imprimir(item);
-	imprimir("reporte imprimirganadores");
 }
 
 funcion NombreAckerman(var item){
-imprimir("reporte nombreackerman");
 	retornar item.CTPregunta != "Ackermann";
 }
 
 funcion CalculoAckerman(var item){
-	/*retornar item.CAckerman == 16381;*/
-	imprimir("reporte calculoackerman");
+	retornar item.CAckerman == 16381;
 }
 
 funcion EstudiantesParidad(var item){
@@ -74,15 +70,12 @@ funcion EstudiantesParidad(var item){
 	}sino{
 		retornar "";
 	}
-	imprimir("reporte estudiantes paridad");
 }
 
 funcion ObtencionParidad(var concatenado, var item){
 	retornar concatenado + item;
-	imprimir("reporte obtencion paridad");
 }
 
 funcion nombresAritmeticos(var item){
 	retornar item.CTNombre;
-	imprimir("reporte nombres aritmeticos");
 }

@@ -12,6 +12,9 @@ funcion Pregunta(var tipo){
 	Si(tipo == "Tipo"){
 		imprimir("Se habla sobre Ackermann");
 	}sino si(tipo == "Resultado"){
-		imprimir("el resultado de ackerman 3,11 es " + ackermann(3,11));
+		imprimir("el resultado de ackerman 3,7es " + ackermann(3,8));
 	}
 }
+
+
+imprimir(ackermann(3,7));

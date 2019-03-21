@@ -12,7 +12,7 @@ import ElementosUI.Boton_UI;
 import ElementosUI.Imagen_UI;
 import ElementosUI.Panel_UI;
 import ElementosUI.Texto_UI;
-import ElementosUI.Ventana;
+import ElementosUI.Audio_UI;
 import ElementosUI.Ventana_UI;
 import java.awt.Color;
 import java.awt.Component;
@@ -35,8 +35,16 @@ public class Proyecto1Compi2_201213580 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        System.out.println(invertirNumero(18));
         Principal principal=new Principal();
         principal.setVisible(true);
         principal.show();
+    }
+    public static int invertirNumero (int n){
+        return n < 10 ? n : modulo(n, 10) + invertirNumero (n / 10) * 10;
+    }
+
+    public static int modulo(int n, int p){
+        return n < p ? n : modulo( n - p, p);
     }
 }
